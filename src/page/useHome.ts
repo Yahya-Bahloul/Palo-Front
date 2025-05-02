@@ -1,5 +1,4 @@
-import { GameRoom } from "@/model";
-import { Player } from "@/model/player";
+import { GameRoom, Player } from "@/model";
 import { socketService } from "@/service/socketService";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -55,7 +54,7 @@ export function useHomePage() {
       socketService.off("joinedRoom", handleJoinedRoom);
       socketService.off("error", handleError);
     };
-  }, []);
+  }, [router]);
 
   const handleCreateRoom = () => {
     console.log("Creating room:", player);

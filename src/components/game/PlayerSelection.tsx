@@ -21,7 +21,7 @@ export function PlayerSection({ players, currentPlayerId }: Props) {
       const timer = setTimeout(() => setAnimateNew(null), 2000);
       return () => clearTimeout(timer);
     }
-  }, [players.length]);
+  }, [players]);
 
   return (
     <div className="space-y-4 w-full max-w-md">

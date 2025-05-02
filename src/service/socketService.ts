@@ -3,10 +3,12 @@ import { io } from "socket.io-client";
 import { Player } from "@/model/player";
 import { GameConfig } from "@/model/gameConfig";
 
-const socket = io("http://localhost:3001", {
+const SOCKET_URL =
+  process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3001";
+
+const socket = io(SOCKET_URL, {
   transports: ["websocket"],
 });
-
 socket.on("connect", () => {
   console.log("✅ Connected to server:", socket.id);
 });

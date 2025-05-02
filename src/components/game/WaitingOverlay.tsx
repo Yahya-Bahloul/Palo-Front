@@ -11,7 +11,7 @@ export function WaitingOverlay() {
           Une partie est en cours
         </h2>
         <p className="text-sm text-gray-600 text-center">
-          Merci de patienter jusqu'à la prochaine manche...
+          {`Merci de patienter jusqu'à la prochaine manche...`}
         </p>
       </div>
     </div>
