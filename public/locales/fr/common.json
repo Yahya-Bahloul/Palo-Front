@@ -1,0 +1,17 @@
+{
+  "welcomeTitle": "Bienvenue dans le jeu des amis",
+  "subtitle": "Joue avec tes amis et amuse-toi",
+  "joinGame": "Rejoindre une partie",
+  "createGame": "Créer une partie",
+  "playerName": "Nom du joueur",
+  "enterName": "Entre ton nom",
+  "roomCode": "Code de la salle",
+  "enterRoomCode": "Entre le code de la salle",
+  "hostName": "Nom de l’hôte",
+  "joinNow": "Rejoindre maintenant",
+  "createRoom": "Créer une salle",
+  "developedBy": "Développé par l’équipe du jeu",
+  "roomCreated": "Salle créée avec succès",
+  "shareRoomCode": "Partage ce code avec tes amis pour les inviter",
+  "startGame": "Démarrer la partie"
+}
