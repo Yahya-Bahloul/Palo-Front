@@ -305,7 +305,7 @@ function StartOrNextButton({
         onClick={endGame}
         className="w-full py-3 bg-amber-500 text-white rounded-xl font-semibold text-base transition-all duration-200"
       >
-        Revenir à l'écran d'accueil
+        {`Revenir à l'écran d'accueil`}
       </button>
     );
   }
