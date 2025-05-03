@@ -42,6 +42,7 @@ export default function RoomPage() {
     endGame,
     gameConfig,
     setGameConfig,
+    leaveRoom,
   } = useRoomPage();
 
   return (
@@ -49,6 +50,8 @@ export default function RoomPage() {
       <StartMenuButton
         gameStarted={phase !== QuizzType1Phases.STARTING}
         onEndGame={endGame}
+        leaveRoom={leaveRoom}
+        isAdmin={isAdmin}
       />
       <PlayerRangeIndicator />
 

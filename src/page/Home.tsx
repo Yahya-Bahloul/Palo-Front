@@ -29,8 +29,8 @@ export default function HomePage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <PlayerRangeIndicator />
 
-      <Card className="w-full max-w-md bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-300 shadow-xl rounded-3xl overflow-hidden">
-        <CardContent className="space-y-6 p-6">
+      <Card className="w-full max-w-md bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-300 shadow-xl rounded-3xl overflow-hidden py-0">
+        <CardContent className="space-y-6 p-6 py-4 pb-0">
           <TabSelector activeTab={activeTab} setActiveTab={setActiveTab} />
           {activeTab === "join" && (
             <div className="space-y-2">
@@ -67,7 +67,7 @@ export default function HomePage() {
           {/* 🧑‍🎨 Avatar Selector ici */}
         </CardContent>
 
-        <CardFooter className="px-6 pb-6">
+        <CardFooter className="px-6 p-6 pt-0" >
           <RoomActionButton
             activeTab={activeTab}
             name={player.name}

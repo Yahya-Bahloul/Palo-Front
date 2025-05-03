@@ -155,6 +155,10 @@ export function useRoomPage() {
     socketService.endGame(roomId as string);
   }
 
+  function leaveRoom() {
+    socketService.leaveRoom(roomId as string);
+  }
+
   // Timer logic
   useEffect(() => {
     if (!gameStarted || timer <= 0) return;
@@ -216,5 +220,6 @@ export function useRoomPage() {
     isAdmin: player.id === admin?.id,
     gameConfig,
     setGameConfig,
+    leaveRoom,
   };
 }

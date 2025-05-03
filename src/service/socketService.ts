@@ -52,6 +52,10 @@ export const socketService = {
     socket.emit("endGame", { roomId });
   },
 
+  leaveRoom: (roomId: string) => {
+    socket.emit("leaveRoom", { roomId });
+  },
+
   on: socket.on.bind(socket),
   off: socket.off.bind(socket),
 };

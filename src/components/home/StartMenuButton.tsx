@@ -13,17 +13,22 @@ import { useState } from "react";
 interface StartMenuButtonProps {
   gameStarted: boolean;
   onEndGame?: () => void;
+  leaveRoom: () => void;
+  isAdmin?: boolean;
 }
 
 export default function StartMenuButton({
   gameStarted,
   onEndGame,
+  leaveRoom,
+  isAdmin = false,
 }: StartMenuButtonProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const handleHome = () => {
     setOpen(false);
+    leaveRoom();
     router.push("/");
   };
 
@@ -57,7 +62,7 @@ export default function StartMenuButton({
               🏠 Revenir à l’accueil
             </button>
 
-            {gameStarted && (
+            {gameStarted && isAdmin && (
               <>
                 <div className="border-t border-yellow-500 my-1" />
                 <button
