@@ -13,7 +13,6 @@ export function useRoomPage() {
   const { roomId } = useParams();
   const [players, setPlayers] = useState<Player[]>([]);
   const [player, setPlayer] = useState<Player>({ id: "", name: "", score: 0 });
-  const [round, setRound] = useState(1);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [admin, setAdmin] = useState<Player | null>(null);
   const [question, setQuestion] = useState("");
@@ -102,7 +101,6 @@ export function useRoomPage() {
   function handleRoundStarted(data: any) {
     setGameStarted(true);
     setWaitingForGameEnd(false);
-    setRound(data.currentRound);
     setCurrentPlayer(data.currentPlayer);
     setPhase(data.phase as QuizzType1Phases);
     setQuestion("");
@@ -132,7 +130,6 @@ export function useRoomPage() {
 
   function handleGameEnded() {
     setGameStarted(false);
-    setRound(1);
     setCurrentPlayer(null);
     setQuestion("");
     setAnswer("");
@@ -150,7 +147,6 @@ export function useRoomPage() {
 
   function reconnectGameState(room: GameRoom) {
     setGameStarted(true);
-    setRound(room.currentRound);
     setCurrentPlayer(room.currentPlayer);
     setPhase(room.phase as QuizzType1Phases);
     setQuestion(room.currentQuestion || "");
