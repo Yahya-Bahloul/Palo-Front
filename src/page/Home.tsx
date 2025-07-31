@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import TabSelector from "@/components/home/TabSelector";
 import { useHomePage } from "./useHome";
-import { AvatarSelector } from "@/components/avatar/AvatarSelector";
+import { AvatarSelector } from "@/components/avatar/AvatarSelectorHome";
 import PlayerRangeIndicator from "@/components/home/PlayerRangeIndicator";
 import { theme } from "@/styles/theme";
 
