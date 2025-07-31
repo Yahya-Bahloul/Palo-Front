@@ -4,16 +4,16 @@ import { useState, useEffect } from "react";
 import { Player } from "@/model/player";
 import { UserRound } from "lucide-react";
 import Image from "next/image";
+import { theme } from "@/styles/theme";
 
 type Props = {
   players: Player[];
-  currentPlayerId?: string; // To highlight the current player
+  currentPlayerId?: string;
 };
 
 export function PlayerSection({ players, currentPlayerId }: Props) {
   const [animateNew, setAnimateNew] = useState<string | null>(null);
 
-  // Track when new players join to animate them
   useEffect(() => {
     const lastPlayer = players[players.length - 1];
     if (lastPlayer && players.length > 0) {
@@ -24,54 +24,53 @@ export function PlayerSection({ players, currentPlayerId }: Props) {
   }, [players]);
 
   return (
-    <div className="space-y-4 w-full max-w-md">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-bold text-white flex items-center">
-          <UserRound className="mr-2 h-5 w-5" />
+    <div className={theme.layout.card}>
+      <div className="flex justify-between items-center mb-2 text-[#f4a261]">
+        <h2 className={theme.playerSection.title}>
+          <UserRound className={theme.playerSection.icon} />
           Joueurs ({players.length})
         </h2>
-        <span className="bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-          En Ligne
-        </span>
+        <span className={theme.playerSection.online}>En ligne</span>
       </div>
 
-      <ul className="text-white ">
-        {players.map((player) => (
-          <li
-            key={player.id}
-            className={`bg-gray-700 px-4 py-3 mt-2 rounded-lg shadow-lg overflow-hidden  flex items-center justify-between 
-              ${
-                player.id === currentPlayerId
-                  ? "bg-gray-700"
-                  : "hover:bg-gray-700"
-              } 
-              transition-all duration-300
-              ${animateNew === player.id ? "animate-pulse bg-green-900" : ""}`}
-          >
-            <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full overflow-hidden border- border-amber-300 shadow transition-opacity duration-300 mr-2 bg-gray-700">
-                <Image
-                  src={`https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`}
-                  alt={player.name}
-                  width={48}
-                  height={48}
-                  unoptimized
-                />
-              </div>
-              <span className="font-medium">{player.name}</span>
-            </div>
+      <ul className={theme.playerCard.container}>
+        {players.map((player) => {
+          const isCurrent = player.id === currentPlayerId;
+          const isNew = animateNew === player.id;
 
-            {player.id === currentPlayerId && (
-              <span className="bg-blue-500 text-xs px-2 py-1 rounded text-white font-bold">
-                Vous
-              </span>
-            )}
-          </li>
-        ))}
+          return (
+            <li
+              key={player.id}
+              className={[
+                theme.playerCard.item,
+                theme.playerCard.baseBg,
+                isCurrent ? theme.playerCard.highlight : theme.playerCard.hover,
+                isNew ? theme.playerCard.newPlayer : "",
+              ].join(" ")}
+            >
+              <div className="flex items-center gap-2">
+                <div className={theme.playerCard.avatar}>
+                  <Image
+                    src={`https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`}
+                    alt={player.name}
+                    width={40}
+                    height={40}
+                    unoptimized
+                  />
+                </div>
+                <span className={theme.playerCard.name}>{player.name}</span>
+              </div>
+
+              {isCurrent && (
+                <span className={theme.playerCard.badge}>VOUS</span>
+              )}
+            </li>
+          );
+        })}
       </ul>
 
       {players.length === 0 && (
-        <div className="text-center p-6 text-gray-300 italic bg-gray-800 rounded-lg">
+        <div className={theme.playerCard.placeholder}>
           En attente de joueurs...
         </div>
       )}

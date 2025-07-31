@@ -3,6 +3,7 @@
 
 import Image from "next/image";
 import { Player } from "@/model/player";
+import { theme } from "@/styles/theme";
 
 type Props = {
   players: Player[];
@@ -20,7 +21,9 @@ export function PlayerFooterList({
   currentPlayerId,
 }: Props) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-amber-500 border-t border-amber-200 px-4 py-2 flex justify-center gap-4 overflow-x-auto z-50 shadow-inner backdrop-blur">
+    <div
+      className={`fixed bottom-0 left-0 right-0 px-4 py-2 flex justify-center gap-4 overflow-x-auto z-50 shadow-inner backdrop-blur-sm ${theme.footer}`}
+    >
       {players
         .filter((p) => !p.joinedLate)
         .map((player) => {
@@ -32,12 +35,18 @@ export function PlayerFooterList({
               ? !!votes[player.id]
               : true;
 
+          const isCurrent = player.id === currentPlayerId;
+
           const opacityClass =
             phase === "guessing" || phase === "voting"
-              ? hasSubmitted || player.id === currentPlayerId
+              ? hasSubmitted || isCurrent
                 ? "opacity-100"
                 : "opacity-30"
               : "opacity-100";
+
+          const borderClass = isCurrent
+            ? theme.border.current
+            : theme.border.default;
 
           return (
             <div
@@ -45,7 +54,7 @@ export function PlayerFooterList({
               className="flex flex-col items-center text-center text-xs min-w-[64px]"
             >
               <div
-                className={`w-12 h-12 rounded-full overflow-hidden border-2 border-amber-300 shadow ${opacityClass} transition-opacity duration-300`}
+                className={`${theme.avatar.base} ${borderClass} ${opacityClass}`}
               >
                 <Image
                   src={avatarUrl}
@@ -55,12 +64,8 @@ export function PlayerFooterList({
                   unoptimized
                 />
               </div>
-              <div className="text-[11px] text-amber-800 font-semibold mt-1 truncate w-14">
-                {player.name}
-              </div>
-              <div className="text-[10px] text-gray-600 font-medium">
-                {player.score} pts
-              </div>
+              <div className={theme.text.playerName}>{player.name}</div>
+              <div className={theme.text.playerScore}>{player.score} pts</div>
             </div>
           );
         })}

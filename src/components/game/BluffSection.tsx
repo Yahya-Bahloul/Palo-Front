@@ -2,69 +2,76 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle, AlertTriangle } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import { theme } from "@/styles/theme";
+import { isBluffTooClose, normalizeText } from "@/utils/similarityUtils";
 
 type Props = {
   handleSubmitGuess: (bluff: string) => void;
   question: string;
-  answer: string; // ✅ correct answer passed in
+  answer: string;
 };
 
 export function BluffSection({ handleSubmitGuess, question, answer }: Props) {
   const [bluff, setBluff] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isExactMatch, setIsExactMatch] = useState(false);
+  const [similarBluffDetected, setSimilarBluffDetected] = useState(false);
 
   const handleSubmit = () => {
-    console.log("Submitted bluff:", bluff, "answer:", answer);
-    if (bluff.trim().toLowerCase() === answer.toLowerCase()) {
+    console.log("Submitting bluff:", bluff);
+    const cleanBluff = normalizeText(bluff);
+    const cleanAnswer = normalizeText(answer);
+
+    if (cleanBluff === cleanAnswer) {
       setIsExactMatch(true);
-    } else if (bluff.trim().length > 0) {
+      setSimilarBluffDetected(false);
+      return;
+    }
+
+    if (isBluffTooClose(bluff, answer)) {
+      setSimilarBluffDetected(true);
       setIsExactMatch(false);
+      return;
+    }
+
+    if (cleanBluff.length > 0) {
+      setIsExactMatch(false);
+      setSimilarBluffDetected(false);
       handleSubmitGuess(bluff.trim());
       setSubmitted(true);
     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-xl shadow-lg border border-amber-200">
-      <h2 className="text-xl font-bold text-amber-800 mb-4 text-center">
-        Devine une réponse plausible
-      </h2>
-
-      <p className="text-sm text-amber-700 italic text-center mb-4">
-        “{question}”
-      </p>
+    <div className={theme.bluffSection.card}>
+      <h2 className={theme.bluffSection.text.heading}>{question}</h2>
 
       {submitted ? (
         <div className="text-center space-y-3">
-          <CheckCircle className="w-6 h-6 mx-auto text-green-600" />
-          <p className="text-gray-700">Ton bluff :</p>
-          <p className="bg-white p-3 rounded-lg font-medium text-black">
-            {bluff}
-          </p>
-          <p className="text-sm text-gray-500 italic">
+          <p className={theme.bluffSection.text.waiting}>
             En attente des autres joueurs...
           </p>
         </div>
       ) : (
-        <>
+        <div className="space-y-4">
           <input
             type="text"
             value={bluff}
             onChange={(e) => setBluff(e.target.value)}
             placeholder="Écris ta fausse réponse ici"
-            className="w-full p-3 rounded-lg text-black bg-white border border-amber-300 shadow-sm focus:ring-2 focus:ring-amber-500 outline-none"
+            className={theme.bluffSection.input}
+            disabled={submitted}
           />
 
           <button
             onClick={handleSubmit}
-            className={`mt-4 w-full py-3 px-4 rounded-lg font-medium text-center transition-all duration-300 flex items-center justify-center space-x-2
-              ${
-                bluff.length > 0
-                  ? "bg-amber-600 hover:bg-amber-500 text-white shadow-md hover:shadow-lg"
-                  : "bg-amber-300 text-amber-100 cursor-not-allowed"
-              }`}
+            disabled={submitted || bluff.trim().length === 0}
+            className={`${theme.bluffSection.button.base} ${
+              bluff.trim().length > 0 && !submitted
+                ? theme.bluffSection.button.enabled
+                : theme.bluffSection.button.disabled
+            }`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -82,12 +89,20 @@ export function BluffSection({ handleSubmitGuess, question, answer }: Props) {
           </button>
 
           {isExactMatch && (
-            <p className="text-sm text-red-600 text-center mt-2 flex items-center justify-center gap-2">
-              <AlertTriangle className="w-4 h-4" />
+            <p className={theme.bluffSection.text.error}>
+              <AlertTriangle className={theme.bluffSection.icon.warning} />
               Tu as trouvé la bonne réponse ! Essaie un autre bluff 😏
             </p>
           )}
-        </>
+
+          {similarBluffDetected && !isExactMatch && (
+            <p className={theme.bluffSection.text.warning}>
+              <AlertTriangle className={theme.bluffSection.icon.warning} />
+              Ta réponse est trop proche de la bonne... Essaie d’être plus
+              créatif 😉
+            </p>
+          )}
+        </div>
       )}
     </div>
   );

@@ -56,6 +56,14 @@ export const socketService = {
     socket.emit("leaveRoom", { roomId });
   },
 
+  chooseCategory: (roomId: string, category: string) => {
+    socket.emit("chooseCategory", { roomId, category });
+  },
+
+  forceFinalResults: (roomId: string) => {
+    socket.emit("forceFinalResults", { roomId });
+  },
+
   on: socket.on.bind(socket),
   off: socket.off.bind(socket),
 };

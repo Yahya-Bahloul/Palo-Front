@@ -1,6 +1,6 @@
 export enum QuizzType1Phases {
   STARTING = "starting",
-  QUESTION = "question",
+  CATEGORIES = "categories",
   GUESSING = "guessing",
   VOTING = "voting",
   RESULTS = "results",

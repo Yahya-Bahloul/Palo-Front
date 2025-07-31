@@ -1,8 +1,8 @@
-// src/components/game/AvatarSelector.tsx
 "use client";
 
 import { RefreshCw } from "lucide-react";
 import Image from "next/image";
+import { theme } from "@/styles/theme";
 
 const AVATAR_STYLE = "adventurer";
 
@@ -18,9 +18,9 @@ export function AvatarSelector({
   )}`;
 
   return (
-    <div className="bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-xl shadow-lg border border-amber-200 space-y-6 text-center">
+    <div className={theme.avatarSelector.container}>
       {seed && (
-        <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border border-amber-300 bg-white shadow">
+        <div className={theme.avatarSelector.imageWrapper}>
           <Image
             src={avatarUrl}
             alt="Avatar preview"
@@ -34,9 +34,9 @@ export function AvatarSelector({
       <div className="flex justify-center">
         <button
           onClick={regenerateAvatar}
-          className="flex items-center justify-center gap-2 bg-white border border-amber-400 text-amber-700 font-medium px-4 py-2 rounded-lg hover:bg-amber-100 transition-all"
+          className={theme.avatarSelector.button}
         >
-          <RefreshCw className="w-4 h-4" />
+          <RefreshCw className={theme.avatarSelector.icon} />
           Générer un nouvel avatar
         </button>
       </div>

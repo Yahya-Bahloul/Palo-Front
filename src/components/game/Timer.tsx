@@ -10,7 +10,8 @@ export function Timer({
 }) {
   if (
     phase === QuizzType1Phases.RESULTS ||
-    phase === QuizzType1Phases.FINAL_RESULTS
+    phase === QuizzType1Phases.FINAL_RESULTS ||
+    phase === QuizzType1Phases.CATEGORIES
   )
     return null;
   return (

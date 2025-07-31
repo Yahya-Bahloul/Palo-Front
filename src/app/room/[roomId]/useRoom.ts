@@ -26,9 +26,10 @@ export function useRoomPage() {
   const [guesses, setGuesses] = useState<Record<string, string>>({});
   const [votes, setVotes] = useState<Record<string, string>>({});
   const [waitingForGameEnd, setWaitingForGameEnd] = useState(false);
-  const [gameConfig, setGameConfig] = useState<GameConfig>({ maxRound: 10 }); // optional for display
+  const [gameConfig, setGameConfig] = useState<GameConfig>({ maxRound: 10 });
+  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+  const [isLastRound, setIsLastRound] = useState(false);
 
-  // Join room
   useEffect(() => {
     if (typeof window === "undefined") return;
     const storedPlayer = JSON.parse(localStorage.getItem("player") || "null");
@@ -43,7 +44,6 @@ export function useRoomPage() {
     }
   }, [roomId]);
 
-  // Listen to player and room updates
   useEffect(() => {
     const handleJoinedRoom = (data: { room: GameRoom }) => {
       setPlayers(data.room.players);
@@ -51,7 +51,6 @@ export function useRoomPage() {
         data.room.players.find((p) => p.id === data.room.adminId) || null
       );
 
-      // Reconnexion dans une partie déjà lancée
       if (data.room.phase !== QuizzType1Phases.STARTING) {
         const isInRoom = data.room.players.some(
           (p) => p.id === player.id && !p.joinedLate
@@ -75,24 +74,28 @@ export function useRoomPage() {
     };
   }, [player]);
 
-  // Game lifecycle events
   useEffect(() => {
     socketService.on("roundStarted", handleRoundStarted);
-    socketService.on("questionSubmitted", handleQuestionSubmitted);
+    socketService.on("questionReady", handleQuestionReady);
     socketService.on("votingStarted", handleVotingStarted);
     socketService.on("resultsReady", handleResultsReady);
     socketService.on("gameEnded", handleGameEnded);
     socketService.on("guessSubmitted", (data) => setGuesses(data.guesses));
     socketService.on("voteSubmitted", (data) => setVotes(data.votes));
+    socketService.on("categoriesForRound", (data) =>
+      setAvailableCategories(data.categories)
+    );
+    socketService.on("showFinalResult", handleFinalResults);
 
     return () => {
       socketService.off("roundStarted", handleRoundStarted);
-      socketService.off("questionSubmitted", handleQuestionSubmitted);
+      socketService.off("questionReady", handleQuestionReady);
       socketService.off("votingStarted", handleVotingStarted);
       socketService.off("resultsReady", handleResultsReady);
       socketService.off("gameEnded", handleGameEnded);
       socketService.off("guessSubmitted");
       socketService.off("voteSubmitted");
+      socketService.off("categoriesForRound");
     };
   }, [player]);
 
@@ -107,7 +110,7 @@ export function useRoomPage() {
     setTimer(60);
   }
 
-  function handleQuestionSubmitted(data: any) {
+  function handleQuestionReady(data: any) {
     setQuestion(data.currentQuestion);
     setAnswer(data.currentAnswer);
     setPhase(data.phase as QuizzType1Phases);
@@ -121,10 +124,10 @@ export function useRoomPage() {
   }
 
   function handleResultsReady(data: any) {
-    console.log("Results ready", data);
     setPhase(data.phase as QuizzType1Phases);
     setVotes(data.votes);
     setPlayers(data.players);
+    setIsLastRound(data.isLastRound || false);
   }
 
   function handleGameEnded() {
@@ -138,6 +141,11 @@ export function useRoomPage() {
     setGuesses({});
     setVotes({});
     setWaitingForGameEnd(false);
+  }
+
+  function handleFinalResults(data: any) {
+    setPhase(QuizzType1Phases.FINAL_RESULTS);
+    setPlayers(data.players);
   }
 
   function reconnectGameState(room: GameRoom) {
@@ -159,7 +167,10 @@ export function useRoomPage() {
     socketService.leaveRoom(roomId as string);
   }
 
-  // Timer logic
+  function showFinalResult() {
+    socketService.forceFinalResults(roomId as string);
+  }
+
   useEffect(() => {
     if (!gameStarted || timer <= 0) return;
     const interval = setInterval(() => {
@@ -182,8 +193,9 @@ export function useRoomPage() {
     socketService.nextRound(roomId as string);
   };
 
-  const handleSubmitQuestion = () => {
-    socketService.submitQuestion(roomId as string, player.id, question, answer);
+  const handleChooseCategory = (category: string) => {
+    console.log("Choosing category:", category);
+    socketService.chooseCategory(roomId as string, category);
   };
 
   const handleSubmitGuess = (bluff: string) => {
@@ -198,7 +210,6 @@ export function useRoomPage() {
     roomId,
     player,
     players,
-    round,
     currentPlayer,
     question,
     answer,
@@ -211,7 +222,7 @@ export function useRoomPage() {
     setQuestion,
     setAnswer,
     handleStartGame,
-    handleSubmitQuestion,
+    handleChooseCategory,
     handleSubmitGuess,
     handleSubmitVote,
     handleNextRound,
@@ -221,5 +232,8 @@ export function useRoomPage() {
     gameConfig,
     setGameConfig,
     leaveRoom,
+    availableCategories,
+    showFinalResult,
+    isLastRound,
   };
 }

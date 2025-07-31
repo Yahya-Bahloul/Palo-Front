@@ -1,0 +1,19 @@
+/* src/styles/theme-vars.css */
+:root {
+  --color-bg: oklch(0.97 0 0); /* crème par défaut, à modifier */
+  --color-card: oklch(1 0 0);
+  --color-border: oklch(0.9 0 0);
+  --color-primary: oklch(0.6 0.15 240); /* bleu pastel */
+  --color-accent: oklch(0.65 0.2 200); /* cyan */
+  --color-text: oklch(0.2 0 0); /* gris foncé */
+  --radius-lg: 12px;
+}
+
+.dark {
+  --color-bg: oklch(0.12 0 0);
+  --color-card: oklch(0.15 0 0);
+  --color-border: oklch(0.3 0 0);
+  --color-primary: oklch(0.8 0.2 240);
+  --color-accent: oklch(0.85 0.2 200);
+  --color-text: oklch(0.95 0 0);
+}
