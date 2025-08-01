@@ -12,12 +12,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>My App</title>
+        <title>Tnjya</title>
       </head>
-      <body className={`${theme.background} text-white`}>
+      <body className={`${theme.background} text-white overflow-hidden`}>
         <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
       </body>
     </html>
-    
   );
 }
