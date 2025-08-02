@@ -4,21 +4,24 @@
 import Image from "next/image";
 import { Player } from "@/model/player";
 import { theme } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
 
-type Props = {
-  guesses: Record<string, string>;
-  votes: Record<string, string>;
-  players: Player[];
-  question: string;
-  currentPlayerId: string;
+type ComputedGuess = {
+  key: string;
+  text: string;
+  authorNames: string[];
+  isCorrect: boolean;
+  voters: Player[];
 };
 
-export function VoteBreakdownSection({
-  guesses,
-  votes,
-  players,
-  question,
-}: Props) {
+type Props = {
+  computedGuesses: ComputedGuess[];
+  question: string;
+};
+
+export function VoteBreakdownSection({ computedGuesses, question }: Props) {
+  const { t } = useTranslation();
+
   const getAvatarUrl = (avatar?: string) =>
     avatar
       ? `https://api.dicebear.com/8.x/adventurer/svg?seed=${encodeURIComponent(
@@ -26,40 +29,22 @@ export function VoteBreakdownSection({
         )}`
       : "";
 
-  const guessEntries = Object.entries(guesses).map(([guessId, text]) => {
-    const voters = Object.entries(votes)
-      .filter(([, targetId]) => targetId === guessId)
-      .map(([voterId]) => players.find((p) => p.id === voterId))
-      .filter(Boolean) as Player[];
-
-    const player = players.find((p) => p.id === guessId);
-    const author =
-      player?.name ||
-      (guessId.startsWith("CORRECT") ? "La bonne réponse" : "Notre bluff");
-
-    return {
-      guessId,
-      text,
-      voters,
-      author,
-      isCorrect: guessId.startsWith("CORRECT"),
-    };
-  });
-
   const sorted = [
-    ...guessEntries.filter((g) => g.isCorrect),
-    ...guessEntries.filter((g) => !g.isCorrect),
+    ...computedGuesses.filter((g) => g.isCorrect),
+    ...computedGuesses.filter((g) => !g.isCorrect),
   ];
 
   return (
     <div className={theme.voteBreakdownSection.container}>
-      <h2 className={theme.voteBreakdownSection.title}>Résultats des votes</h2>
+      <h2 className={theme.voteBreakdownSection.title}>
+        {t("voteBreakdown.title", "Résultats des votes")}
+      </h2>
       <p className={theme.voteBreakdownSection.question}>“{question}”</p>
 
       <div className="space-y-6">
-        {sorted.map(({ guessId, text, voters, author, isCorrect }) => (
+        {sorted.map(({ key, text, voters, authorNames, isCorrect }) => (
           <div
-            key={guessId}
+            key={key}
             className={`${theme.voteBreakdownSection.card.base} ${
               isCorrect
                 ? theme.voteBreakdownSection.card.correct
@@ -91,8 +76,12 @@ export function VoteBreakdownSection({
             {/* Main guess text */}
             <p className={theme.voteBreakdownSection.text.guess}>{text}</p>
 
-            {/* Author */}
-            <p className={theme.voteBreakdownSection.text.author}>{author}</p>
+            {/* Author name(s) */}
+            <p className={theme.voteBreakdownSection.text.author}>
+              {isCorrect
+                ? t("voteBreakdown.correctAnswer", "La bonne réponse")
+                : authorNames.join(", ")}
+            </p>
           </div>
         ))}
       </div>

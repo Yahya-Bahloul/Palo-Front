@@ -1,3 +1,4 @@
+import { GameConfig } from "./gameConfig";
 import { Player } from "./player";
 import { QuizzType1Phases } from "./Quizz1Phases";
 
@@ -12,4 +13,6 @@ export type GameRoom = {
   phase: QuizzType1Phases;
   guesses: Record<string, string>; // playerId -> guess (bluff or correct answer)
   votes: Record<string, string>; // voterId -> voted playerId
+  categories?: string[]; // current categories for the round
+  gameConfig: GameConfig;
 };

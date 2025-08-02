@@ -13,5 +13,48 @@
   "developedBy": "Développé par l’équipe du jeu",
   "roomCreated": "Salle créée avec succès",
   "shareRoomCode": "Partage ce code avec tes amis pour les inviter",
-  "startGame": "Démarrer la partie"
+  "startGame": "Démarrer la partie",
+  "choose": "Sélectionner des catégories :",
+  "waiting": "{{player}} est en train de choisir une catégorie...",
+  "category": {
+    "sport": "Sport",
+    "anime": "Animé",
+    "cinema": "Cinéma",
+    "football": "Football",
+    "histoire": "Histoire",
+    "geographie": "Géographie",
+    "environnement": "Environnement",
+    "littérature arabe": "Littérature arabe",
+    "animaux": "Animaux",
+    "ww1": "Première Guerre mondiale",
+    "ww2": "Seconde Guerre mondiale",
+    "musique": "Musique",
+    "politique": "Politique",
+    "culture_generale": "Culture générale",
+    "sciences": "Sciences",
+    "technologie": "Technologie",
+    "art": "Art",
+    "mythologie": "Mythologie",
+    "geopolitique": "Géopolitique",
+    "medecine": "Médecine",
+    "philosophie": "Philosophie",
+    "religion": "Religion",
+    "langues": "Langues",
+    "cuisine": "Cuisine",
+    "voyages": "Voyages"
+  },
+
+  "playerSection": {
+    "title": "Joueurs ({{count}})",
+    "online": "En ligne",
+    "you": "VOUS",
+    "waiting": "En attente de joueurs..."
+  },
+  "room": {
+    "qrCode": {
+      "title": "Scanner pour rejoindre la partie",
+      "copy": "Copier le lien d'invitation",
+      "copied": "Lien copié !"
+    }
+  }
 }

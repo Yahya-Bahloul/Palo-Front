@@ -23,7 +23,7 @@ export const socketService = {
   },
 
   startGame(roomId: string, config: GameConfig) {
-    socket.emit("startGame", { roomId, ...config });
+    socket.emit("startGame", { roomId, config });
   },
 
   submitQuestion: (
@@ -62,6 +62,14 @@ export const socketService = {
 
   forceFinalResults: (roomId: string) => {
     socket.emit("forceFinalResults", { roomId });
+  },
+
+  sendSelectedCategories: (roomId: string, categories: string[]) => {
+    socket.emit("adminSelectedCategories", { roomId, categories });
+  },
+
+    updatePlayer: (roomId: string, player: Player) => {
+    socket.emit("updatePlayer", { roomId, player });
   },
 
   on: socket.on.bind(socket),

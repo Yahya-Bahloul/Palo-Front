@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Tnjya</title>
       </head>
-      <body className={`${theme.background} text-white overflow-hidden`}>
+      <body className={`${theme.background} text-white pb-[80px]`}>
         <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
       </body>
     </html>

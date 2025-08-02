@@ -39,7 +39,7 @@ export const theme = {
   },
 
   text: {
-    heading: "text-4xl font-bold text-[#f4f1de] drop-shadow-sm",
+    heading: "text-4xl font-bold text-[#f4f1de] drop-shadow-sm pt-4 pl-6",
     subheading: "text-xl font-semibold text-white",
     faded: "text-slate-300",
     playerName: "text-[11px] text-yellow-900 font-semibold truncate w-14",

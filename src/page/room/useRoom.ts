@@ -1,20 +1,32 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// src/hooks/useRoomPage.ts
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState, useRef } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { socketService } from "@/service/socketService";
 import { Player } from "@/model/player";
 import { QuizzType1Phases } from "@/model/Quizz1Phases";
 import { GameRoom } from "@/model/gameRoom";
 import { GameConfig } from "@/model/gameConfig";
+import { ComputedGuess } from "@/model/computedGuesses";
+import { usePlayerStore } from "@/utils/usePlayerStore";
+
+function arraysAreEqual(a: string[], b: string[]) {
+  return a.length === b.length && a.every((v) => b.includes(v));
+}
 
 export function useRoomPage() {
-  const { roomId } = useParams();
+  const params = useParams();
+  const router = useRouter();
+  const roomId = params ? params["roomId"] : undefined;
+
+  const { player } = usePlayerStore();
+
   const [players, setPlayers] = useState<Player[]>([]);
-  const [player, setPlayer] = useState<Player>({ id: "", name: "", score: 0 });
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [admin, setAdmin] = useState<Player | null>(null);
+
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [timer, setTimer] = useState(0);
@@ -26,29 +38,50 @@ export function useRoomPage() {
   const [votes, setVotes] = useState<Record<string, string>>({});
   const [waitingForGameEnd, setWaitingForGameEnd] = useState(false);
   const [gameConfig, setGameConfig] = useState<GameConfig>({ maxRound: 10 });
+
+  const [currentCategories, setCurrentCategories] = useState<string[]>([]);
   const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isLastRound, setIsLastRound] = useState(false);
+  const [computedGuesses, setComputedGuesses] = useState<ComputedGuess[]>([]);
+
+  const lastSentCategoriesRef = useRef<string[]>([]);
+
+  const isAdmin = player.id === admin?.id;
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    const storedPlayer = JSON.parse(localStorage.getItem("player") || "null");
-    if (roomId && storedPlayer) {
-      setPlayer({
-        id: storedPlayer.id,
-        name: storedPlayer.name,
-        avatar: storedPlayer.avatar,
-        score: 0,
-      });
-      socketService.joinRoom(roomId as string, storedPlayer);
+    if (!roomId) return;
+
+    if (!player.name || !player.avatar) {
+      // 🚨 Pop-up or redirect logic here
+      // For example, redirect to setup screen:
+      router.push(`/setup?roomId=${roomId}`);
+      return;
     }
-  }, [roomId]);
+
+    socketService.joinRoom(roomId as string, player);
+  }, [roomId, player]);
 
   useEffect(() => {
-    const handleJoinedRoom = (data: { room: GameRoom }) => {
+    const handleJoinedRoom = (data: {
+      room: GameRoom;
+      availableCategories: string[];
+    }) => {
       setPlayers(data.room.players);
       setAdmin(
         data.room.players.find((p) => p.id === data.room.adminId) || null
       );
+      setAnswer(data.room.currentAnswer || "");
+      setCurrentCategories(data.room.categories || []);
+      setCurrentPlayer(data.room.currentPlayer || null);
+      setGameConfig(data.room.gameConfig || { maxRound: 10 });
+      setGameStarted(data.room.phase !== QuizzType1Phases.STARTING);
+      setPhase(data.room.phase as QuizzType1Phases);
+      setQuestion(data.room.currentQuestion || "");
+      setGuesses(data.room.guesses || {});
+      setVotes(data.room.votes || {});
+      setAvailableCategories(data.availableCategories || []);
+      setSelectedCategories(data.room.gameConfig?.categories || []);
 
       if (data.room.phase !== QuizzType1Phases.STARTING) {
         const isInRoom = data.room.players.some(
@@ -63,8 +96,8 @@ export function useRoomPage() {
     };
 
     socketService.on("joinedRoom", handleJoinedRoom);
-    socketService.on("playerJoined", (data) => setPlayers(data.room.players));
-    socketService.on("playerLeft", (data) => setPlayers(data.room.players));
+    socketService.on("playerJoined", (data) => setPlayers(data.players));
+    socketService.on("playerLeft", (data) => setPlayers(data.players));
 
     return () => {
       socketService.off("joinedRoom", handleJoinedRoom);
@@ -82,9 +115,18 @@ export function useRoomPage() {
     socketService.on("guessSubmitted", (data) => setGuesses(data.guesses));
     socketService.on("voteSubmitted", (data) => setVotes(data.votes));
     socketService.on("categoriesForRound", (data) =>
-      setAvailableCategories(data.categories)
+      setCurrentCategories(data.categories)
     );
     socketService.on("showFinalResult", handleFinalResults);
+    socketService.on("playerUpdated", (updatedPlayers: Player[]) => {
+      setPlayers(updatedPlayers);
+    });
+
+    socketService.on("adminSelectedCategories", (data) => {
+      if (!isAdmin) {
+        setSelectedCategories(data.categories);
+      }
+    });
 
     return () => {
       socketService.off("roundStarted", handleRoundStarted);
@@ -95,8 +137,21 @@ export function useRoomPage() {
       socketService.off("guessSubmitted");
       socketService.off("voteSubmitted");
       socketService.off("categoriesForRound");
+      socketService.off("adminSelectedCategories");
+      socketService.off("playerUpdated");
     };
   }, [player]);
+
+  useEffect(() => {
+    if (!isAdmin || !roomId) return;
+    if (!arraysAreEqual(selectedCategories, lastSentCategoriesRef.current)) {
+      socketService.sendSelectedCategories(
+        roomId as string,
+        selectedCategories
+      );
+      lastSentCategoriesRef.current = selectedCategories;
+    }
+  }, [selectedCategories, isAdmin, roomId]);
 
   function handleRoundStarted(data: any) {
     setGameStarted(true);
@@ -123,12 +178,13 @@ export function useRoomPage() {
 
   function handleResultsReady(data: any) {
     setPhase(data.phase as QuizzType1Phases);
+    setComputedGuesses(data.computedGuesses);
     setVotes(data.votes);
     setPlayers(data.players);
     setIsLastRound(data.isLastRound || false);
   }
 
-  function handleGameEnded() {
+  function handleGameEnded(data: GameRoom) {
     setGameStarted(false);
     setCurrentPlayer(null);
     setQuestion("");
@@ -137,6 +193,7 @@ export function useRoomPage() {
     setPhase(QuizzType1Phases.STARTING);
     setGuesses({});
     setVotes({});
+    setPlayers(data.players);
     setWaitingForGameEnd(false);
   }
 
@@ -182,7 +239,14 @@ export function useRoomPage() {
   }, [timer, gameStarted]);
 
   const handleStartGame = () => {
-    socketService.startGame(roomId as string, gameConfig);
+    const allCategoriesSelected =
+      availableCategories.length === selectedCategories.length;
+    const config: GameConfig = {
+      ...gameConfig,
+      all_categories: allCategoriesSelected,
+      categories: allCategoriesSelected ? [] : selectedCategories,
+    };
+    socketService.startGame(roomId as string, config);
   };
 
   const handleNextRound = () => {
@@ -190,7 +254,6 @@ export function useRoomPage() {
   };
 
   const handleChooseCategory = (category: string) => {
-    console.log("Choosing category:", category);
     socketService.chooseCategory(roomId as string, category);
   };
 
@@ -224,12 +287,16 @@ export function useRoomPage() {
     handleNextRound,
     endGame,
     isMyTurn: player.id === currentPlayer?.id,
-    isAdmin: player.id === admin?.id,
+    isAdmin,
     gameConfig,
     setGameConfig,
     leaveRoom,
-    availableCategories,
+    currentCategories,
     showFinalResult,
     isLastRound,
+    availableCategories,
+    selectedCategories,
+    setSelectedCategories,
+    computedGuesses,
   };
 }

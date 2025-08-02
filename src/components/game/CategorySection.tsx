@@ -2,6 +2,7 @@
 "use client";
 
 import { theme } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   isMyTurn: boolean;
@@ -16,12 +17,12 @@ export function CategorySection({
   handleChooseCategory,
   currentPlayerName,
 }: Props) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col space-y-4 items-center">
       <h2 className={theme.text.subheading}>
-        {isMyTurn
-          ? "Choisis une catégorie :"
-          : `${currentPlayerName} est en train de choisir une catégorie...`}
+        {isMyTurn ? t("choose") : t("waiting", { player: currentPlayerName })}
       </h2>
 
       <div className="grid gap-4 w-full max-w-md">
@@ -34,7 +35,7 @@ export function CategorySection({
             }`}
             disabled={!isMyTurn}
           >
-            {cat.toUpperCase()}
+            {t(`category.${cat.toLowerCase()}`)}
           </button>
         ))}
       </div>

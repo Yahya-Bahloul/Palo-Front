@@ -2,10 +2,10 @@ import { QuizzType1Phases } from "@/model/Quizz1Phases";
 
 // src/app/room/Timer.tsx
 export function Timer({
-  time,
+  timer,
   phase,
 }: {
-  time: number;
+  timer: number;
   phase: QuizzType1Phases;
 }) {
   if (
@@ -16,7 +16,7 @@ export function Timer({
     return null;
   return (
     <div className="text-center text-xl font-bold text-amber-700 mt-6">
-      {time > 0 ? `Temps restant: ${time}s` : "Temps écoulé!"}
+      {timer > 0 ? `Temps restant: ${timer}s` : ""}
     </div>
   );
 }

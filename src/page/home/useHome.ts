@@ -1,40 +1,35 @@
-import { GameRoom, Player } from "@/model";
+// src/hooks/useHomePage.ts
+import { GameRoom } from "@/model";
 import { socketService } from "@/service/socketService";
+import { usePlayerStore } from "@/utils/usePlayerStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const PLAYER_KEY = "player";
 
 export function useHomePage() {
   const router = useRouter();
 
-  const [player, setPlayer] = useState<Player>({
-    id: "",
-    name: "",
-    avatar: "",
-    score: 0,
-  });
+  const { player, updatePlayer, regenerateAvatar } = usePlayerStore();
 
   const [roomCode, setRoomCode] = useState("");
   const [activeTab, setActiveTab] = useState<"create" | "join">("create");
 
-  // ✅ Load player from localStorage or create new
+  // ✅ Init player only once
   useEffect(() => {
-    const stored = localStorage.getItem(PLAYER_KEY);
-    const existing = stored ? (JSON.parse(stored) as Player) : ({} as Player);
-    const newPlayer: Player = {
-      id: existing.id || crypto.randomUUID(),
-      name: existing.name || "",
-      avatar: existing.avatar || generateRandomSeed(),
-      score: existing.score || 0,
-    };
-    setPlayer(newPlayer);
-    localStorage.setItem(PLAYER_KEY, JSON.stringify(newPlayer));
-  }, []);
+    console.log(player);
+    if (!player.id) {
+      updatePlayer({
+        id: crypto.randomUUID(),
+        name: "",
+        score: 0,
+        avatar: Math.random().toString(36).substring(2, 10),
+      });
+    }
+  }, [player.id, updatePlayer]);
 
+  // ✅ Handle backend events
   useEffect(() => {
-    const handleRoomCreated = (data: { room: { id: string } }) => {
-      router.push(`/room/${data.room.id}`);
+    const handleRoomCreated = (data: { id: string }) => {
+      router.push(`/room/${data.id}`);
     };
 
     const handleJoinedRoom = (data: { room: GameRoom }) => {
@@ -66,16 +61,6 @@ export function useHomePage() {
     socketService.joinRoom(roomCode, player);
   };
 
-  const updatePlayer = (partial: Partial<Player>) => {
-    const updated = { ...player, ...partial };
-    setPlayer(updated);
-    localStorage.setItem(PLAYER_KEY, JSON.stringify(updated));
-  };
-
-  const regenerateAvatar = () => {
-    updatePlayer({ avatar: generateRandomSeed() });
-  };
-
   return {
     activeTab,
     setActiveTab,
@@ -87,8 +72,4 @@ export function useHomePage() {
     handleJoinRoom,
     regenerateAvatar,
   };
-}
-
-function generateRandomSeed(): string {
-  return Math.random().toString(36).substring(2, 10);
 }

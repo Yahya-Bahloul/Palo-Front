@@ -1,5 +1,7 @@
+// src/components/avatar/AvatarSelector.tsx
 "use client";
 
+import { useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
@@ -13,13 +15,22 @@ export function AvatarSelector({
   regenerateAvatar: () => void;
   seed?: string;
 }) {
-  const avatarUrl = `https://api.dicebear.com/8.x/${AVATAR_STYLE}/svg?seed=${encodeURIComponent(
-    seed
-  )}`;
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (seed && typeof seed === "string" && seed.trim() !== "") {
+      const url = `https://api.dicebear.com/8.x/${AVATAR_STYLE}/svg?seed=${encodeURIComponent(
+        seed
+      )}`;
+      setAvatarUrl(url);
+    } else {
+      setAvatarUrl(null);
+    }
+  }, [seed]);
 
   return (
     <div className={theme.avatarSelector.container}>
-      {seed && (
+      {avatarUrl && (
         <div className={theme.avatarSelector.imageWrapper}>
           <Image
             src={avatarUrl}
