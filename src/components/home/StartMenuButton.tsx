@@ -1,18 +1,19 @@
+// src/components/game/StartMenuButton.tsx
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { usePlayerStore } from "@/utils/usePlayerStore";
 import { AvatarSelector } from "../avatar/AvatarSelectorHome";
 import { socketService } from "@/service/socketService";
-import { useParams } from "next/navigation";
+import { usePlayerStore } from "@/utils/usePlayerStore";
 
 interface StartMenuButtonProps {
   gameStarted: boolean;
@@ -33,6 +34,7 @@ export default function StartMenuButton({
   const [open, setOpen] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const { player, updatePlayerName, regenerateAvatar } = usePlayerStore();
+  const { t } = useTranslation("common");
 
   const handleHome = () => {
     setOpen(false);
@@ -63,7 +65,7 @@ export default function StartMenuButton({
         <PopoverTrigger asChild>
           <Button
             variant="default"
-            className="bg-yellow-400 text-black font-bold px-3 py-2 border-2 border-black rounded-md shadow-md"
+            className="bg-yellow-400 text-black font-bold border-2 border-black rounded-md shadow-md text-lg"
           >
             ≡
           </Button>
@@ -72,14 +74,14 @@ export default function StartMenuButton({
         <PopoverContent
           align="start"
           sideOffset={8}
-          className="w-72 bg-black border-4 border-yellow-400 text-white rounded-md shadow-lg retro-font"
+          className="w-60 bg-black border-4 border-yellow-400 text-white rounded-md shadow-lg retro-font"
         >
           <div className="flex flex-col gap-4 text-sm px-2 py-1">
             <button
               onClick={handleHome}
-              className="hover:underline hover:text-yellow-300 text-left"
+              className="hover:underline hover:text-yellow-300 text-center"
             >
-              🏠 Revenir à l’accueil
+              🏠 {t("backHome")}
             </button>
 
             {gameStarted && isAdmin && (
@@ -87,9 +89,9 @@ export default function StartMenuButton({
                 <div className="border-t border-yellow-500 my-1" />
                 <button
                   onClick={handleEndGame}
-                  className="hover:underline text-red-400 hover:text-red-300 text-left"
+                  className="hover:underline text-red-400 hover:text-red-300 text-center"
                 >
-                  ❌ Terminer la partie
+                  ❌ {t("endGame")}
                 </button>
               </>
             )}
@@ -97,9 +99,9 @@ export default function StartMenuButton({
             <div className="border-t border-yellow-500 my-1" />
             <button
               onClick={() => setEditProfile((prev) => !prev)}
-              className="hover:underline hover:text-yellow-300 text-left"
+              className="hover:underline hover:text-yellow-300 text-center"
             >
-              ✏️ Modifier mon profil
+              ✏️ {t("editProfile")}
             </button>
 
             {editProfile && (
@@ -108,7 +110,7 @@ export default function StartMenuButton({
                   className="text-black bg-white w-full rounded-sm px-2 py-1"
                   value={player.name}
                   onChange={handleChangeName}
-                  placeholder="Votre nom"
+                  placeholder={t("playerName")}
                 />
                 <AvatarSelector
                   regenerateAvatar={regenerateAvatar}
@@ -118,7 +120,7 @@ export default function StartMenuButton({
                   className="w-full bg-green-500 text-black font-semibold"
                   onClick={handleSave}
                 >
-                  💾 Enregistrer
+                  💾 {t("save")}
                 </Button>
               </div>
             )}

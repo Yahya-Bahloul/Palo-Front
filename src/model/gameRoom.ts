@@ -15,4 +15,6 @@ export type GameRoom = {
   votes: Record<string, string>; // voterId -> voted playerId
   categories?: string[]; // current categories for the round
   gameConfig: GameConfig;
+  currentQuestionImageUrl?: string; // URL for the current question image
+  currentCategory?: string; // category of the current question
 };

@@ -21,7 +21,7 @@ export default function TabSelector({
         onValueChange={(value) => setActiveTab(value as "create" | "join")}
         className="w-full"
       >
-        <TabsList className="w-full grid grid-cols-2 gap-2 bg-white/90 border border-gray-300 rounded-xl p-1 shadow-inner">
+        <TabsList className="w-full grid grid-cols-2 gap-2 h-[40px]	 bg-white/90 border border-gray-300 rounded-xl shadow-inner">
           <TabsTrigger value="create" className={theme.tabSelector.trigger}>
             {t("createGame")}
           </TabsTrigger>

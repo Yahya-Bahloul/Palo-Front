@@ -4,6 +4,7 @@
 import Image from "next/image";
 import { Player } from "@/model/player";
 import { theme } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   players: Player[];
@@ -20,6 +21,8 @@ export function PlayerFooterList({
   votes,
   currentPlayerId,
 }: Props) {
+  const { t } = useTranslation();
+
   return (
     <div
       className={`fixed bottom-0 left-0 right-0 px-4 py-2 flex justify-center gap-4 overflow-x-auto z-50 shadow-inner backdrop-blur-sm ${theme.footer}`}
@@ -65,7 +68,9 @@ export function PlayerFooterList({
                 />
               </div>
               <div className={theme.text.playerName}>{player.name}</div>
-              <div className={theme.text.playerScore}>{player.score} pts</div>
+              <div className={theme.text.playerScore}>
+                {player.score} {t("pointsShort")}
+              </div>
             </div>
           );
         })}

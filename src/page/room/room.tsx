@@ -1,3 +1,4 @@
+// src/app/room/page.tsx
 "use client";
 
 import { PlayerSection } from "@/components/game/PlayerSelection";
@@ -17,16 +18,21 @@ import { VoteBreakdownSection } from "@/components/game/VoteBreakdownSection";
 import { ResultSection } from "@/components/game/ResultSection";
 import { Dispatch, SetStateAction } from "react";
 import { ComputedGuess } from "@/model/computedGuesses";
+import { useTranslation } from "react-i18next"; // ✅
 
 export default function RoomPage() {
   const props = useRoomPage();
+  const { t } = useTranslation(); // ✅
 
   return (
     <div className={theme.layout.container}>
       <StartMenuButton {...props} />
 
       <div className={theme.layout.card}>
-        <h1 className={theme.text.heading}>Salle {props.roomId}</h1>
+        <h1 className={theme.text.heading}>
+          {props.currentCategory !== "" &&
+            t(`category.${props.currentCategory}`)}
+        </h1>
 
         {props.waitingForGameEnd && <WaitingOverlay />}
         <GameStartingPhase {...props} roomId={props.roomId as string} />
@@ -36,7 +42,9 @@ export default function RoomPage() {
             <CategoryPhase
               {...props}
               categories={props.currentCategories}
-              currentPlayerName={props.currentPlayer?.name || "Joueur"}
+              currentPlayerName={
+                props.currentPlayer?.name || t("room.defaultPlayerName")
+              }
             />
             <BluffPhase {...props} />
             <VotePhase {...props} />
@@ -101,46 +109,26 @@ function CategoryPhase({
   );
 }
 
-function BluffPhase({
-  phase,
-  handleSubmitGuess,
-  question,
-  answer,
-}: {
+function BluffPhase(props: {
   phase: QuizzType1Phases;
   handleSubmitGuess: (guess: string) => void;
   question: string;
   answer: string;
+  currentQuestionImageUrl?: string;
 }) {
-  if (phase !== QuizzType1Phases.GUESSING) return null;
-  return (
-    <BluffSection
-      question={question}
-      handleSubmitGuess={handleSubmitGuess}
-      answer={answer}
-    />
-  );
+  if (props.phase !== QuizzType1Phases.GUESSING) return null;
+  return <BluffSection {...props} />;
 }
 
-function VotePhase({
-  phase,
-  guesses,
-  handleSubmitVote,
-  question,
-}: {
+function VotePhase(props: {
   phase: QuizzType1Phases;
   guesses: Record<string, string>;
   handleSubmitVote: (vote: string) => void;
   question: string;
+  currentQuestionImageUrl?: string;
 }) {
-  if (phase !== QuizzType1Phases.VOTING) return null;
-  return (
-    <VoteSection
-      question={question}
-      guesses={guesses}
-      handleSubmitVote={handleSubmitVote}
-    />
-  );
+  if (props.phase !== QuizzType1Phases.VOTING) return null;
+  return <VoteSection {...props} />;
 }
 
 function ResultPhase(props: {
@@ -179,6 +167,7 @@ function StartOrNextButton({
   showFinalResult: () => void;
   isLastRound?: boolean;
 }) {
+  const { t } = useTranslation(); // ✅
   const isResults = phase === QuizzType1Phases.RESULTS;
   const isFinal = phase === QuizzType1Phases.FINAL_RESULTS;
 
@@ -188,7 +177,7 @@ function StartOrNextButton({
         onClick={handleStartGame}
         className={`${theme.button.base} ${theme.button.start}`}
       >
-        Démarrer la partie
+        {t("room.startGame")}
       </button>
     );
   }
@@ -201,7 +190,7 @@ function StartOrNextButton({
             onClick={handleNextRound}
             className={`${theme.button.base} ${theme.button.start}`}
           >
-            Passer à la prochaine question
+            {t("room.nextQuestion")}
           </button>
         )}
         {isLastRound && (
@@ -209,7 +198,7 @@ function StartOrNextButton({
             onClick={showFinalResult}
             className={`${theme.button.base} ${theme.button.primary}`}
           >
-            Voir le podium
+            {t("room.showFinalResults")}
           </button>
         )}
       </div>
@@ -222,7 +211,7 @@ function StartOrNextButton({
         onClick={endGame}
         className={`${theme.button.base} ${theme.button.primary}`}
       >
-        {`Revenir à l'écran d'accueil`}
+        {t("room.backHome")}
       </button>
     );
   }

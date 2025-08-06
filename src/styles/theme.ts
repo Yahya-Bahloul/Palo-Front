@@ -19,6 +19,7 @@ export const theme = {
 
   background: "bg-[#588157] from-[#1E293B] via-[#334155] to-[#0F172A]",
   card: "bg-slate-100 border border-slate-200 text-gray-900",
+  card_admin: "bg-white border border-gray-300 text-gray-900 shadow-md",
   input: {
     base: "w-full p-3 pr-10 text-black bg-white border border-amber-300 rounded-lg shadow-sm transition-all duration-200 outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500",
   },
@@ -45,6 +46,7 @@ export const theme = {
     playerName: "text-[11px] text-yellow-900 font-semibold truncate w-14",
     playerScore: "text-[10px] text-yellow-800 font-medium",
     label: "block text-amber-700 font-medium",
+    label_admin: "block text-amber-700 font-semibold mb-2 ",
     helper: "mt-4 text-xs text-amber-700 text-center",
   },
 
@@ -114,7 +116,7 @@ export const theme = {
   bluffSection: {
     card: "bg-gradient-to-br from-amber-50 to-amber-100 p-6 rounded-xl shadow-lg border border-amber-200",
     text: {
-      heading: "text-xl font-bold text-amber-800 mb-4 text-center",
+      heading: "text-lg text-amber-800 mb-4 text-center",
       label: "text-gray-700 text-center",
       bluff: "bg-white p-3 rounded-lg font-medium text-black text-center",
       waiting: "text-sm text-gray-500 italic text-center",
@@ -164,7 +166,7 @@ export const theme = {
 
   tabSelector: {
     trigger:
-      "text-sm font-semibold tracking-wide data-[state=active]:bg-[#f4a261] data-[state=active]:text-black data-[state=active]:ring-2 data-[state=active]:ring-[#f4a261]/70 rounded-lg transition-all",
+      "text-sm font-semibold tracking-wide data-[state=active]:bg-yellow-300 data-[state=active]:text-black data-[state=active]:ring-2 data-[state=active]:ring-[#f4a261]/70 rounded-lg transition-all",
   },
   border: {
     default: "border-yellow-300",

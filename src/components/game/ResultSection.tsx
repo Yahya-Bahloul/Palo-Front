@@ -4,12 +4,15 @@
 import { Player } from "@/model/player";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   players: Player[];
 };
 
 export function ResultSection({ players }: Props) {
+  const { t } = useTranslation();
+
   const sortedPlayers = [...players]
     .filter((p) => !p.joinedLate)
     .sort((a, b) => b.score - a.score);
@@ -25,7 +28,7 @@ export function ResultSection({ players }: Props) {
 
   return (
     <div className={theme.resultSection.card}>
-      <h2 className={theme.resultSection.title}>{"🏆 Résultats finaux"}</h2>
+      <h2 className={theme.resultSection.title}>🏆 {t("finalResults")}</h2>
 
       <div className="space-y-3">
         {sortedPlayers.map((player, index) => {
@@ -53,7 +56,7 @@ export function ResultSection({ players }: Props) {
                 {player.name}
               </span>
               <span className={theme.resultSection.playerScore}>
-                {player.score} pts
+                {player.score} {t("pointsShort")}
               </span>
             </div>
           );

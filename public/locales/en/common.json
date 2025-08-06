@@ -1,0 +1,111 @@
+{
+  "welcomeTitle": "Welcome to the Friends Game",
+  "subtitle": "Play with your friends and have fun",
+  "joinGame": "Join a game",
+  "createGame": "Create a game",
+  "enterName": "Enter your name",
+  "roomCode": "Room code",
+  "enterRoomCode": "Enter the room code",
+  "hostName": "Host name",
+  "joinNow": "Join now",
+  "createRoom": "Create a room",
+  "developedBy": "Developed by the game team",
+  "roomCreated": "Room created successfully",
+  "shareRoomCode": "Share this code with your friends to invite them",
+  "startGame": "Start the game",
+  "choose": "Choose categories:",
+  "waiting": "{{player}} is choosing a category...",
+  "category": {
+    "sport": "Sport",
+    "anime": "Anime",
+    "cinema": "Cinema",
+    "football": "Football",
+    "history": "History",
+    "geography": "Geography",
+    "environment": "Environment",
+    "littérature arabe": "Arabic Literature",
+    "animaux": "Animals",
+    "animal": "Animals",
+    "ww1": "World War I",
+    "ww2": "World War II",
+    "musique": "Music",
+    "music_ar": "Arabic Music",
+    "politique": "Politics",
+    "culture_generale": "General Knowledge",
+    "sciences": "Science",
+    "technologie": "Technology",
+    "art": "Art",
+    "mythologie": "Mythology",
+    "geopolitique": "Geopolitics",
+    "medecine": "Medicine",
+    "philosophie": "Philosophy",
+    "religion": "Religion",
+    "langues": "Languages",
+    "cuisine": "Cooking",
+    "voyages": "Travel",
+    "capitals": "Capitals",
+    "world_cup": "World Cup"
+  },
+  "playerSection": {
+    "title": "Players ({{count}})",
+    "online": "Online",
+    "you": "YOU",
+    "waiting": "Waiting for other players..."
+  },
+  "room": {
+    "qrCode": {
+      "title": "Scan to join the game",
+      "copy": "Copy invitation link",
+      "copied": "Link copied!"
+    },
+    "title": "Room {{id}}",
+    "startGame": "Start the game",
+    "nextQuestion": "Next question",
+    "showFinalResults": "Show the podium",
+    "backHome": "Back to home screen",
+    "defaultPlayerName": "Player"
+  },
+  "avatar": {
+    "previewAlt": "Avatar preview",
+    "regenerate": "Generate a new avatar"
+  },
+  "backHome": "Back to home",
+  "endGame": "End the game",
+  "editProfile": "Edit my profile",
+  "save": "Save",
+  "playerName": "Your name",
+  "submitBluff": "Submit",
+  "bluffInputPlaceholder": "Write your fake answer here",
+  "exactMatchWarning": "You found the correct answer! Try another bluff 😏",
+  "tooCloseWarning": "Your answer is too close to the correct one... Be more creative 😉",
+  "waitingForOthers": "Waiting for other players...",
+  "questionImageAlt": "Question image",
+  "settingsTitle": "Settings",
+  "numberOfRounds": "Number of rounds",
+  "pointsShort": "pts",
+  "finalResults": "Final results",
+  "voteSection": {
+    "title": "Vote for the correct answer",
+    "waiting": "Vote recorded! Waiting for others...",
+    "imageAlt": "Question image"
+  },
+  "waitingNotice": {
+    "thanks": "Thanks for waiting..."
+  },
+  "waitingOverlay": {
+    "title": "A game is in progress",
+    "message": "Please wait until the next round..."
+  },
+  "setup": {
+    "title": "Create your profile",
+    "nameLabel": "Your name:",
+    "namePlaceholder": "Enter your name",
+    "avatarLabel": "Your avatar:",
+    "save": "✅ Save"
+  },
+  "language": "Language",
+  "voteBreakdown": {
+    "title": "Vote Results",
+    "correctAnswer": "The correct answer"
+  }
+}

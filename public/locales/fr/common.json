@@ -3,7 +3,6 @@
   "subtitle": "Joue avec tes amis et amuse-toi",
   "joinGame": "Rejoindre une partie",
   "createGame": "Créer une partie",
-  "playerName": "Nom du joueur",
   "enterName": "Entre ton nom",
   "roomCode": "Code de la salle",
   "enterRoomCode": "Entre le code de la salle",
@@ -21,11 +20,11 @@
     "anime": "Animé",
     "cinema": "Cinéma",
     "football": "Football",
-    "histoire": "Histoire",
-    "geographie": "Géographie",
-    "environnement": "Environnement",
+    "history": "Histoire",
+    "geography": "Géographie",
+    "environment": "Environnement",
     "littérature arabe": "Littérature arabe",
-    "animaux": "Animaux",
+    "animal": "Animaux",
     "ww1": "Première Guerre mondiale",
     "ww2": "Seconde Guerre mondiale",
     "musique": "Musique",
@@ -41,7 +40,10 @@
     "religion": "Religion",
     "langues": "Langues",
     "cuisine": "Cuisine",
-    "voyages": "Voyages"
+    "voyages": "Voyages",
+    "capitals": "Capitales",
+    "world_cup": "Coupe du monde",
+    "music_ar": "Musique arabe"
   },
 
   "playerSection": {
@@ -55,6 +57,55 @@
       "title": "Scanner pour rejoindre la partie",
       "copy": "Copier le lien d'invitation",
       "copied": "Lien copié !"
-    }
+    },
+    "title": "Room {{id}}",
+    "startGame": "Start the game",
+    "nextQuestion": "Next question",
+    "showFinalResults": "Show the podium",
+    "backHome": "Back to home screen",
+    "defaultPlayerName": "Player"
+  },
+  "avatar": {
+    "previewAlt": "Aperçu de l’avatar",
+    "regenerate": "Générer un nouvel avatar"
+  },
+  "backHome": "Revenir à l’accueil",
+  "endGame": "Terminer la partie",
+  "editProfile": "Modifier mon profil",
+  "save": "Enregistrer",
+  "playerName": "Votre nom",
+  "submitBluff": "Soumettre",
+  "bluffInputPlaceholder": "Écris ta fausse réponse ici",
+  "exactMatchWarning": "Tu as trouvé la bonne réponse ! Essaie un autre bluff 😏",
+  "tooCloseWarning": "Ta réponse est trop proche de la bonne... Essaie d’être plus créatif 😉",
+  "waitingForOthers": "En attente des autres joueurs...",
+  "questionImageAlt": "Image de la question",
+  "settingsTitle": "Paramètres",
+  "numberOfRounds": "Nombre de manches",
+  "pointsShort": "pts",
+  "finalResults": "Résultats finaux",
+  "voteSection": {
+    "title": "Votez pour la bonne réponse",
+    "waiting": "Vote enregistré ! En attente des autres...",
+    "imageAlt": "Image de la question"
+  },
+  "waitingNotice": {
+    "thanks": "Merci de patienter..."
+  },
+  "waitingOverlay": {
+    "title": "Une partie est en cours",
+    "message": "Merci de patienter jusqu'à la prochaine manche..."
+  },
+  "setup": {
+    "title": "Crée ton profil",
+    "nameLabel": "Ton nom :",
+    "namePlaceholder": "Entre ton nom",
+    "avatarLabel": "Ton avatar :",
+    "save": "✅ Sauvegarder"
+  },
+  "language": "Langue",
+  "voteBreakdown": {
+    "title": "Résultats des votes",
+    "correctAnswer": "La bonne réponse"
   }
 }

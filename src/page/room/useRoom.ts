@@ -44,6 +44,10 @@ export function useRoomPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isLastRound, setIsLastRound] = useState(false);
   const [computedGuesses, setComputedGuesses] = useState<ComputedGuess[]>([]);
+  const [currentQuestionImageUrl, setCurrentQuestionImageUrl] = useState<
+    string | undefined
+  >(undefined);
+  const [currentCategory, setCurrentCategory] = useState<string>("");
 
   const lastSentCategoriesRef = useRef<string[]>([]);
 
@@ -78,10 +82,14 @@ export function useRoomPage() {
       setGameStarted(data.room.phase !== QuizzType1Phases.STARTING);
       setPhase(data.room.phase as QuizzType1Phases);
       setQuestion(data.room.currentQuestion || "");
+      setCurrentQuestionImageUrl(
+        data.room.currentQuestionImageUrl || undefined
+      );
       setGuesses(data.room.guesses || {});
       setVotes(data.room.votes || {});
       setAvailableCategories(data.availableCategories || []);
       setSelectedCategories(data.room.gameConfig?.categories || []);
+      setCurrentCategory(data.room.currentCategory || "");
 
       if (data.room.phase !== QuizzType1Phases.STARTING) {
         const isInRoom = data.room.players.some(
@@ -114,9 +122,11 @@ export function useRoomPage() {
     socketService.on("gameEnded", handleGameEnded);
     socketService.on("guessSubmitted", (data) => setGuesses(data.guesses));
     socketService.on("voteSubmitted", (data) => setVotes(data.votes));
-    socketService.on("categoriesForRound", (data) =>
-      setCurrentCategories(data.categories)
-    );
+    socketService.on("categoriesForRound", (data) => {
+      setCurrentCategories(data.categories);
+      console.log("aaaa");
+      setCurrentCategory("");
+    });
     socketService.on("showFinalResult", handleFinalResults);
     socketService.on("playerUpdated", (updatedPlayers: Player[]) => {
       setPlayers(updatedPlayers);
@@ -159,6 +169,7 @@ export function useRoomPage() {
     setCurrentPlayer(data.currentPlayer);
     setPhase(data.phase as QuizzType1Phases);
     setQuestion("");
+    setCurrentQuestionImageUrl(undefined);
     setAnswer("");
     setTimer(60);
   }
@@ -167,6 +178,8 @@ export function useRoomPage() {
     setQuestion(data.currentQuestion);
     setAnswer(data.currentAnswer);
     setPhase(data.phase as QuizzType1Phases);
+    setCurrentCategory(data.currentCategory || "");
+    setCurrentQuestionImageUrl(data.currentQuestionImageUrl || null);
     setTimer(40);
   }
 
@@ -188,6 +201,7 @@ export function useRoomPage() {
     setGameStarted(false);
     setCurrentPlayer(null);
     setQuestion("");
+    setCurrentQuestionImageUrl(undefined);
     setAnswer("");
     setTimer(0);
     setPhase(QuizzType1Phases.STARTING);
@@ -298,5 +312,7 @@ export function useRoomPage() {
     selectedCategories,
     setSelectedCategories,
     computedGuesses,
+    currentQuestionImageUrl,
+    currentCategory,
   };
 }

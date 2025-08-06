@@ -17,9 +17,14 @@ type ComputedGuess = {
 type Props = {
   computedGuesses: ComputedGuess[];
   question: string;
+  currentQuestionImageUrl?: string;
 };
 
-export function VoteBreakdownSection({ computedGuesses, question }: Props) {
+export function VoteBreakdownSection({
+  computedGuesses,
+  question,
+  currentQuestionImageUrl,
+}: Props) {
   const { t } = useTranslation();
 
   const getAvatarUrl = (avatar?: string) =>
@@ -37,10 +42,21 @@ export function VoteBreakdownSection({ computedGuesses, question }: Props) {
   return (
     <div className={theme.voteBreakdownSection.container}>
       <h2 className={theme.voteBreakdownSection.title}>
-        {t("voteBreakdown.title", "Résultats des votes")}
+        {t("voteBreakdown.title")}
       </h2>
       <p className={theme.voteBreakdownSection.question}>“{question}”</p>
-
+      {currentQuestionImageUrl && (
+        <div className="flex justify-center my-4">
+          <Image
+            src={currentQuestionImageUrl}
+            alt="question image"
+            width={320}
+            height={192}
+            className="max-w-xs max-h-48 w-auto h-auto object-contain rounded-xl border border-white/20"
+            unoptimized
+          />
+        </div>
+      )}
       <div className="space-y-6">
         {sorted.map(({ key, text, voters, authorNames, isCorrect }) => (
           <div
@@ -79,7 +95,7 @@ export function VoteBreakdownSection({ computedGuesses, question }: Props) {
             {/* Author name(s) */}
             <p className={theme.voteBreakdownSection.text.author}>
               {isCorrect
-                ? t("voteBreakdown.correctAnswer", "La bonne réponse")
+                ? t("voteBreakdown.correctAnswer")
                 : authorNames.join(", ")}
             </p>
           </div>

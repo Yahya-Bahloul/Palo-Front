@@ -1,8 +1,11 @@
 // src/components/game/BluffSection.tsx
 "use client";
 
+// src/components/game/BluffSection.tsx
 import { useState } from "react";
+import Image from "next/image";
 import { AlertTriangle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { theme } from "@/styles/theme";
 import { isBluffTooClose, normalizeText } from "@/utils/similarityUtils";
 
@@ -10,16 +13,22 @@ type Props = {
   handleSubmitGuess: (bluff: string) => void;
   question: string;
   answer: string;
+  currentQuestionImageUrl?: string;
 };
 
-export function BluffSection({ handleSubmitGuess, question, answer }: Props) {
+export function BluffSection({
+  handleSubmitGuess,
+  question,
+  answer,
+  currentQuestionImageUrl,
+}: Props) {
+  const { t } = useTranslation();
   const [bluff, setBluff] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isExactMatch, setIsExactMatch] = useState(false);
   const [similarBluffDetected, setSimilarBluffDetected] = useState(false);
 
   const handleSubmit = () => {
-    console.log("Submitting bluff:", bluff);
     const cleanBluff = normalizeText(bluff);
     const cleanAnswer = normalizeText(answer);
 
@@ -45,12 +54,25 @@ export function BluffSection({ handleSubmitGuess, question, answer }: Props) {
 
   return (
     <div className={theme.bluffSection.card}>
+      {currentQuestionImageUrl && (
+        <div className="flex justify-center mb-4">
+          <Image
+            src={currentQuestionImageUrl}
+            alt={t("questionImageAlt")}
+            width={320}
+            height={192}
+            className="rounded-xl border border-white/20 max-w-xs max-h-48 h-auto w-auto object-contain"
+            unoptimized
+          />
+        </div>
+      )}
+
       <h2 className={theme.bluffSection.text.heading}>{question}</h2>
 
       {submitted ? (
         <div className="text-center space-y-3">
           <p className={theme.bluffSection.text.waiting}>
-            En attente des autres joueurs...
+            {t("waitingForOthers")}
           </p>
         </div>
       ) : (
@@ -59,7 +81,7 @@ export function BluffSection({ handleSubmitGuess, question, answer }: Props) {
             type="text"
             value={bluff}
             onChange={(e) => setBluff(e.target.value)}
-            placeholder="Écris ta fausse réponse ici"
+            placeholder={t("bluffInputPlaceholder")}
             className={theme.bluffSection.input}
             disabled={submitted}
           />
@@ -85,21 +107,20 @@ export function BluffSection({ handleSubmitGuess, question, answer }: Props) {
                 clipRule="evenodd"
               />
             </svg>
-            <span>Soumettre le bluff</span>
+            <span>{t("submitBluff")}</span>
           </button>
 
           {isExactMatch && (
             <p className={theme.bluffSection.text.error}>
               <AlertTriangle className={theme.bluffSection.icon.warning} />
-              Tu as trouvé la bonne réponse ! Essaie un autre bluff 😏
+              {t("exactMatchWarning")}
             </p>
           )}
 
           {similarBluffDetected && !isExactMatch && (
             <p className={theme.bluffSection.text.warning}>
               <AlertTriangle className={theme.bluffSection.icon.warning} />
-              Ta réponse est trop proche de la bonne... Essaie d’être plus
-              créatif 😉
+              {t("tooCloseWarning")}
             </p>
           )}
         </div>

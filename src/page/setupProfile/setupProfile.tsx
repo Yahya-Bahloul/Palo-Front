@@ -7,8 +7,10 @@ import { AvatarSelector } from "@/components/avatar/AvatarSelectorHome";
 import { useSetupProfile } from "./useSetupProfile";
 import { theme } from "@/styles/theme";
 import { useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SetupPage() {
+  const { t } = useTranslation();
   const { name, setName, error, handleSave, player, regenerateAvatar } =
     useSetupProfile();
 
@@ -24,17 +26,17 @@ export default function SetupPage() {
       <div className={theme.home.card}>
         <div className={theme.home.cardContent}>
           <h1 className="text-xl font-bold text-center text-yellow-900">
-            🧑‍🎮 Crée ton profil
+            🧑‍🎮 {t("setup.title")}
           </h1>
 
           <div className="space-y-2">
-            <label className={theme.text.label}>Ton nom :</label>
+            <label className={theme.text.label}>{t("setup.nameLabel")}</label>
             <Input
               ref={inputRef}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className={theme.home.input}
-              placeholder="Entre ton nom"
+              placeholder={t("setup.namePlaceholder")}
             />
             {error && (
               <p className="text-red-500 text-sm mt-1 text-center">{error}</p>
@@ -42,7 +44,7 @@ export default function SetupPage() {
           </div>
 
           <div className="space-y-2 pt-4">
-            <label className={theme.text.label}>Ton avatar :</label>
+            <label className={theme.text.label}>{t("setup.avatarLabel")}</label>
             <AvatarSelector
               seed={player.avatar}
               regenerateAvatar={regenerateAvatar}
@@ -56,7 +58,7 @@ export default function SetupPage() {
             className={theme.home.actionButton}
             onClick={handleSave}
           >
-            ✅ Sauvegarder
+            {t("setup.save")}
           </Button>
         </div>
       </div>

@@ -28,7 +28,8 @@ export function PlayerSection({
   roomId,
   isAdmin,
 }: Props) {
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const isRTL = i18n.language === "ar";
   const [animateNew, setAnimateNew] = useState<string | null>(null);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export function PlayerSection({
   }, [players]);
 
   const toggleCategory = (category: string) => {
-    if (!isAdmin) return; // 🔒 Pas admin = pas d’action
+    if (!isAdmin) return;
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
@@ -56,7 +57,7 @@ export function PlayerSection({
   };
 
   const toggleAllCategories = () => {
-    if (!isAdmin) return; // 🔒 Pas admin = pas d’action
+    if (!isAdmin) return;
     setSelectedCategories((prev) =>
       prev.length === availableCategories.length ? [] : [...availableCategories]
     );
@@ -123,7 +124,7 @@ export function PlayerSection({
 
       {/* Catégories */}
       {availableCategories.length > 0 && (
-        <div className="mt-6 w-full">
+        <div className="mt-6 w-full" dir={isRTL ? "rtl" : "ltr"}>
           <div className="flex items-center justify-center mb-4 gap-2">
             <h3 className="text-lg font-semibold text-white">{t("choose")}</h3>
 
@@ -146,7 +147,7 @@ export function PlayerSection({
             )}
           </div>
 
-          {/* Boutons */}
+          {/* Boutons de catégorie */}
           <div className="flex flex-wrap justify-center gap-2">
             {availableCategories.map((cat) => {
               const selected = selectedCategories.includes(cat);
