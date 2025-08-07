@@ -58,12 +58,12 @@
       "copy": "Copier le lien d'invitation",
       "copied": "Lien copié !"
     },
-    "title": "Room {{id}}",
-    "startGame": "Start the game",
-    "nextQuestion": "Next question",
-    "showFinalResults": "Show the podium",
-    "backHome": "Back to home screen",
-    "defaultPlayerName": "Player"
+    "title": "Salle {{id}}",
+    "startGame": "Démarrer la partie",
+    "nextQuestion": "Question suivante",
+    "showFinalResults": "Voir le podium",
+    "backHome": "Retour à l'accueil",
+    "defaultPlayerName": "Joueur"
   },
   "avatar": {
     "previewAlt": "Aperçu de l’avatar",

@@ -11,6 +11,7 @@ import { GameRoom } from "@/model/gameRoom";
 import { GameConfig } from "@/model/gameConfig";
 import { ComputedGuess } from "@/model/computedGuesses";
 import { usePlayerStore } from "@/utils/usePlayerStore";
+import { useTranslation } from "react-i18next";
 
 function arraysAreEqual(a: string[], b: string[]) {
   return a.length === b.length && a.every((v) => b.includes(v));
@@ -20,7 +21,7 @@ export function useRoomPage() {
   const params = useParams();
   const router = useRouter();
   const roomId = params ? params["roomId"] : undefined;
-
+  const { i18n } = useTranslation();
   const { player } = usePlayerStore();
 
   const [players, setPlayers] = useState<Player[]>([]);
@@ -37,7 +38,10 @@ export function useRoomPage() {
   const [guesses, setGuesses] = useState<Record<string, string>>({});
   const [votes, setVotes] = useState<Record<string, string>>({});
   const [waitingForGameEnd, setWaitingForGameEnd] = useState(false);
-  const [gameConfig, setGameConfig] = useState<GameConfig>({ maxRound: 10 });
+  const [gameConfig, setGameConfig] = useState<GameConfig>({
+    maxRound: 10,
+    lang: i18n.language || "en",
+  });
 
   const [currentCategories, setCurrentCategories] = useState<string[]>([]);
   const [availableCategories, setAvailableCategories] = useState<string[]>([]);

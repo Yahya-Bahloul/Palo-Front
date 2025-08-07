@@ -21,6 +21,12 @@ export function GameSettingsPanel({
   const MIN_ROUNDS = 5;
   const MAX_ROUNDS = 30;
 
+  const LANG_OPTIONS = [
+    { value: "fr", label: "Français" },
+    { value: "en", label: "English" },
+    { value: "ar", label: "العربية" },
+  ];
+
   const incrementRounds = () => {
     if (gameConfig.maxRound < MAX_ROUNDS) {
       setGameConfig({ ...gameConfig, maxRound: gameConfig.maxRound + 1 });
@@ -31,6 +37,10 @@ export function GameSettingsPanel({
     if (gameConfig.maxRound > MIN_ROUNDS) {
       setGameConfig({ ...gameConfig, maxRound: gameConfig.maxRound - 1 });
     }
+  };
+
+  const handleLangChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setGameConfig({ ...gameConfig, lang: e.target.value });
   };
 
   if (!isAdmin) return null;
@@ -85,6 +95,23 @@ export function GameSettingsPanel({
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <label className="text-sm font-medium text-white">
+          {t("language")}
+        </label>
+        <select
+          value={gameConfig.lang || "en"}
+          onChange={handleLangChange}
+          className="px-4 py-1 text-sm font-mono text-yellow-300 border-2 border-yellow-400 rounded-lg bg-black/20 focus:outline-none"
+        >
+          {LANG_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );
