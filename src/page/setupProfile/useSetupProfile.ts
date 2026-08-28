@@ -9,7 +9,7 @@ export function useSetupProfile() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roomId = searchParams?.get("roomId");
-  const redirect = roomId ? `/room/${roomId}` : "/";
+  const redirect = roomId ? `/room?roomId=${roomId}` : "/";
 
   const { player, updatePlayerName, regenerateAvatar } = usePlayerStore();
 

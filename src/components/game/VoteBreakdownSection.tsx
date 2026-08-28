@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Player } from "@/model/player";
 import { theme } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
+import { capitalizeFirst } from "@/lib/utils";
 
 type ComputedGuess = {
   key: string;
@@ -44,7 +45,9 @@ export function VoteBreakdownSection({
       <h2 className={theme.voteBreakdownSection.title}>
         {t("voteBreakdown.title")}
       </h2>
-      <p className={theme.voteBreakdownSection.question}>“{question}”</p>
+      <p className={theme.voteBreakdownSection.question}>
+        “{capitalizeFirst(question)}”
+      </p>
       {currentQuestionImageUrl && (
         <div className="flex justify-center my-4">
           <Image
@@ -90,7 +93,9 @@ export function VoteBreakdownSection({
             </div>
 
             {/* Main guess text */}
-            <p className={theme.voteBreakdownSection.text.guess}>{text}</p>
+            <p className={theme.voteBreakdownSection.text.guess}>
+              {capitalizeFirst(text)}
+            </p>
 
             {/* Author name(s) */}
             <p className={theme.voteBreakdownSection.text.author}>

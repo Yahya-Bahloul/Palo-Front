@@ -15,6 +15,9 @@
   "startGame": "Start the game",
   "choose": "Choose categories:",
   "waiting": "{{player}} is choosing a category...",
+  "playerLeftNotice": "{{name}} left the room",
+  "purchaseWebUnavailableNotice": "Purchases aren't available on the web. Download the Palo app on the Play Store or App Store to unlock this category or the subscription.",
+  "purchaseFailedNotice": "The purchase failed. Try again or check your payment method on the Play Store / App Store.",
   "category": {
     "sport": "Sport",
     "anime": "Anime",
@@ -50,7 +53,8 @@
     "title": "Players ({{count}})",
     "online": "Online",
     "you": "YOU",
-    "waiting": "Waiting for other players..."
+    "waiting": "Waiting for other players...",
+    "kick": "Kick this player"
   },
   "room": {
     "qrCode": {
@@ -107,5 +111,31 @@
   "voteBreakdown": {
     "title": "Vote Results",
     "correctAnswer": "The correct answer"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "An account is only needed to unlock premium categories or subscribe — you can keep playing without one.",
+    "googleNotConfigured": "Google Sign-In isn't set up yet.",
+    "appleNotConfigured": "Apple Sign-In isn't set up yet.",
+    "continueWithApple": "Continue with Apple",
+    "continueWithGoogle": "Continue with Google"
+  },
+  "purchases": {
+    "title": "My categories",
+    "unlocked": "Unlocked",
+    "logout": "Sign out",
+    "close": "Close",
+    "subscriptionTitle": "Palo Premium",
+    "subscriptionDescription": "Unlock every category and play without limits",
+    "subscriptionActive": "Subscription active",
+    "subscribe": "Subscribe",
+    "subscribing": "Purchasing…",
+    "subscriptionUnavailable": "Only available in the app",
+    "purchaseFailed": "The purchase failed. Please try again later.",
+    "features": [
+      "Unlimited players",
+      "Every category unlocked",
+      "All game settings"
+    ]
   }
 }

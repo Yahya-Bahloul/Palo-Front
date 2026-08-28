@@ -14,8 +14,8 @@ socket.on("connect", () => {
 });
 
 export const socketService = {
-  createRoom: (player: Player) => {
-    socket.emit("createRoom", player);
+  createRoom: (player: Player, authToken?: string) => {
+    socket.emit("createRoom", { ...player, authToken });
   },
 
   joinRoom: (roomId: string, player: Player) => {
@@ -54,6 +54,10 @@ export const socketService = {
 
   leaveRoom: (roomId: string) => {
     socket.emit("leaveRoom", { roomId });
+  },
+
+  kickPlayer: (roomId: string, targetPlayerId: string) => {
+    socket.emit("kickPlayer", { roomId, targetPlayerId });
   },
 
   chooseCategory: (roomId: string, category: string) => {

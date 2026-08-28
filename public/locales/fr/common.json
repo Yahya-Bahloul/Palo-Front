@@ -15,6 +15,9 @@
   "startGame": "Démarrer la partie",
   "choose": "Sélectionner des catégories :",
   "waiting": "{{player}} est en train de choisir une catégorie...",
+  "playerLeftNotice": "{{name}} a quitté la salle",
+  "purchaseWebUnavailableNotice": "L'achat n'est pas disponible sur le web. Téléchargez l'appli Palo sur le Play Store ou l'App Store pour débloquer cette catégorie ou l'abonnement.",
+  "purchaseFailedNotice": "L'achat a échoué. Réessaie ou vérifie ton moyen de paiement sur le Play Store / App Store.",
   "category": {
     "sport": "Sport",
     "anime": "Animé",
@@ -50,7 +53,8 @@
     "title": "Joueurs ({{count}})",
     "online": "En ligne",
     "you": "VOUS",
-    "waiting": "En attente de joueurs..."
+    "waiting": "En attente de joueurs...",
+    "kick": "Exclure ce joueur"
   },
   "room": {
     "qrCode": {
@@ -107,5 +111,31 @@
   "voteBreakdown": {
     "title": "Résultats des votes",
     "correctAnswer": "La bonne réponse"
+  },
+  "auth": {
+    "title": "Connexion",
+    "subtitle": "Un compte n'est nécessaire que pour débloquer des catégories premium ou t'abonner — tu peux continuer à jouer sans compte.",
+    "googleNotConfigured": "La connexion Google n'est pas encore configurée.",
+    "appleNotConfigured": "La connexion Apple n'est pas encore configurée.",
+    "continueWithApple": "Continuer avec Apple",
+    "continueWithGoogle": "Continuer avec Google"
+  },
+  "purchases": {
+    "title": "Mes catégories",
+    "unlocked": "Débloqué",
+    "logout": "Se déconnecter",
+    "close": "Fermer",
+    "subscriptionTitle": "Palo Premium",
+    "subscriptionDescription": "Débloque toutes les catégories et joue sans limite",
+    "subscriptionActive": "Abonnement actif",
+    "subscribe": "S'abonner",
+    "subscribing": "Achat en cours…",
+    "subscriptionUnavailable": "Disponible uniquement dans l'app",
+    "purchaseFailed": "L'achat a échoué. Réessaie plus tard.",
+    "features": [
+      "Nombre de joueurs illimité",
+      "Toutes les catégories débloquées",
+      "Tous les paramètres de partie"
+    ]
   }
 }

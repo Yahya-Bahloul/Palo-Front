@@ -3,7 +3,8 @@
 
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Player } from "@/model/player";
-import { UserRound, CheckSquare, Square } from "lucide-react";
+import { CategoryCatalogEntry } from "@/model/category";
+import { UserRound, CheckSquare, Square, Lock, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
@@ -12,9 +13,13 @@ import { RoomQRCode } from "./RoomQRCode";
 type Props = {
   players: Player[];
   currentPlayerId?: string;
-  availableCategories?: string[];
+  myPlayerId?: string;
+  availableCategories?: CategoryCatalogEntry[];
   selectedCategories: string[];
   setSelectedCategories: Dispatch<SetStateAction<string[]>>;
+  onRequestUnlockCategory?: (category: CategoryCatalogEntry) => void;
+  purchasingCategoryKey?: string | null;
+  onKickPlayer?: (playerId: string) => void;
   roomId: string;
   isAdmin: boolean;
 };
@@ -22,9 +27,13 @@ type Props = {
 export function PlayerSection({
   players,
   currentPlayerId,
+  myPlayerId,
   availableCategories = [],
   selectedCategories,
   setSelectedCategories,
+  onRequestUnlockCategory,
+  purchasingCategoryKey,
+  onKickPlayer,
   roomId,
   isAdmin,
 }: Props) {
@@ -32,10 +41,15 @@ export function PlayerSection({
   const isRTL = i18n.language === "ar";
   const [animateNew, setAnimateNew] = useState<string | null>(null);
 
+  const unlockedCategories = availableCategories
+    .filter((cat) => cat.unlocked)
+    .map((cat) => cat.key);
+
   useEffect(() => {
-    if (availableCategories.length > 0) {
-      setSelectedCategories(availableCategories);
+    if (unlockedCategories.length > 0) {
+      setSelectedCategories(unlockedCategories);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [availableCategories]);
 
   useEffect(() => {
@@ -59,7 +73,7 @@ export function PlayerSection({
   const toggleAllCategories = () => {
     if (!isAdmin) return;
     setSelectedCategories((prev) =>
-      prev.length === availableCategories.length ? [] : [...availableCategories]
+      prev.length === unlockedCategories.length ? [] : [...unlockedCategories]
     );
   };
 
@@ -106,11 +120,22 @@ export function PlayerSection({
                 </div>
                 <span className={theme.playerCard.name}>{player.name}</span>
               </div>
-              {isCurrent && (
-                <span className={theme.playerCard.badge}>
-                  {t("playerSection.you")}
-                </span>
-              )}
+              <div className="flex items-center gap-2">
+                {isCurrent && (
+                  <span className={theme.playerCard.badge}>
+                    {t("playerSection.you")}
+                  </span>
+                )}
+                {isAdmin && player.id !== myPlayerId && (
+                  <button
+                    onClick={() => onKickPlayer?.(player.id)}
+                    title={t("playerSection.kick")}
+                    className="text-red-400 hover:text-red-300 p-3 -m-1 rounded-md hover:bg-white/10 active:scale-90 transition-transform"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
             </li>
           );
         })}
@@ -133,12 +158,12 @@ export function PlayerSection({
                 onClick={toggleAllCategories}
                 className="bg-black border-yellow-300 p-1 rounded-md text-yellow-300 shadow-[2px_2px_0px_rgba(255,255,255,0.2)] hover:translate-y-[1px] transition-all"
                 title={
-                  selectedCategories.length === availableCategories.length
+                  selectedCategories.length === unlockedCategories.length
                     ? t("unselectAll")
                     : t("selectAll")
                 }
               >
-                {selectedCategories.length === availableCategories.length ? (
+                {selectedCategories.length === unlockedCategories.length ? (
                   <CheckSquare className="w-5 h-5" />
                 ) : (
                   <Square className="w-5 h-5" />
@@ -150,11 +175,47 @@ export function PlayerSection({
           {/* Boutons de catégorie */}
           <div className="flex flex-wrap justify-center gap-2">
             {availableCategories.map((cat) => {
-              const selected = selectedCategories.includes(cat);
+              const selected = selectedCategories.includes(cat.key);
+              const locked = !cat.unlocked;
+
+              if (locked) {
+                const purchasing = purchasingCategoryKey === cat.key;
+                return (
+                  <button
+                    key={cat.key}
+                    onClick={() =>
+                      isAdmin && !purchasing && onRequestUnlockCategory?.(cat)
+                    }
+                    disabled={!isAdmin || purchasing}
+                    title={
+                      cat.priceCents
+                        ? `${(cat.priceCents / 100).toFixed(2)}€`
+                        : undefined
+                    }
+                    className={`px-3 py-1 text-sm font-medium border transition-all duration-200
+                      bg-white/10 text-white/50 border-white/20
+                      rounded-md flex items-center gap-1
+                      ${
+                        !isAdmin || purchasing
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-white/20 hover:scale-105 active:scale-95"
+                      }
+                    `}
+                  >
+                    {purchasing ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      <Lock className="w-3 h-3" />
+                    )}
+                    {t(`category.${cat.key.toLowerCase()}`)}
+                  </button>
+                );
+              }
+
               return (
                 <button
-                  key={cat}
-                  onClick={() => toggleCategory(cat)}
+                  key={cat.key}
+                  onClick={() => toggleCategory(cat.key)}
                   disabled={!isAdmin}
                   className={`px-3 py-1 text-sm font-medium border transition-all duration-200
                     ${
@@ -170,7 +231,7 @@ export function PlayerSection({
                     }
                   `}
                 >
-                  {t(`category.${cat.toLowerCase()}`)}
+                  {t(`category.${cat.key.toLowerCase()}`)}
                 </button>
               );
             })}

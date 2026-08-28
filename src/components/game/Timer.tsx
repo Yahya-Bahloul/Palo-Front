@@ -24,11 +24,15 @@ export function Timer({
     badgeColor = "bg-orange-400 text-black border-black"; // 🟠
   else if (timer <= 5) badgeColor = "bg-red-500 text-white border-black"; // 🔴
 
+  const urgent = timer > 0 && timer <= 5;
+
   return (
     <div className="flex justify-center mt-6">
       <Badge
         variant="default"
-        className={`${badgeColor} border-4 px-4 py-2 rounded-full font-mono text-lg shadow-[3px_3px_0_0_black] flex items-center gap-2`}
+        className={`${badgeColor} border-4 px-4 py-2 rounded-full font-mono text-lg shadow-[3px_3px_0_0_black] flex items-center gap-2 ${
+          urgent ? "animate-pulse" : ""
+        }`}
       >
         <Clock className="w-5 h-5" />
         {timer > 0 ? `${timer}` : ""}

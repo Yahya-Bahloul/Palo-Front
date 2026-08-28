@@ -15,6 +15,9 @@
   "startGame": "ابدأ اللعبة",
   "choose": "اختر الفئات:",
   "waiting": "{{player}} يختار فئة...",
+  "playerLeftNotice": "{{name}} غادر الغرفة",
+  "purchaseWebUnavailableNotice": "الشراء غير متاح على الويب. حمّل تطبيق Palo من Play Store أو App Store لفتح هذه الفئة أو الاشتراك.",
+  "purchaseFailedNotice": "فشلت عملية الشراء. حاول مرة أخرى أو تحقق من وسيلة الدفع على Play Store / App Store.",
   "category": {
     "sport": "رياضة",
     "anime": "أنمي",
@@ -50,7 +53,8 @@
     "title": "اللاعبون ({{count}})",
     "online": "متصل",
     "you": "أنت",
-    "waiting": "بانتظار لاعبين آخرين..."
+    "waiting": "بانتظار لاعبين آخرين...",
+    "kick": "طرد هذا اللاعب"
   },
   "room": {
     "qrCode": {
@@ -107,5 +111,31 @@
   "voteBreakdown": {
     "title": "نتائج التصويت",
     "correctAnswer": "الإجابة الصحيحة"
+  },
+  "auth": {
+    "title": "تسجيل الدخول",
+    "subtitle": "الحساب مطلوب فقط لفتح الفئات المميزة أو الاشتراك — يمكنك الاستمرار في اللعب بدونه.",
+    "googleNotConfigured": "تسجيل الدخول عبر Google غير مُعد بعد.",
+    "appleNotConfigured": "تسجيل الدخول عبر Apple غير مُعد بعد.",
+    "continueWithApple": "المتابعة باستخدام Apple",
+    "continueWithGoogle": "المتابعة باستخدام Google"
+  },
+  "purchases": {
+    "title": "فئاتي",
+    "unlocked": "مفتوح",
+    "logout": "تسجيل الخروج",
+    "close": "إغلاق",
+    "subscriptionTitle": "Palo بريميوم",
+    "subscriptionDescription": "افتح جميع الفئات والعب بلا حدود",
+    "subscriptionActive": "الاشتراك نشط",
+    "subscribe": "اشترك",
+    "subscribing": "جارٍ الشراء…",
+    "subscriptionUnavailable": "متوفر فقط داخل التطبيق",
+    "purchaseFailed": "فشلت عملية الشراء. حاول مرة أخرى لاحقاً.",
+    "features": [
+      "عدد لا محدود من اللاعبين",
+      "فتح جميع الفئات",
+      "جميع إعدادات اللعبة"
+    ]
   }
 }

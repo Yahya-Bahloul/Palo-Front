@@ -18,7 +18,7 @@ export function RoomQRCode({ roomId }: Props) {
   // Assure que joinUrl est défini uniquement côté client
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setJoinUrl(`${window.location.origin}/room/${roomId}`);
+      setJoinUrl(`${window.location.origin}/room?roomId=${roomId}`);
     }
   }, [roomId]);
 
@@ -33,31 +33,33 @@ export function RoomQRCode({ roomId }: Props) {
   if (!joinUrl) return null; // ou <Skeleton /> si tu veux afficher un loader temporaire
 
   return (
-    <div className="flex flex-col items-center gap-4 p-6 ">
-      <QRCodeSVG
-        value={joinUrl}
-        size={160}
-        bgColor="#ffffff"
-        fgColor="#000000"
-        level="H"
-        className="rounded-xl shadow-md"
-      />
-      <div className="flex items-center justify-center gap-2">
-        <h2 className="text-lg font-semibold text-center">
-          {t("room.qrCode.title")}
-        </h2>
-        <button
-          onClick={handleCopy}
-          className="p-2 bg-yellow-400 text-black rounded-md hover:bg-yellow-300 transition"
-          title={t("room.qrCode.copy")}
-        >
-          {copied ? (
-            <Check className="w-4 h-4" />
-          ) : (
-            <Copy className="w-4 h-4" />
-          )}
-        </button>
+    <div className="flex flex-col items-center gap-3 p-5">
+      <div className="p-3 bg-white rounded-xl shadow-inner">
+        <QRCodeSVG
+          value={joinUrl}
+          size={150}
+          bgColor="#ffffff"
+          fgColor="#000000"
+          level="H"
+        />
       </div>
+
+      <button
+        onClick={handleCopy}
+        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-yellow-400 text-black hover:bg-yellow-300 active:scale-95 transition-all"
+      >
+        {copied ? (
+          <>
+            <Check className="w-4 h-4" />
+            {t("room.qrCode.copied")}
+          </>
+        ) : (
+          <>
+            <Copy className="w-4 h-4" />
+            {t("room.qrCode.copy")}
+          </>
+        )}
+      </button>
     </div>
   );
 }

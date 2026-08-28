@@ -8,6 +8,7 @@ import i18n from "../../i18n";
 import { theme } from "@/styles/theme";
 import { useHtmlLangDir } from "@/hooks/useHtmlLangDir";
 import { I18nInitializerWrapper } from "@/utils/I18nInitializer";
+import { PurchasesInitializer } from "@/utils/PurchasesInitializer";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const { lang, dir } = useHtmlLangDir();
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className={`${theme.background} text-white pb-[80px]`}>
         <I18nextProvider i18n={i18n}>
-          <I18nInitializerWrapper>{children}</I18nInitializerWrapper>
+          <I18nInitializerWrapper>
+            <PurchasesInitializer>{children}</PurchasesInitializer>
+          </I18nInitializerWrapper>
         </I18nextProvider>
       </body>
     </html>

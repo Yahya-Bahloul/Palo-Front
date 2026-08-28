@@ -4,6 +4,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { capitalizeFirst } from "@/lib/utils";
 
 type Props = {
   guesses: Record<string, string>;
@@ -46,7 +47,7 @@ export function VoteSection({
       )}
 
       <p className="text-sm text-amber-700 italic text-center mb-6">
-        “{question}”
+        “{capitalizeFirst(question)}”
       </p>
 
       <div className="space-y-3">
@@ -63,7 +64,7 @@ export function VoteSection({
               votedId && votedId !== id ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {guess}
+            {capitalizeFirst(guess)}
           </button>
         ))}
       </div>

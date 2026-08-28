@@ -10,7 +10,6 @@ import TabSelector from "@/components/home/TabSelector";
 import { useHomePage } from "./useHome";
 import { AvatarSelector } from "@/components/avatar/AvatarSelectorHome";
 import { theme } from "@/styles/theme";
-import { useEffect, useState } from "react";
 import LanguageSelect from "@/components/utils/LanguageSelect";
 
 export default function HomePage() {
@@ -29,12 +28,10 @@ export default function HomePage() {
 
   return (
     <div className={`${theme.home.wrapper} relative`}>
-      <LanguageSelect />
+      <LanguageSelect />  
 
-      <Card
-        className={`${theme.home.card} border-[3px] border-yellow-400 shadow-retro pixel-border`}
-      >
-        <CardContent className={`${theme.home.cardContent} retro-shadow`}>
+      <Card className={`${theme.home.card} border-[3px] border-yellow-400`}>
+        <CardContent className={theme.home.cardContent}>
           <TabSelector activeTab={activeTab} setActiveTab={setActiveTab} />
 
           {activeTab === "join" && (
@@ -102,11 +99,7 @@ function RoomActionButton({
   onJoin: () => void;
 }) {
   const { t } = useTranslation("common");
-  const [disabled, setDisabled] = useState(true);
-
-  useEffect(() => {
-    setDisabled(activeTab === "join" ? !name || !roomCode : !name);
-  }, [activeTab, name, roomCode]);
+  const disabled = activeTab === "join" ? !name || !roomCode : !name;
 
   return (
     <Button

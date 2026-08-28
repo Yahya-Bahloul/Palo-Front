@@ -2,6 +2,7 @@
 import { GameRoom } from "@/model";
 import { socketService } from "@/service/socketService";
 import { usePlayerStore } from "@/utils/usePlayerStore";
+import { useAuthStore } from "@/utils/useAuthStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -9,6 +10,7 @@ export function useHomePage() {
   const router = useRouter();
 
   const { player, updatePlayer, regenerateAvatar } = usePlayerStore();
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   const [roomCode, setRoomCode] = useState("");
   const [activeTab, setActiveTab] = useState<"create" | "join">("create");
@@ -29,11 +31,11 @@ export function useHomePage() {
   // ✅ Handle backend events
   useEffect(() => {
     const handleRoomCreated = (data: { id: string }) => {
-      router.push(`/room/${data.id}`);
+      router.push(`/room?roomId=${data.id}`);
     };
 
     const handleJoinedRoom = (data: { room: GameRoom }) => {
-      router.push(`/room/${data.room.id}`);
+      router.push(`/room?roomId=${data.room.id}`);
     };
 
     const handleError = (err: { message: string }) => {
@@ -53,7 +55,7 @@ export function useHomePage() {
 
   const handleCreateRoom = () => {
     console.log("Creating room:", player);
-    socketService.createRoom(player);
+    socketService.createRoom(player, accessToken ?? undefined);
   };
 
   const handleJoinRoom = () => {

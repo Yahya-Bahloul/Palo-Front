@@ -2,6 +2,7 @@
 "use client";
 
 import { PlayerSection } from "@/components/game/PlayerSelection";
+import { NoticeToast } from "@/components/game/NoticeToast";
 import { BluffSection } from "@/components/game/BluffSection";
 import { VoteSection } from "@/components/game/VoteSection";
 import { Timer } from "@/components/game/Timer";
@@ -18,6 +19,7 @@ import { VoteBreakdownSection } from "@/components/game/VoteBreakdownSection";
 import { ResultSection } from "@/components/game/ResultSection";
 import { Dispatch, SetStateAction } from "react";
 import { ComputedGuess } from "@/model/computedGuesses";
+import { CategoryCatalogEntry } from "@/model/category";
 import { useTranslation } from "react-i18next"; // ✅
 
 export default function RoomPage() {
@@ -26,7 +28,7 @@ export default function RoomPage() {
 
   return (
     <div className={theme.layout.container}>
-      <StartMenuButton {...props} />
+      <StartMenuButton {...props} onEndGame={props.endGame} />
 
       <div className={theme.layout.card}>
         <h1 className={theme.text.heading}>
@@ -34,8 +36,18 @@ export default function RoomPage() {
             t(`category.${props.currentCategory}`)}
         </h1>
 
+        {props.notice && (
+          <NoticeToast message={props.notice} onDismiss={props.dismissNotice} />
+        )}
+
         {props.waitingForGameEnd && <WaitingOverlay />}
-        <GameStartingPhase {...props} roomId={props.roomId as string} />
+        <GameStartingPhase
+          {...props}
+          roomId={props.roomId as string}
+          myPlayerId={props.player.id}
+          onRequestUnlockCategory={props.handleRequestUnlockCategory}
+          onKickPlayer={props.handleKickPlayer}
+        />
 
         {props.gameStarted && (
           <>
@@ -74,10 +86,14 @@ export default function RoomPage() {
 function GameStartingPhase(props: {
   gameStarted: boolean;
   players: Player[];
-  availableCategories: string[];
+  availableCategories: CategoryCatalogEntry[];
   currentPlayerId?: string;
+  myPlayerId?: string;
   selectedCategories: string[];
   setSelectedCategories: Dispatch<SetStateAction<string[]>>;
+  onRequestUnlockCategory?: (category: CategoryCatalogEntry) => void;
+  purchasingCategoryKey?: string | null;
+  onKickPlayer?: (playerId: string) => void;
   roomId: string;
   isAdmin: boolean;
 }) {

@@ -28,7 +28,7 @@ export function PlayerFooterList({
       className={`fixed bottom-0 left-0 right-0 px-4 py-2 flex justify-center gap-4 overflow-x-auto z-50 shadow-inner backdrop-blur-sm ${theme.footer}`}
     >
       {players
-        .filter((p) => !p.joinedLate)
+        .filter((p) => !p.joinedLate && p.connected !== false)
         .map((player) => {
           const avatarUrl = `https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`;
           const hasSubmitted =

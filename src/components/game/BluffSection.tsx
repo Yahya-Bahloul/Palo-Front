@@ -8,6 +8,7 @@ import { AlertTriangle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { theme } from "@/styles/theme";
 import { isBluffTooClose, normalizeText } from "@/utils/similarityUtils";
+import { capitalizeFirst } from "@/lib/utils";
 
 type Props = {
   handleSubmitGuess: (bluff: string) => void;
@@ -67,7 +68,9 @@ export function BluffSection({
         </div>
       )}
 
-      <h2 className={theme.bluffSection.text.heading}>{question}</h2>
+      <h2 className={theme.bluffSection.text.heading}>
+        {capitalizeFirst(question)}
+      </h2>
 
       {submitted ? (
         <div className="text-center space-y-3">

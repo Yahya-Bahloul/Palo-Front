@@ -1,7 +1,7 @@
 // src/components/game/StartMenuButton.tsx
 "use client";
 
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -29,8 +29,8 @@ export default function StartMenuButton({
   isAdmin = false,
 }: StartMenuButtonProps) {
   const router = useRouter();
-  const params = useParams();
-  const roomId = params?.roomId;
+  const searchParams = useSearchParams();
+  const roomId = searchParams?.get("roomId");
   const [open, setOpen] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const { player, updatePlayerName, regenerateAvatar } = usePlayerStore();

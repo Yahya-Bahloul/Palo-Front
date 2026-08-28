@@ -4,4 +4,5 @@ export type Player = {
   score: number; // le score du joueur
   avatar?: string; // l'avatar du joueur (optionnel)
   joinedLate?: boolean; // indique si le joueur a rejoint la partie après son début
+  connected?: boolean; // false s'il s'est déconnecté en cours de partie
 };

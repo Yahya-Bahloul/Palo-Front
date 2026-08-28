@@ -70,7 +70,7 @@ export function GameSettingsPanel({
             <button
               onClick={incrementRounds}
               disabled={gameConfig.maxRound >= MAX_ROUNDS}
-              className={`rounded-full p-1 border-2 border-yellow-400 hover:bg-yellow-500/20 active:scale-90 ${
+              className={`rounded-full p-3 border-2 border-yellow-400 hover:bg-yellow-500/20 active:scale-90 ${
                 theme.effects.transition
               } ${
                 gameConfig.maxRound >= MAX_ROUNDS
@@ -78,12 +78,12 @@ export function GameSettingsPanel({
                   : ""
               }`}
             >
-              <ChevronUp className="h-4 w-4 text-yellow-300" />
+              <ChevronUp className="h-5 w-5 text-yellow-300" />
             </button>
             <button
               onClick={decrementRounds}
               disabled={gameConfig.maxRound <= MIN_ROUNDS}
-              className={`rounded-full p-1 border-2 border-yellow-400 hover:bg-yellow-500/20 active:scale-90 ${
+              className={`rounded-full p-3 border-2 border-yellow-400 hover:bg-yellow-500/20 active:scale-90 ${
                 theme.effects.transition
               } ${
                 gameConfig.maxRound <= MIN_ROUNDS
@@ -91,7 +91,7 @@ export function GameSettingsPanel({
                   : ""
               }`}
             >
-              <ChevronDown className="h-4 w-4 text-yellow-300" />
+              <ChevronDown className="h-5 w-5 text-yellow-300" />
             </button>
           </div>
         </div>
