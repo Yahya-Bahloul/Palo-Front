@@ -35,7 +35,7 @@ export function AvatarSelector({
       className={`${theme.avatarSelector.container} flex flex-col items-center gap-4`}
     >
       {avatarUrl && (
-        <div className="border-4 border-black rounded-lg p-1 bg-white shadow-[4px_4px_0_0_black]">
+        <div className={theme.avatarSelector.imageWrapper}>
           <Image
             src={avatarUrl}
             alt={t("avatar.previewAlt", "Aperçu de l’avatar")}
@@ -48,9 +48,9 @@ export function AvatarSelector({
 
       <button
         onClick={regenerateAvatar}
-        className="mt-2 flex items-center gap-2 border-2 border-black bg-yellow-300 text-black font-mono px-3 py-1 rounded shadow-[3px_3px_0_0_black] hover:bg-yellow-400 transition"
+        className={theme.avatarSelector.button}
       >
-        <RefreshCw className="w-4 h-4" />
+        <RefreshCw className={theme.avatarSelector.icon} />
         {t("avatar.regenerate", "Générer un nouvel avatar")}
       </button>
     </div>

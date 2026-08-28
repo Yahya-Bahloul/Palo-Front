@@ -7,7 +7,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { socketService } from "@/service/socketService";
 import { Player } from "@/model/player";
 import { QuizzType1Phases } from "@/model/Quizz1Phases";
-import { GameRoom } from "@/model/gameRoom";
+import { GameRoom, ChatMessage } from "@/model/gameRoom";
 import { GameConfig } from "@/model/gameConfig";
 import { ComputedGuess } from "@/model/computedGuesses";
 import { CategoryCatalogEntry } from "@/model/category";
@@ -46,7 +46,7 @@ export function useRoomPage() {
   const router = useRouter();
   const roomId = searchParams?.get("roomId") ?? undefined;
   const { i18n, t } = useTranslation();
-  const { player } = usePlayerStore();
+  const { player, setCurrentRoomId } = usePlayerStore();
   const accessToken = useAuthStore((s) => s.accessToken);
 
   const [players, setPlayers] = useState<Player[]>([]);
@@ -63,6 +63,7 @@ export function useRoomPage() {
   const [guesses, setGuesses] = useState<Record<string, string>>({});
   const [votes, setVotes] = useState<Record<string, string>>({});
   const [waitingForGameEnd, setWaitingForGameEnd] = useState(false);
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [gameConfig, setGameConfig] = useState<GameConfig>({
     maxRound: 10,
     lang: i18n.language || "en",
@@ -108,8 +109,9 @@ export function useRoomPage() {
       return;
     }
 
+    setCurrentRoomId(roomId);
     socketService.joinRoom(roomId as string, player);
-  }, [roomId, player]);
+  }, [roomId, player, setCurrentRoomId]);
 
   useEffect(() => {
     const handleJoinedRoom = (data: {
@@ -123,7 +125,11 @@ export function useRoomPage() {
       setAnswer(data.room.currentAnswer || "");
       setCurrentCategories(data.room.categories || []);
       setCurrentPlayer(data.room.currentPlayer || null);
-      setGameConfig(data.room.gameConfig || { maxRound: 10 });
+      setGameConfig({
+        maxRound: data.room.gameConfig?.maxRound ?? 10,
+        lang: data.room.gameConfig?.lang || i18n.language || "en",
+        categories: data.room.gameConfig?.categories,
+      });
       setGameStarted(data.room.phase !== QuizzType1Phases.STARTING);
       setPhase(data.room.phase as QuizzType1Phases);
       setQuestion(data.room.currentQuestion || "");
@@ -137,6 +143,7 @@ export function useRoomPage() {
       setCurrentCategory(data.room.currentCategory || "");
       setComputedGuesses(data.room.computedGuesses || []);
       setIsLastRound(data.room.isLastRound || false);
+      setChatMessages(data.room.chatMessages || []);
 
       if (data.room.phase !== QuizzType1Phases.STARTING) {
         const isInRoom = data.room.players.some(
@@ -152,19 +159,35 @@ export function useRoomPage() {
 
     const handleYouWereKicked = () => {
       leaveRoom();
+      setCurrentRoomId(null);
       router.push("/");
     };
+
+    const handleChatMessage = (msg: ChatMessage) => {
+      setChatMessages((prev) =>
+        prev.some((m) => m.id === msg.id) ? prev : [...prev, msg]
+      );
+    };
+
+    const handleJoinError = () => {
+      setCurrentRoomId(null);
+      router.replace("/?roomError=1");
+    };
+    socketService.on("joinError", handleJoinError);
 
     socketService.on("joinedRoom", handleJoinedRoom);
     socketService.on("playerJoined", (data) => setPlayers(data.players));
     socketService.on("playerLeft", (data) => setPlayers(data.players));
     socketService.on("youWereKicked", handleYouWereKicked);
+    socketService.on("chatMessage", handleChatMessage);
 
     return () => {
       socketService.off("joinedRoom", handleJoinedRoom);
       socketService.off("playerJoined");
       socketService.off("playerLeft");
       socketService.off("youWereKicked", handleYouWereKicked);
+      socketService.off("chatMessage", handleChatMessage);
+      socketService.off("joinError", handleJoinError);
     };
   }, [player]);
 
@@ -305,6 +328,21 @@ export function useRoomPage() {
     socketService.leaveRoom(roomId as string);
   }
 
+  function leaveAndGoHome() {
+    socketService.leaveRoom(roomId as string);
+    setCurrentRoomId(null);
+    router.push("/");
+  }
+
+  function sendChatMessage(text: string) {
+    if (!roomId || !text.trim()) return;
+    socketService.sendChatMessage(roomId, {
+      id: player.id,
+      name: player.name,
+      avatar: player.avatar,
+    }, text);
+  }
+
   function showFinalResult() {
     socketService.forceFinalResults(roomId as string);
   }
@@ -430,6 +468,7 @@ export function useRoomPage() {
     gameConfig,
     setGameConfig,
     leaveRoom,
+    leaveAndGoHome,
     currentCategories,
     showFinalResult,
     isLastRound,
@@ -443,5 +482,7 @@ export function useRoomPage() {
     currentCategory,
     notice,
     dismissNotice,
+    chatMessages,
+    sendChatMessage,
   };
 }

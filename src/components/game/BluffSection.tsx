@@ -4,7 +4,7 @@
 // src/components/game/BluffSection.tsx
 import { useState } from "react";
 import Image from "next/image";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Send, Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { theme } from "@/styles/theme";
 import { isBluffTooClose, normalizeText } from "@/utils/similarityUtils";
@@ -56,30 +56,32 @@ export function BluffSection({
   return (
     <div className={theme.bluffSection.card}>
       {currentQuestionImageUrl && (
-        <div className="flex justify-center mb-4">
-          <Image
-            src={currentQuestionImageUrl}
-            alt={t("questionImageAlt")}
-            width={320}
-            height={192}
-            className="rounded-xl border border-white/20 max-w-xs max-h-48 h-auto w-auto object-contain"
-            unoptimized
-          />
-        </div>
+        <Image
+          src={currentQuestionImageUrl}
+          alt={t("questionImageAlt")}
+          width={320}
+          height={192}
+          className="rounded-xl border-2 border-[color:var(--skin-border)] max-w-full max-h-44 h-auto w-auto object-contain"
+          unoptimized
+        />
       )}
 
-      <h2 className={theme.bluffSection.text.heading}>
-        {capitalizeFirst(question)}
-      </h2>
+      <div className="space-y-1.5">
+        <p className="font-arcade text-xs uppercase tracking-[0.2em] text-[color:var(--skin-accent)]">
+          {t("bluffSection.questionLabel", "Question")}
+        </p>
+        <h2 className={theme.bluffSection.text.heading}>
+          {capitalizeFirst(question)}
+        </h2>
+      </div>
 
       {submitted ? (
-        <div className="text-center space-y-3">
-          <p className={theme.bluffSection.text.waiting}>
-            {t("waitingForOthers")}
-          </p>
-        </div>
+        <p className={theme.bluffSection.text.waiting}>
+          <Clock className="inline w-4 h-4 mr-1.5 -mt-0.5" />
+          {t("waitingForOthers")}
+        </p>
       ) : (
-        <div className="space-y-4">
+        <div className="w-full space-y-4">
           <input
             type="text"
             value={bluff}
@@ -87,30 +89,16 @@ export function BluffSection({
             placeholder={t("bluffInputPlaceholder")}
             className={theme.bluffSection.input}
             disabled={submitted}
+            autoFocus
           />
 
           <button
             onClick={handleSubmit}
             disabled={submitted || bluff.trim().length === 0}
-            className={`${theme.bluffSection.button.base} ${
-              bluff.trim().length > 0 && !submitted
-                ? theme.bluffSection.button.enabled
-                : theme.bluffSection.button.disabled
-            }`}
+            className={theme.bluffSection.button.base}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-            <span>{t("submitBluff")}</span>
+            <Send className="h-4 w-4" />
+            {t("submitBluff")}
           </button>
 
           {isExactMatch && (

@@ -4,11 +4,24 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Player } from "@/model/player";
 import { CategoryCatalogEntry } from "@/model/category";
-import { UserRound, CheckSquare, Square, Lock, X, Loader2 } from "lucide-react";
+import { Users, CheckSquare, Square, Lock, X, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 import { RoomQRCode } from "./RoomQRCode";
+import type React from "react";
+
+// distinct per-player accent colors (readable on both light & dark skins)
+const PLAYER_HUES = [
+  "#22d3ee",
+  "#f472b6",
+  "#a3e635",
+  "#fbbf24",
+  "#818cf8",
+  "#fb7185",
+  "#34d399",
+  "#c084fc",
+];
 
 type Props = {
   players: Player[];
@@ -82,34 +95,45 @@ export function PlayerSection({
       <RoomQRCode roomId={roomId} />
 
       {/* En-tête joueurs */}
-      <div className="flex justify-between items-center mb-2 text-[#f4a261]">
+      <div className="flex justify-between items-center mb-3">
         <h2 className={theme.playerSection.title}>
-          <UserRound className={theme.playerSection.icon} />
+          <Users className={theme.playerSection.icon} />
           {t("playerSection.title", { count: players.length })}
         </h2>
         <span className={theme.playerSection.online}>
+          <span className="skin-live-dot" aria-hidden />
           {t("playerSection.online")}
         </span>
       </div>
 
       {/* Liste des joueurs */}
       <ul className={theme.playerCard.container}>
-        {players.map((player) => {
+        {players.map((player, i) => {
           const isCurrent = player.id === currentPlayerId;
           const isNew = animateNew === player.id;
+          const hue = PLAYER_HUES[i % PLAYER_HUES.length];
 
           return (
             <li
               key={player.id}
+              style={
+                {
+                  "--row-accent": hue,
+                  borderColor: hue,
+                } as React.CSSProperties
+              }
               className={[
                 theme.playerCard.item,
-                theme.playerCard.baseBg,
+                "border-l-4",
                 isCurrent ? theme.playerCard.highlight : theme.playerCard.hover,
                 isNew ? theme.playerCard.newPlayer : "",
               ].join(" ")}
             >
               <div className="flex items-center gap-2">
-                <div className={theme.playerCard.avatar}>
+                <div
+                  className={theme.playerCard.avatar}
+                  style={{ borderColor: hue }}
+                >
                   <Image
                     src={`https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`}
                     alt={player.name}
@@ -130,7 +154,8 @@ export function PlayerSection({
                   <button
                     onClick={() => onKickPlayer?.(player.id)}
                     title={t("playerSection.kick")}
-                    className="text-red-400 hover:text-red-300 p-3 -m-1 rounded-md hover:bg-white/10 active:scale-90 transition-transform"
+                    aria-label={t("playerSection.kick")}
+                    className="text-[color:var(--skin-danger)] opacity-70 hover:opacity-100 p-2 rounded-md hover:bg-[color:var(--skin-danger)]/10 active:scale-90 transition"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -150,13 +175,13 @@ export function PlayerSection({
       {/* Catégories */}
       {availableCategories.length > 0 && (
         <div className="mt-6 w-full" dir={isRTL ? "rtl" : "ltr"}>
-          <div className="flex items-center justify-center mb-4 gap-2">
-            <h3 className="text-lg font-semibold text-white">{t("choose")}</h3>
+          <div className="flex items-center justify-between mb-3 gap-2">
+            <h3 className={theme.lobby.sectionTitle}>{t("choose")}</h3>
 
             {isAdmin && (
               <button
                 onClick={toggleAllCategories}
-                className="bg-black border-yellow-300 p-1 rounded-md text-yellow-300 shadow-[2px_2px_0px_rgba(255,255,255,0.2)] hover:translate-y-[1px] transition-all"
+                className="skin-chip px-2.5 py-1 text-xs inline-flex items-center gap-1.5"
                 title={
                   selectedCategories.length === unlockedCategories.length
                     ? t("unselectAll")
@@ -164,19 +189,23 @@ export function PlayerSection({
                 }
               >
                 {selectedCategories.length === unlockedCategories.length ? (
-                  <CheckSquare className="w-5 h-5" />
+                  <CheckSquare className="w-4 h-4" />
                 ) : (
-                  <Square className="w-5 h-5" />
+                  <Square className="w-4 h-4" />
                 )}
+                {selectedCategories.length === unlockedCategories.length
+                  ? t("unselectAll")
+                  : t("selectAll")}
               </button>
             )}
           </div>
 
           {/* Boutons de catégorie */}
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap gap-2">
             {availableCategories.map((cat) => {
               const selected = selectedCategories.includes(cat.key);
               const locked = !cat.unlocked;
+              const label = t(`category.${cat.key.toLowerCase()}`);
 
               if (locked) {
                 const purchasing = purchasingCategoryKey === cat.key;
@@ -187,27 +216,14 @@ export function PlayerSection({
                       isAdmin && !purchasing && onRequestUnlockCategory?.(cat)
                     }
                     disabled={!isAdmin || purchasing}
-                    title={
-                      cat.priceCents
-                        ? `${(cat.priceCents / 100).toFixed(2)}€`
-                        : undefined
-                    }
-                    className={`px-3 py-1 text-sm font-medium border transition-all duration-200
-                      bg-white/10 text-white/50 border-white/20
-                      rounded-md flex items-center gap-1
-                      ${
-                        !isAdmin || purchasing
-                          ? "opacity-50 cursor-not-allowed"
-                          : "hover:bg-white/20 hover:scale-105 active:scale-95"
-                      }
-                    `}
+                    className={`${theme.lobby.chip} skin-catchip-locked`}
                   >
                     {purchasing ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-[color:var(--skin-accent-2)]" />
                     ) : (
-                      <Lock className="w-3 h-3" />
+                      <Lock className="w-3.5 h-3.5 text-[color:var(--skin-accent-2)]" />
                     )}
-                    {t(`category.${cat.key.toLowerCase()}`)}
+                    {label}
                   </button>
                 );
               }
@@ -217,21 +233,11 @@ export function PlayerSection({
                   key={cat.key}
                   onClick={() => toggleCategory(cat.key)}
                   disabled={!isAdmin}
-                  className={`px-3 py-1 text-sm font-medium border transition-all duration-200
-                    ${
-                      selected
-                        ? "bg-yellow-400 text-black border-yellow-500"
-                        : "bg-white/30 text-white border-white/40"
-                    }
-                    rounded-md hover:scale-105 active:scale-95
-                    ${
-                      !isAdmin
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-white/50"
-                    }
-                  `}
+                  className={`${theme.lobby.chip} ${
+                    selected ? theme.lobby.chipOn : ""
+                  }`}
                 >
-                  {t(`category.${cat.key.toLowerCase()}`)}
+                  {label}
                 </button>
               );
             })}

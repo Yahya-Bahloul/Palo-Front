@@ -32,21 +32,34 @@ export function RoomQRCode({ roomId }: Props) {
 
   if (!joinUrl) return null; // ou <Skeleton /> si tu veux afficher un loader temporaire
 
+  const code = roomId?.toUpperCase();
+
   return (
-    <div className="flex flex-col items-center gap-3 p-5">
-      <div className="p-3 bg-white rounded-xl shadow-inner">
+    <div className="flex flex-col items-center gap-3">
+      <div className="skin-panel p-3 bg-white">
         <QRCodeSVG
           value={joinUrl}
-          size={150}
+          size={140}
           bgColor="#ffffff"
           fgColor="#000000"
           level="H"
         />
       </div>
 
+      {code && (
+        <div className="flex items-center gap-2">
+          <span className="font-arcade text-xs uppercase tracking-wide text-[color:var(--skin-muted)]">
+            {t("roomCode")}
+          </span>
+          <span className="skin-readout px-3 py-1 text-base tracking-[0.3em] font-bold">
+            {code}
+          </span>
+        </div>
+      )}
+
       <button
         onClick={handleCopy}
-        className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-yellow-400 text-black hover:bg-yellow-300 active:scale-95 transition-all"
+        className="skin-chip px-4 py-2 text-sm inline-flex items-center gap-2"
       >
         {copied ? (
           <>

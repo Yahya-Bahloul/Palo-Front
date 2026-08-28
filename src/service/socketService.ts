@@ -76,6 +76,23 @@ export const socketService = {
     socket.emit("updatePlayer", { roomId, player });
   },
 
+  checkRoom: (roomId: string) => {
+    socket.emit("checkRoom", { roomId });
+  },
+
+  sendChatMessage: (
+    roomId: string,
+    player: { id: string; name: string; avatar?: string },
+    text: string
+  ) => {
+    socket.emit("sendChatMessage", { roomId, player, text });
+  },
+
+  get connected() {
+    return socket.connected;
+  },
+
   on: socket.on.bind(socket),
   off: socket.off.bind(socket),
+  once: socket.once.bind(socket),
 };

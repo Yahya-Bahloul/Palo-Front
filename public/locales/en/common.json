@@ -1,5 +1,6 @@
 {
   "welcomeTitle": "Welcome to the Friends Game",
+  "tagline": "Bluff · Vote · Survive",
   "subtitle": "Play with your friends and have fun",
   "joinGame": "Join a game",
   "createGame": "Create a game",
@@ -47,7 +48,16 @@
     "cuisine": "Cooking",
     "voyages": "Travel",
     "capitals": "Capitals",
-    "world_cup": "World Cup"
+    "world_cup": "World Cup",
+    "space": "Space",
+    "human_body": "Human Body",
+    "mythology": "Mythology",
+    "inventions": "Inventions",
+    "world_music": "World Music",
+    "chemistry": "Chemistry",
+    "world_literature": "World Literature",
+    "technology": "Technology",
+    "oceans": "Oceans"
   },
   "playerSection": {
     "title": "Players ({{count}})",
@@ -98,7 +108,9 @@
   },
   "waitingOverlay": {
     "title": "A game is in progress",
-    "message": "Please wait until the next round..."
+    "message": "You'll join the next game. Meanwhile, you can talk in the chat.",
+    "wait": "Wait",
+    "leave": "Leave"
   },
   "setup": {
     "title": "Create your profile",
@@ -137,5 +149,15 @@
       "Every category unlocked",
       "All game settings"
     ]
+  },
+  "reconnecting": "Reconnecting to the game…",
+  "roomNotFoundTitle": "Room not found",
+  "joinRoomError": "This room doesn't exist or has been closed.",
+  "ok": "OK",
+  "chat": {
+    "title": "Chat",
+    "empty": "No messages yet",
+    "placeholder": "Type a message…",
+    "send": "Send"
   }
 }

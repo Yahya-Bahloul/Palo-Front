@@ -14,13 +14,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const { lang, dir } = useHtmlLangDir();
 
   return (
-    <html lang={lang} dir={dir}>
+    <html lang={lang} dir={dir} data-skin="retro">
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Tnjya</title>
       </head>
-      <body className={`${theme.background} text-white pb-[80px]`}>
+      <body
+        className={theme.background}
+        style={{ color: "var(--skin-text)" }}
+      >
         <I18nextProvider i18n={i18n}>
           <I18nInitializerWrapper>
             <PurchasesInitializer>{children}</PurchasesInitializer>

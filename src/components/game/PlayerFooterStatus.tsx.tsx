@@ -4,7 +4,6 @@
 import Image from "next/image";
 import { Player } from "@/model/player";
 import { theme } from "@/styles/theme";
-import { useTranslation } from "react-i18next";
 
 type Props = {
   players: Player[];
@@ -21,15 +20,16 @@ export function PlayerFooterList({
   votes,
   currentPlayerId,
 }: Props) {
-  const { t } = useTranslation();
+  const visible = [...players]
+    .filter((p) => !p.joinedLate && p.connected !== false)
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 px-4 py-2 flex justify-center gap-4 overflow-x-auto z-50 shadow-inner backdrop-blur-sm ${theme.footer}`}
+      className={`fixed bottom-0 left-0 right-0 z-40 px-3 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+0.4rem)] ${theme.footer}`}
     >
-      {players
-        .filter((p) => !p.joinedLate && p.connected !== false)
-        .map((player) => {
+      <div className="flex justify-start sm:justify-center gap-3 overflow-x-auto no-scrollbar">
+        {visible.map((player) => {
           const avatarUrl = `https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`;
           const hasSubmitted =
             phase === "guessing"
@@ -37,43 +37,46 @@ export function PlayerFooterList({
               : phase === "voting"
               ? !!votes[player.id]
               : true;
-
           const isCurrent = player.id === currentPlayerId;
-
-          const opacityClass =
-            phase === "guessing" || phase === "voting"
-              ? hasSubmitted || isCurrent
-                ? "opacity-100"
-                : "opacity-30"
-              : "opacity-100";
-
-          const borderClass = isCurrent
-            ? theme.border.current
-            : theme.border.default;
+          const dim =
+            (phase === "guessing" || phase === "voting") &&
+            !hasSubmitted &&
+            !isCurrent;
 
           return (
             <div
               key={player.id}
-              className="flex flex-col items-center text-center text-xs min-w-[64px]"
+              className={`flex flex-col items-center gap-1 shrink-0 w-14 ${
+                dim ? "opacity-35" : "opacity-100"
+              }`}
             >
-              <div
-                className={`${theme.avatar.base} ${borderClass} ${opacityClass}`}
-              >
-                <Image
-                  src={avatarUrl}
-                  alt={player.name}
-                  width={48}
-                  height={48}
-                  unoptimized
-                />
+              <div className="relative">
+                <div
+                  className={`w-9 h-9 rounded-full overflow-hidden border-2 ${
+                    isCurrent
+                      ? "border-[color:var(--skin-accent)]"
+                      : "border-[color:var(--skin-border)]"
+                  }`}
+                >
+                  <Image
+                    src={avatarUrl}
+                    alt={player.name}
+                    width={36}
+                    height={36}
+                    unoptimized
+                  />
+                </div>
+                <span className="absolute -bottom-1 -right-1 min-w-[16px] h-4 px-1 rounded-full bg-[color:var(--skin-primary)] text-[color:var(--skin-btn-color)] text-[9px] font-bold flex items-center justify-center leading-none">
+                  {player.score}
+                </span>
               </div>
-              <div className={theme.text.playerName}>{player.name}</div>
-              <div className={theme.text.playerScore}>
-                {player.score} {t("pointsShort")}
-              </div>
+              <span className="text-[10px] font-arcade text-[color:var(--skin-text)] truncate max-w-full">
+                {player.name}
+              </span>
             </div>
           );
         })}
+      </div>
     </div>
   );
 }

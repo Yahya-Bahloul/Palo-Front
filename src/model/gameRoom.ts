@@ -21,4 +21,14 @@ export type GameRoom = {
   currentCategory?: string; // category of the current question
   computedGuesses?: ComputedGuess[]; // present once results have been computed for the round
   isLastRound?: boolean;
+  chatMessages?: ChatMessage[];
+};
+
+export type ChatMessage = {
+  id: string;
+  playerId: string;
+  playerName: string;
+  avatar?: string;
+  text: string;
+  ts: number;
 };

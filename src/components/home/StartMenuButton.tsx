@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { AvatarSelector } from "../avatar/AvatarSelectorHome";
 import { socketService } from "@/service/socketService";
 import { usePlayerStore } from "@/utils/usePlayerStore";
+import { Menu, Home, LogOut, Pencil, Save } from "lucide-react";
+import { theme } from "@/styles/theme";
 
 interface StartMenuButtonProps {
   gameStarted: boolean;
@@ -33,12 +35,14 @@ export default function StartMenuButton({
   const roomId = searchParams?.get("roomId");
   const [open, setOpen] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
-  const { player, updatePlayerName, regenerateAvatar } = usePlayerStore();
+  const { player, updatePlayerName, regenerateAvatar, setCurrentRoomId } =
+    usePlayerStore();
   const { t } = useTranslation("common");
 
   const handleHome = () => {
     setOpen(false);
     leaveRoom();
+    setCurrentRoomId(null);
     router.push("/");
   };
 
@@ -59,55 +63,59 @@ export default function StartMenuButton({
     }
   };
 
+  const menuItem =
+    "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg font-arcade text-sm text-[color:var(--skin-text)] hover:bg-[color:var(--skin-primary)]/15 transition text-left";
+
   return (
-    <div className="absolute top-4 left-4 z-50">
+    <div
+      className="absolute left-4 z-50"
+      style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button
-            variant="default"
-            className="bg-yellow-400 text-black font-bold border-2 border-black rounded-md shadow-md text-lg"
+          <button
+            aria-label={t("backHome")}
+            className="skin-stepper"
           >
-            ≡
-          </Button>
+            <Menu className="h-5 w-5" />
+          </button>
         </PopoverTrigger>
 
         <PopoverContent
           align="start"
           sideOffset={8}
-          className="w-60 bg-black border-4 border-yellow-400 text-white rounded-md shadow-lg retro-font"
+          className="w-64 p-2 neon-card !rounded-[calc(var(--skin-radius)*0.75)]"
         >
-          <div className="flex flex-col gap-4 text-sm px-2 py-1">
-            <button
-              onClick={handleHome}
-              className="hover:underline hover:text-yellow-300 text-center"
-            >
-              🏠 {t("backHome")}
+          <div className="flex flex-col gap-0.5">
+            <button onClick={handleHome} className={menuItem}>
+              <Home className="h-4 w-4 shrink-0" />
+              {t("backHome")}
             </button>
 
             {gameStarted && isAdmin && (
-              <>
-                <div className="border-t border-yellow-500 my-1" />
-                <button
-                  onClick={handleEndGame}
-                  className="hover:underline text-red-400 hover:text-red-300 text-center"
-                >
-                  ❌ {t("endGame")}
-                </button>
-              </>
+              <button
+                onClick={handleEndGame}
+                className={`${menuItem} text-[color:var(--skin-danger)] hover:bg-[color:var(--skin-danger)]/15`}
+              >
+                <LogOut className="h-4 w-4 shrink-0" />
+                {t("endGame")}
+              </button>
             )}
 
-            <div className="border-t border-yellow-500 my-1" />
+            <div className="h-px my-1 bg-[color:var(--skin-border)]" />
+
             <button
               onClick={() => setEditProfile((prev) => !prev)}
-              className="hover:underline hover:text-yellow-300 text-center"
+              className={menuItem}
             >
-              ✏️ {t("editProfile")}
+              <Pencil className="h-4 w-4 shrink-0" />
+              {t("editProfile")}
             </button>
 
             {editProfile && (
-              <div className="space-y-2">
+              <div className="space-y-2 p-2">
                 <Input
-                  className="text-black bg-white w-full rounded-sm px-2 py-1"
+                  className={theme.home.input}
                   value={player.name}
                   onChange={handleChangeName}
                   placeholder={t("playerName")}
@@ -117,10 +125,11 @@ export default function StartMenuButton({
                   seed={player.avatar}
                 />
                 <Button
-                  className="w-full bg-green-500 text-black font-semibold"
+                  className={theme.home.actionButton}
                   onClick={handleSave}
                 >
-                  💾 {t("save")}
+                  <Save className="h-4 w-4" />
+                  {t("save")}
                 </Button>
               </div>
             )}

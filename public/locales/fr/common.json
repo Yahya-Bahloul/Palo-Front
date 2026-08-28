@@ -1,5 +1,6 @@
 {
   "welcomeTitle": "Bienvenue dans le jeu des amis",
+  "tagline": "Bluffe · Vote · Survis",
   "subtitle": "Joue avec tes amis et amuse-toi",
   "joinGame": "Rejoindre une partie",
   "createGame": "Créer une partie",
@@ -46,7 +47,16 @@
     "voyages": "Voyages",
     "capitals": "Capitales",
     "world_cup": "Coupe du monde",
-    "music_ar": "Musique arabe"
+    "music_ar": "Musique arabe",
+    "space": "Espace",
+    "human_body": "Corps humain",
+    "mythology": "Mythologie",
+    "inventions": "Inventions",
+    "world_music": "Musique du monde",
+    "chemistry": "Chimie",
+    "world_literature": "Littérature mondiale",
+    "technology": "Technologie",
+    "oceans": "Océans"
   },
 
   "playerSection": {
@@ -98,7 +108,9 @@
   },
   "waitingOverlay": {
     "title": "Une partie est en cours",
-    "message": "Merci de patienter jusqu'à la prochaine manche..."
+    "message": "Tu rejoindras la prochaine partie. En attendant, tu peux discuter dans le chat.",
+    "wait": "Attendre",
+    "leave": "Quitter"
   },
   "setup": {
     "title": "Crée ton profil",
@@ -137,5 +149,15 @@
       "Toutes les catégories débloquées",
       "Tous les paramètres de partie"
     ]
+  },
+  "reconnecting": "Reconnexion à la partie…",
+  "roomNotFoundTitle": "Salle introuvable",
+  "joinRoomError": "Cette salle n’existe pas ou a été fermée.",
+  "ok": "OK",
+  "chat": {
+    "title": "Chat",
+    "empty": "Aucun message pour l’instant",
+    "placeholder": "Écris un message…",
+    "send": "Envoyer"
   }
 }

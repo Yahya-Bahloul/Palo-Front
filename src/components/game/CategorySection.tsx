@@ -20,19 +20,20 @@ export function CategorySection({
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col space-y-4 items-center">
-      <h2 className={theme.text.subheading}>
-        {isMyTurn ? t("choose") : t("waiting", { player: currentPlayerName })}
-      </h2>
+    <div className={theme.phase.bare}>
+      <div className="space-y-1.5">
+        <p className={theme.phase.eyebrow}>{t("category.title", "Catégorie")}</p>
+        <h2 className={theme.phase.title}>
+          {isMyTurn ? t("choose") : t("waiting", { player: currentPlayerName })}
+        </h2>
+      </div>
 
-      <div className="grid gap-4 w-full max-w-md">
+      <div className="grid gap-4 w-full">
         {categories.map((cat) => (
           <button
             key={cat}
             onClick={() => handleChooseCategory(cat)}
-            className={`${theme.button.base} ${theme.button.category} ${
-              !isMyTurn ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={isMyTurn ? theme.phase.option : theme.phase.optionIdle}
             disabled={!isMyTurn}
           >
             {t(`category.${cat.toLowerCase()}`)}
