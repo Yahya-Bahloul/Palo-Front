@@ -4,7 +4,16 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Player } from "@/model/player";
 import { CategoryCatalogEntry } from "@/model/category";
-import { Users, CheckSquare, Square, Lock, X, Loader2 } from "lucide-react";
+import {
+  Users,
+  CheckSquare,
+  Square,
+  Lock,
+  X,
+  Loader2,
+  Crown,
+  UserPlus,
+} from "lucide-react";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
@@ -27,6 +36,7 @@ type Props = {
   players: Player[];
   currentPlayerId?: string;
   myPlayerId?: string;
+  hostId?: string;
   availableCategories?: CategoryCatalogEntry[];
   selectedCategories: string[];
   setSelectedCategories: Dispatch<SetStateAction<string[]>>;
@@ -39,7 +49,6 @@ type Props = {
 
 export function PlayerSection({
   players,
-  currentPlayerId,
   myPlayerId,
   availableCategories = [],
   selectedCategories,
@@ -49,6 +58,7 @@ export function PlayerSection({
   onKickPlayer,
   roomId,
   isAdmin,
+  hostId,
 }: Props) {
   const { i18n, t } = useTranslation();
   const isRTL = i18n.language === "ar";
@@ -106,96 +116,102 @@ export function PlayerSection({
         </span>
       </div>
 
-      {/* Liste des joueurs */}
-      <ul className={theme.playerCard.container}>
+      {/* Grille de joueurs */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
         {players.map((player, i) => {
-          const isCurrent = player.id === currentPlayerId;
+          const isMe = player.id === myPlayerId;
+          const isHost = hostId ? player.id === hostId : i === 0;
           const isNew = animateNew === player.id;
           const hue = PLAYER_HUES[i % PLAYER_HUES.length];
+          const canKick = isAdmin && !isMe;
 
           return (
-            <li
+            <div
               key={player.id}
-              style={
-                {
-                  "--row-accent": hue,
-                  borderColor: hue,
-                } as React.CSSProperties
-              }
-              className={[
-                theme.playerCard.item,
-                "border-l-4",
-                isCurrent ? theme.playerCard.highlight : theme.playerCard.hover,
-                isNew ? theme.playerCard.newPlayer : "",
-              ].join(" ")}
+              style={{ "--pc": hue } as React.CSSProperties}
+              className={`skin-player-card group ${isNew ? "neon-pulse" : ""}`}
             >
-              <div className="flex items-center gap-2">
-                <div
-                  className={theme.playerCard.avatar}
-                  style={{ borderColor: hue }}
+              {isHost && (
+                <span
+                  className="absolute -top-1.5 -left-1.5 z-10 grid place-items-center w-5 h-5 rounded-full"
+                  style={{ background: hue }}
+                  title="Host"
                 >
-                  <Image
-                    src={`https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`}
-                    alt={player.name}
-                    width={40}
-                    height={40}
-                    unoptimized
-                  />
-                </div>
-                <span className={theme.playerCard.name}>{player.name}</span>
+                  <Crown className="w-3 h-3 text-black" />
+                </span>
+              )}
+
+              {canKick && (
+                <button
+                  onClick={() => onKickPlayer?.(player.id)}
+                  aria-label={t("playerSection.kick")}
+                  title={t("playerSection.kick")}
+                  className="absolute -top-1.5 -right-1.5 z-10 grid place-items-center w-5 h-5 rounded-full bg-[color:var(--skin-danger)] text-white opacity-0 group-hover:opacity-100 transition"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+
+              <div
+                className="w-12 h-12 rounded-full overflow-hidden bg-[color:var(--skin-bg)] border-2"
+                style={{ borderColor: hue }}
+              >
+                <Image
+                  src={`https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`}
+                  alt={player.name}
+                  width={48}
+                  height={48}
+                  unoptimized
+                />
               </div>
-              <div className="flex items-center gap-2">
-                {isCurrent && (
-                  <span className={theme.playerCard.badge}>
-                    {t("playerSection.you")}
-                  </span>
-                )}
-                {isAdmin && player.id !== myPlayerId && (
-                  <button
-                    onClick={() => onKickPlayer?.(player.id)}
-                    title={t("playerSection.kick")}
-                    aria-label={t("playerSection.kick")}
-                    className="text-[color:var(--skin-danger)] opacity-70 hover:opacity-100 p-2 rounded-md hover:bg-[color:var(--skin-danger)]/10 active:scale-90 transition"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            </li>
+              <span className="mt-1.5 text-[11px] font-arcade font-semibold text-[color:var(--skin-text)] truncate max-w-full">
+                {player.name || "—"}
+              </span>
+              {isMe && (
+                <span
+                  className="mt-0.5 text-[9px] font-bold px-1.5 rounded uppercase tracking-wide"
+                  style={{ background: hue, color: "#000" }}
+                >
+                  {t("playerSection.you")}
+                </span>
+              )}
+            </div>
           );
         })}
-      </ul>
 
-      {players.length === 0 && (
-        <div className={theme.playerCard.placeholder}>
-          {t("playerSection.waiting")}
+        {/* Invite slot */}
+        <div className="skin-player-card !cursor-default border-dashed opacity-70">
+          <div className="w-12 h-12 rounded-full grid place-items-center border-2 border-dashed border-[color:var(--skin-border)]">
+            <UserPlus className="w-5 h-5 text-[color:var(--skin-muted)]" />
+          </div>
+          <span className="mt-1.5 text-[10px] font-arcade text-[color:var(--skin-muted)]">
+            {t("playerSection.invite", "Inviter")}
+          </span>
         </div>
-      )}
+      </div>
 
       {/* Catégories */}
       {availableCategories.length > 0 && (
         <div className="mt-6 w-full" dir={isRTL ? "rtl" : "ltr"}>
-          <div className="flex items-center justify-between mb-3 gap-2">
+          <div className="flex flex-wrap items-center justify-between mb-3 gap-x-3 gap-y-2">
             <h3 className={theme.lobby.sectionTitle}>{t("choose")}</h3>
 
             {isAdmin && (
               <button
                 onClick={toggleAllCategories}
-                className="skin-chip px-2.5 py-1 text-xs inline-flex items-center gap-1.5"
-                title={
-                  selectedCategories.length === unlockedCategories.length
-                    ? t("unselectAll")
-                    : t("selectAll")
-                }
+                className="skin-chip px-3 py-1.5 text-xs inline-flex items-center gap-1.5 shrink-0"
               >
                 {selectedCategories.length === unlockedCategories.length ? (
-                  <CheckSquare className="w-4 h-4" />
+                  <>
+                    <CheckSquare className="w-4 h-4" />
+                    {t("unselectAll")}
+                  </>
                 ) : (
-                  <Square className="w-4 h-4" />
+                  <>
+                    <Square className="w-4 h-4" />
+                    {t("selectAll")}
+                  </>
                 )}
-                {selectedCategories.length === unlockedCategories.length
-                  ? t("unselectAll")
-                  : t("selectAll")}
               </button>
             )}
           </div>

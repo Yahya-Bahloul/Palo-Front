@@ -15,6 +15,8 @@
   "shareRoomCode": "شارك هذا الرمز مع أصدقائك لدعوتهم",
   "startGame": "ابدأ اللعبة",
   "choose": "اختر الفئات:",
+  "selectAll": "تحديد الكل",
+  "unselectAll": "إلغاء تحديد الكل",
   "waiting": "{{player}} يختار فئة...",
   "playerLeftNotice": "{{name}} غادر الغرفة",
   "purchaseWebUnavailableNotice": "الشراء غير متاح على الويب. حمّل تطبيق Palo من Play Store أو App Store لفتح هذه الفئة أو الاشتراك.",
@@ -64,7 +66,8 @@
     "online": "متصل",
     "you": "أنت",
     "waiting": "بانتظار لاعبين آخرين...",
-    "kick": "طرد هذا اللاعب"
+    "kick": "طرد هذا اللاعب",
+    "invite": "دعوة"
   },
   "room": {
     "qrCode": {
@@ -120,6 +123,7 @@
     "save": "✅ حفظ"
   },
   "language": "اللغة",
+  "questionLanguage": "لغة الأسئلة",
   "voteBreakdown": {
     "title": "نتائج التصويت",
     "correctAnswer": "الإجابة الصحيحة"
@@ -130,8 +134,12 @@
     "googleNotConfigured": "تسجيل الدخول عبر Google غير مُعد بعد.",
     "appleNotConfigured": "تسجيل الدخول عبر Apple غير مُعد بعد.",
     "continueWithApple": "المتابعة باستخدام Apple",
-    "continueWithGoogle": "المتابعة باستخدام Google"
+    "continueWithGoogle": "المتابعة باستخدام Google",
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج"
   },
+  "menu": "القائمة",
+  "getPremium": "اشترك في بريميوم",
   "purchases": {
     "title": "فئاتي",
     "unlocked": "مفتوح",

@@ -10,9 +10,16 @@ type Props = {
   messages: ChatMessage[];
   myPlayerId: string;
   onSend: (text: string) => void;
+  /** extra bottom offset (rem) so the toggle clears a fixed action bar below it */
+  bottomOffsetRem?: number;
 };
 
-export function ChatPanel({ messages, myPlayerId, onSend }: Props) {
+export function ChatPanel({
+  messages,
+  myPlayerId,
+  onSend,
+  bottomOffsetRem = 5.25,
+}: Props) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState("");
@@ -42,7 +49,9 @@ export function ChatPanel({ messages, myPlayerId, onSend }: Props) {
         onClick={() => setOpen((v) => !v)}
         aria-label={t("chat.title", "Chat")}
         className="fixed right-4 z-40 skin-stepper !w-12 !h-12"
-        style={{ bottom: "calc(env(safe-area-inset-bottom,0px) + 5.25rem)" }}
+        style={{
+          bottom: `calc(env(safe-area-inset-bottom,0px) + ${bottomOffsetRem}rem)`,
+        }}
       >
         {open ? (
           <X className="w-5 h-5" />
@@ -60,7 +69,9 @@ export function ChatPanel({ messages, myPlayerId, onSend }: Props) {
         <div
           className="fixed inset-0 z-40 flex items-end justify-center px-3"
           style={{
-            paddingBottom: "calc(env(safe-area-inset-bottom,0px) + 4.75rem)",
+            paddingBottom: `calc(env(safe-area-inset-bottom,0px) + ${
+              bottomOffsetRem + 0.5
+            }rem)`,
           }}
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) setOpen(false);

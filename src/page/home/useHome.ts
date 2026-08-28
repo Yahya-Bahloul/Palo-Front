@@ -5,10 +5,12 @@ import { usePlayerStore } from "@/utils/usePlayerStore";
 import { useAuthStore } from "@/utils/useAuthStore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export function useHomePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { i18n } = useTranslation();
 
   const { player, updatePlayer, regenerateAvatar, currentRoomId, setCurrentRoomId } =
     usePlayerStore();
@@ -109,8 +111,11 @@ export function useHomePage() {
   }, [currentRoomId, router, setCurrentRoomId]);
 
   const handleCreateRoom = () => {
-    console.log("Creating room:", player);
-    socketService.createRoom(player, accessToken ?? undefined);
+    socketService.createRoom(
+      player,
+      accessToken ?? undefined,
+      i18n.language || "fr"
+    );
   };
 
   const handleJoinRoom = () => {

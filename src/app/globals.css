@@ -297,12 +297,12 @@
   --skin-accent-2: #ff5d8f;  /* pink */
   --skin-danger: #ff4d4d;
 
-  --font-display: "Press Start 2P", monospace;
-  --font-body: "Pixelify Sans", "Press Start 2P", monospace;
+  --font-display: "Pixelify Sans", monospace;
+  --font-body: "Pixelify Sans", monospace;
 
   --skin-radius: 0px;
   --skin-display-transform: uppercase;
-  --skin-display-spacing: 0.04em;
+  --skin-display-spacing: 0.02em;
 
   --skin-backdrop-image:
     radial-gradient(ellipse 70% 55% at 50% -10%, rgba(63, 224, 208, 0.12), transparent 70%),
@@ -329,19 +329,18 @@
   --skin-heading-shadow: 3px 3px 0 var(--skin-accent-2), 6px 6px 0 #000000;
 }
 
-/* Press Start 2P is tiny per em — only shrink the true pixel-font display text */
+/* Pixelify Sans has normal metrics — no per-em size hacks needed */
 [data-skin="retro"] .font-display {
-  font-size: 0.82em;
-  line-height: 1.5;
+  font-weight: 700;
+  line-height: 1.15;
 }
 [data-skin="retro"] .font-arcade {
-  font-size: 1.05em;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 [data-skin="retro"] .neon-btn {
   font-family: var(--font-body);
   font-weight: 700;
-  font-size: 1.05rem;
+  font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
@@ -489,9 +488,8 @@
   line-height: 1.35;
 }
 [data-skin="retro"] .skin-category-title {
-  /* override the global 0.82em down-scale for this one heading */
-  font-size: clamp(1.15rem, 5vw, 1.6rem);
-  line-height: 1.6;
+  font-size: clamp(2rem, 8vw, 3rem);
+  line-height: 1.15;
 }
 
 /* Solid, non-transparent answer/option button (vote + category choices) */
@@ -715,6 +713,35 @@
 [data-skin="retro"] .skin-chip-on { box-shadow: 2px 2px 0 0 #000; }
 [data-skin="candy"] .skin-chip { border-width: 2px; border-color: var(--skin-text); }
 
+/* Player card (lobby grid) */
+.skin-player-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0.4rem;
+  border-radius: calc(var(--skin-radius) * 0.7);
+  background: color-mix(in srgb, var(--skin-card) 75%, transparent);
+  border: 1px solid var(--skin-border);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--pc, var(--skin-accent)) 30%, transparent);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.skin-player-card:hover {
+  transform: translateY(-2px);
+}
+[data-skin="retro"] .skin-player-card {
+  border-radius: 0;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 0 var(--pc, #000);
+}
+[data-skin="retro"] .skin-player-card:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 0 var(--pc, #000);
+}
+[data-skin="candy"] .skin-player-card {
+  border: 2px solid var(--skin-text);
+}
+
 /* Category chips (lobby) — deliberately NOT the primary yellow */
 .skin-catchip {
   font-family: var(--font-body);
@@ -770,8 +797,13 @@
 }
 [data-skin="retro"] .skin-catchip-locked {
   border-style: solid;
-  border-color: var(--skin-accent-2);
-  box-shadow: 3px 3px 0 0 var(--skin-accent-2);
+  border-color: var(--skin-accent-2) !important;
+  box-shadow: 3px 3px 0 0 #000 !important;
+  color: var(--skin-text);
+}
+[data-skin="retro"] .skin-catchip-locked:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--skin-accent-2) 22%, var(--skin-card));
+  box-shadow: 4px 4px 0 0 #000 !important;
 }
 
 /* Stepper button (rounds +/-) */
@@ -812,7 +844,7 @@
   letter-spacing: var(--skin-display-spacing);
   color: var(--skin-primary);
 }
-[data-skin="retro"] .skin-section-title { font-size: 0.82em; }
+[data-skin="retro"] .skin-section-title { font-size: 1em; }
 
 /* Live indicator dot */
 .skin-live-dot {

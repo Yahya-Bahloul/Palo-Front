@@ -15,9 +15,17 @@ const APPLE_CLIENT_ID = process.env.NEXT_PUBLIC_APPLE_CLIENT_ID || "";
 export function useLogin() {
   const router = useRouter();
   const setSession = useAuthStore((s) => s.setSession);
+  const user = useAuthStore((s) => s.user);
   const googleButtonRef = useRef<HTMLDivElement>(null);
   const [googleScriptLoaded, setGoogleScriptLoaded] = useState(false);
   const isNative = nativeSocialLoginAvailable();
+
+  // Already signed in — no reason to be on the login page.
+  useEffect(() => {
+    if (user) router.replace("/");
+  }, [user, router]);
+
+  const goHome = () => router.push("/");
 
   // Google Identity Services' web <script> flow never initializes inside a
   // Capacitor WebView (Google blocks it there) — only wire up the web button
@@ -56,7 +64,7 @@ export function useLogin() {
       callback: async (response) => {
         const result = await authService.loginWithGoogle(response.credential);
         setSession(result.user, result.accessToken);
-        router.back();
+        router.replace("/");
       },
     });
     google.accounts.id.renderButton(googleButtonRef.current, {
@@ -69,7 +77,7 @@ export function useLogin() {
     const idToken = await socialLoginService.signInWithGoogle();
     const result = await authService.loginWithGoogle(idToken);
     setSession(result.user, result.accessToken);
-    router.back();
+    router.replace("/");
   };
 
   const signInWithApple = async () => {
@@ -77,7 +85,7 @@ export function useLogin() {
       const idToken = await socialLoginService.signInWithApple();
       const result = await authService.loginWithApple(idToken);
       setSession(result.user, result.accessToken);
-      router.back();
+      router.replace("/");
       return;
     }
 
@@ -91,10 +99,11 @@ export function useLogin() {
     const { authorization } = await window.AppleID.auth.signIn();
     const result = await authService.loginWithApple(authorization.id_token);
     setSession(result.user, result.accessToken);
-    router.back();
+    router.replace("/");
   };
 
   return {
+    goHome,
     googleButtonRef,
     signInWithGoogleNative,
     signInWithApple,

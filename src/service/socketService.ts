@@ -14,8 +14,8 @@ socket.on("connect", () => {
 });
 
 export const socketService = {
-  createRoom: (player: Player, authToken?: string) => {
-    socket.emit("createRoom", { ...player, authToken });
+  createRoom: (player: Player, authToken?: string, lang?: string) => {
+    socket.emit("createRoom", { ...player, authToken, lang });
   },
 
   joinRoom: (roomId: string, player: Player) => {

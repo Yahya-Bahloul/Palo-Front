@@ -101,6 +101,10 @@ export default function RoomPage() {
         messages={props.chatMessages}
         myPlayerId={props.player.id}
         onSend={props.sendChatMessage}
+        bottomOffsetRem={
+          // clear the floating action button (lobby ~7rem) or the player footer (in-game ~5.25rem)
+          !gameStarted && hasRoomAction(props) ? 8 : 5.25
+        }
       />
 
       {/* Fixed action bar: Start (lobby) / Next / Results — sits above the footer in-game */}
@@ -136,6 +140,7 @@ function GameStartingPhase(props: {
   onKickPlayer?: (playerId: string) => void;
   roomId: string;
   isAdmin: boolean;
+  hostId?: string;
 }) {
   if (props.gameStarted) return null;
   return <PlayerSection {...props} />;

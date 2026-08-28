@@ -14,8 +14,9 @@ import { Input } from "@/components/ui/input";
 import { AvatarSelector } from "../avatar/AvatarSelectorHome";
 import { socketService } from "@/service/socketService";
 import { usePlayerStore } from "@/utils/usePlayerStore";
-import { Menu, Home, LogOut, Pencil, Save } from "lucide-react";
+import { Menu, Home, LogOut, Pencil, Save, DoorOpen } from "lucide-react";
 import { theme } from "@/styles/theme";
+import { useAuthStore } from "@/utils/useAuthStore";
 
 interface StartMenuButtonProps {
   gameStarted: boolean;
@@ -37,6 +38,8 @@ export default function StartMenuButton({
   const [editProfile, setEditProfile] = useState(false);
   const { player, updatePlayerName, regenerateAvatar, setCurrentRoomId } =
     usePlayerStore();
+  const authUser = useAuthStore((s) => s.user);
+  const authLogout = useAuthStore((s) => s.logout);
   const { t } = useTranslation("common");
 
   const handleHome = () => {
@@ -97,7 +100,7 @@ export default function StartMenuButton({
                 onClick={handleEndGame}
                 className={`${menuItem} text-[color:var(--skin-danger)] hover:bg-[color:var(--skin-danger)]/15`}
               >
-                <LogOut className="h-4 w-4 shrink-0" />
+                <DoorOpen className="h-4 w-4 shrink-0" />
                 {t("endGame")}
               </button>
             )}
@@ -111,6 +114,22 @@ export default function StartMenuButton({
               <Pencil className="h-4 w-4 shrink-0" />
               {t("editProfile")}
             </button>
+
+            {authUser && (
+              <>
+                <div className="h-px my-1 bg-[color:var(--skin-border)]" />
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    authLogout();
+                  }}
+                  className={`${menuItem} text-[color:var(--skin-danger)] hover:bg-[color:var(--skin-danger)]/15`}
+                >
+                  <LogOut className="h-4 w-4 shrink-0" />
+                  {t("auth.logout", "Se déconnecter")}
+                </button>
+              </>
+            )}
 
             {editProfile && (
               <div className="space-y-2 p-2">

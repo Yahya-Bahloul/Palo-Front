@@ -15,6 +15,8 @@
   "shareRoomCode": "Share this code with your friends to invite them",
   "startGame": "Start the game",
   "choose": "Choose categories:",
+  "selectAll": "Select all",
+  "unselectAll": "Unselect all",
   "waiting": "{{player}} is choosing a category...",
   "playerLeftNotice": "{{name}} left the room",
   "purchaseWebUnavailableNotice": "Purchases aren't available on the web. Download the Palo app on the Play Store or App Store to unlock this category or the subscription.",
@@ -64,7 +66,8 @@
     "online": "Online",
     "you": "YOU",
     "waiting": "Waiting for other players...",
-    "kick": "Kick this player"
+    "kick": "Kick this player",
+    "invite": "Invite"
   },
   "room": {
     "qrCode": {
@@ -120,6 +123,7 @@
     "save": "✅ Save"
   },
   "language": "Language",
+  "questionLanguage": "Question language",
   "voteBreakdown": {
     "title": "Vote Results",
     "correctAnswer": "The correct answer"
@@ -130,8 +134,12 @@
     "googleNotConfigured": "Google Sign-In isn't set up yet.",
     "appleNotConfigured": "Apple Sign-In isn't set up yet.",
     "continueWithApple": "Continue with Apple",
-    "continueWithGoogle": "Continue with Google"
+    "continueWithGoogle": "Continue with Google",
+    "login": "Sign in",
+    "logout": "Sign out"
   },
+  "menu": "Menu",
+  "getPremium": "Get Premium",
   "purchases": {
     "title": "My categories",
     "unlocked": "Unlocked",

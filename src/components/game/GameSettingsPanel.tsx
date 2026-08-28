@@ -64,7 +64,9 @@ export function GameSettingsPanel({ gameConfig, setGameConfig, isAdmin }: Props)
       </div>
 
       <div className={theme.lobby.settingRow}>
-        <span className={theme.lobby.settingLabel}>{t("language")}</span>
+        <span className={theme.lobby.settingLabel}>
+          {t("questionLanguage", "Langue des questions")}
+        </span>
         <div className="skin-panel flex p-1 gap-1">
           {LANG_OPTIONS.map((opt) => {
             const active = (gameConfig.lang || "en") === opt.value;

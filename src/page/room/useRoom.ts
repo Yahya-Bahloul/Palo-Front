@@ -465,6 +465,7 @@ export function useRoomPage() {
     endGame,
     isMyTurn: player.id === currentPlayer?.id,
     isAdmin,
+    hostId: admin?.id,
     gameConfig,
     setGameConfig,
     leaveRoom,

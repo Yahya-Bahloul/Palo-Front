@@ -15,6 +15,8 @@
   "shareRoomCode": "Partage ce code avec tes amis pour les inviter",
   "startGame": "Démarrer la partie",
   "choose": "Sélectionner des catégories :",
+  "selectAll": "Tout sélectionner",
+  "unselectAll": "Tout désélectionner",
   "waiting": "{{player}} est en train de choisir une catégorie...",
   "playerLeftNotice": "{{name}} a quitté la salle",
   "purchaseWebUnavailableNotice": "L'achat n'est pas disponible sur le web. Téléchargez l'appli Palo sur le Play Store ou l'App Store pour débloquer cette catégorie ou l'abonnement.",
@@ -64,7 +66,8 @@
     "online": "En ligne",
     "you": "VOUS",
     "waiting": "En attente de joueurs...",
-    "kick": "Exclure ce joueur"
+    "kick": "Exclure ce joueur",
+    "invite": "Inviter"
   },
   "room": {
     "qrCode": {
@@ -120,6 +123,7 @@
     "save": "✅ Sauvegarder"
   },
   "language": "Langue",
+  "questionLanguage": "Langue des questions",
   "voteBreakdown": {
     "title": "Résultats des votes",
     "correctAnswer": "La bonne réponse"
@@ -130,8 +134,12 @@
     "googleNotConfigured": "La connexion Google n'est pas encore configurée.",
     "appleNotConfigured": "La connexion Apple n'est pas encore configurée.",
     "continueWithApple": "Continuer avec Apple",
-    "continueWithGoogle": "Continuer avec Google"
+    "continueWithGoogle": "Continuer avec Google",
+    "login": "Se connecter",
+    "logout": "Se déconnecter"
   },
+  "menu": "Menu",
+  "getPremium": "Passer Premium",
   "purchases": {
     "title": "Mes catégories",
     "unlocked": "Débloqué",

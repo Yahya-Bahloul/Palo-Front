@@ -11,6 +11,7 @@ import { useHomePage } from "./useHome";
 import { AvatarSelector } from "@/components/avatar/AvatarSelectorHome";
 import { theme } from "@/styles/theme";
 import LanguageSelect from "@/components/utils/LanguageSelect";
+import { HomeMenu } from "@/components/home/HomeMenu";
 
 export default function HomePage() {
   const { t } = useTranslation("common");
@@ -46,6 +47,7 @@ export default function HomePage() {
 
   return (
     <div className={`${theme.home.wrapper} relative`}>
+      <HomeMenu />
       <LanguageSelect />
 
       {roomErrorPopup && (
