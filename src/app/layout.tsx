@@ -17,7 +17,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang={lang} dir={dir} data-skin="retro">
       <head>
         <meta charSet="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, interactive-widget=resizes-content"
+        />
         <title>Tnjya</title>
       </head>
       <body
