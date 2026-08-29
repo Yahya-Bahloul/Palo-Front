@@ -2,7 +2,7 @@
 "use client";
 
 // src/components/game/BluffSection.tsx
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { AlertTriangle, Send, Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -24,7 +24,17 @@ export function BluffSection({
   currentQuestionImageUrl,
 }: Props) {
   const { t } = useTranslation();
+  const inputRef = useRef<HTMLInputElement>(null);
   const [bluff, setBluff] = useState("");
+
+  // The keyboard opens on autofocus; wait for its slide-in animation, then
+  // bring the field (and the submit button just below it) into view. Works
+  // whether or not the webview resizes for the keyboard.
+  const revealInput = () => {
+    setTimeout(() => {
+      inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+    }, 350);
+  };
   const [submitted, setSubmitted] = useState(false);
   const [isExactMatch, setIsExactMatch] = useState(false);
   const [similarBluffDetected, setSimilarBluffDetected] = useState(false);
@@ -88,9 +98,11 @@ export function BluffSection({
       ) : (
         <div className="w-full space-y-4">
           <input
+            ref={inputRef}
             type="text"
             value={bluff}
             onChange={(e) => setBluff(e.target.value)}
+            onFocus={revealInput}
             placeholder={t("bluffInputPlaceholder")}
             className={theme.bluffSection.input}
             disabled={submitted}
