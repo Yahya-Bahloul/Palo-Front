@@ -56,14 +56,19 @@ export function BluffSection({
   return (
     <div className={theme.bluffSection.card}>
       {currentQuestionImageUrl && (
-        <Image
-          src={currentQuestionImageUrl}
-          alt={t("questionImageAlt")}
-          width={320}
-          height={192}
-          className="rounded-xl border-2 border-[color:var(--skin-border)] max-w-full max-h-44 h-auto w-auto object-contain"
-          unoptimized
-        />
+        <div className="flex w-full justify-center">
+          <span className="inline-block overflow-hidden rounded-xl bg-black">
+            <Image
+              src={currentQuestionImageUrl}
+              alt={t("questionImageAlt")}
+              width={320}
+              height={192}
+              className="block max-w-full max-h-44 h-auto w-auto object-contain bg-black"
+              style={{ backgroundColor: "#000" }}
+              unoptimized
+            />
+          </span>
+        </div>
       )}
 
       <div className="space-y-1.5">

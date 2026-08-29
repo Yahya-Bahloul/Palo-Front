@@ -380,7 +380,7 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 9999;
+  z-index: -1; /* CRT scanlines are background decoration only, never over content */
   background: repeating-linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0) 0,
@@ -553,12 +553,16 @@
 .neon-backdrop {
   background-color: var(--skin-bg);
   background-image: var(--skin-backdrop-image);
+  position: relative;
+  isolation: isolate; /* body becomes a stacking context so the grid can sit at z:-1 */
+  z-index: 0;
 }
 .neon-grid::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: -1; /* behind all app content, above the backdrop paint */
   opacity: var(--skin-grid-opacity);
   background-image:
     linear-gradient(var(--skin-grid-color) 1px, transparent 1px),
@@ -647,6 +651,27 @@
 [data-skin="candy"] .skin-panel {
   border-width: 2px;
   border-color: var(--skin-text);
+}
+
+/* Dark opaque variant — for phase cards (question / answer / votes) that must
+   stay fully readable over the animated backdrop */
+.skin-panel.skin-panel--solid,
+.skin-panel--solid {
+  background-color: var(--skin-bg) !important;
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 50% -10%,
+      color-mix(in srgb, var(--skin-primary) 22%, transparent),
+      transparent 70%
+    ) !important;
+  border: 1px solid color-mix(in srgb, var(--skin-primary-bright) 45%, transparent);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+[data-skin="retro"] .skin-panel--solid {
+  background-image: none !important;
+  background-color: #000 !important;
 }
 
 /* Row inside a panel (player entry) */

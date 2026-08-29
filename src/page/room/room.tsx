@@ -68,8 +68,9 @@ export default function RoomPage() {
         </div>
       ) : (
         <div className={theme.layout.roomShell}>
+          <Timer {...props} />
           {props.currentCategory !== "" && (
-            <h1 className={theme.text.heading}>
+            <h1 className={theme.text.gameCategory}>
               {t(`category.${props.currentCategory}`)}
             </h1>
           )}
@@ -86,7 +87,6 @@ export default function RoomPage() {
             {...props}
             currentPlayerId={props.currentPlayer?.id || ""}
           />
-          <Timer {...props} />
         </div>
       )}
 

@@ -49,15 +49,18 @@ export function VoteBreakdownSection({
         “{capitalizeFirst(question)}”
       </p>
       {currentQuestionImageUrl && (
-        <div className={theme.voteBreakdownSection.imageFrame}>
-          <Image
-            src={currentQuestionImageUrl}
-            alt="question image"
-            width={320}
-            height={192}
-            className="max-w-full max-h-44 w-auto h-auto object-contain rounded"
-            unoptimized
-          />
+        <div className="flex w-full justify-center">
+          <span className="inline-block overflow-hidden rounded-xl bg-black">
+            <Image
+              src={currentQuestionImageUrl}
+              alt="question image"
+              width={320}
+              height={192}
+              className="block max-w-full max-h-44 w-auto h-auto object-contain bg-black"
+              style={{ backgroundColor: "#000" }}
+              unoptimized
+            />
+          </span>
         </div>
       )}
       <div className="space-y-6">

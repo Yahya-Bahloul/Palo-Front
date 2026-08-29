@@ -42,6 +42,9 @@ export const theme = {
   text: {
     heading:
       "skin-category-title text-[color:var(--skin-primary)] neon-text-glow text-center leading-relaxed break-words",
+    // compact category label shown above the in-game phase card
+    gameCategory:
+      "font-display uppercase tracking-[0.14em] text-sm sm:text-base text-[color:var(--skin-primary)] neon-text-glow text-center break-words",
     subheading: "text-xl font-display text-[color:var(--skin-text)]",
     faded: "text-slate-300",
     playerName:
@@ -106,7 +109,7 @@ export const theme = {
 
   phase: {
     // every in-game phase renders in this centered card
-    card: "skin-panel w-full max-w-sm mx-auto p-5 sm:p-6 flex flex-col items-center text-center gap-5",
+    card: "skin-panel skin-panel--solid w-full max-w-sm mx-auto p-5 sm:p-6 flex flex-col items-center text-center gap-5",
     // frameless variant (category choice)
     bare: "w-full max-w-sm mx-auto flex flex-col items-center text-center gap-5",
     title: "font-display text-base sm:text-lg text-[color:var(--skin-text)] leading-snug",
@@ -164,7 +167,7 @@ export const theme = {
   },
 
   bluffSection: {
-    card: "skin-panel w-full max-w-sm mx-auto p-5 sm:p-6 flex flex-col items-center text-center gap-5",
+    card: "skin-panel skin-panel--solid w-full max-w-sm mx-auto p-5 sm:p-6 flex flex-col items-center text-center gap-5",
     text: {
       heading:
         "font-display text-base sm:text-lg text-[color:var(--skin-text)] leading-snug",
@@ -205,13 +208,10 @@ export const theme = {
   },
 
   voteBreakdownSection: {
-    container: "skin-panel w-full max-w-sm mx-auto p-5 sm:p-6 space-y-5",
+    container: "skin-panel skin-panel--solid w-full max-w-sm mx-auto p-5 sm:p-6 space-y-5",
     title: "text-center text-base skin-section-title",
     question:
       "text-center text-sm text-[color:var(--skin-muted)] font-arcade",
-    // image frame: dark, opaque — white flags stay visible against it
-    imageFrame:
-      "mx-auto p-2 rounded-xl bg-[color:var(--skin-bg)] border-2 border-[color:var(--skin-border)]",
     card: {
       base: "rounded-xl p-4 pt-5 relative border-2",
       correct:

@@ -36,14 +36,19 @@ export function VoteSection({
       </div>
 
       {currentQuestionImageUrl && (
-        <Image
-          src={currentQuestionImageUrl}
-          alt={t("voteSection.imageAlt")}
-          width={320}
-          height={192}
-          className="max-w-full max-h-44 w-auto h-auto object-contain rounded-xl border-2 border-[color:var(--skin-border)]"
-          unoptimized
-        />
+        <div className="flex w-full justify-center">
+          <span className="inline-block overflow-hidden rounded-xl bg-black">
+            <Image
+              src={currentQuestionImageUrl}
+              alt={t("voteSection.imageAlt")}
+              width={320}
+              height={192}
+              className="block max-w-full max-h-44 w-auto h-auto object-contain bg-black"
+              style={{ backgroundColor: "#000" }}
+              unoptimized
+            />
+          </span>
+        </div>
       )}
 
       <div className="w-full space-y-4">

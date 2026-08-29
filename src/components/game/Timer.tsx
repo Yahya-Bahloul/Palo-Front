@@ -1,9 +1,13 @@
-// src/app/room/Timer.tsx
+// src/components/game/Timer.tsx
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { QuizzType1Phases } from "@/model/Quizz1Phases";
-import { Clock } from "lucide-react";
+
+// full time per phase — drives the depletion underline
+const PHASE_DURATION: Partial<Record<QuizzType1Phases, number>> = {
+  [QuizzType1Phases.GUESSING]: 30,
+  [QuizzType1Phases.VOTING]: 30,
+};
 
 export function Timer({
   timer,
@@ -19,24 +23,59 @@ export function Timer({
   )
     return null;
 
-  let badgeColor = "bg-yellow-300 text-black border-black"; // 🟡
-  if (timer <= 10 && timer > 5)
-    badgeColor = "bg-orange-400 text-black border-black"; // 🟠
-  else if (timer <= 5) badgeColor = "bg-red-500 text-white border-black"; // 🔴
+  const total = PHASE_DURATION[phase] ?? Math.max(timer, 1);
+  const pct = Math.max(0, Math.min(100, (timer / total) * 100));
 
-  const urgent = timer > 0 && timer <= 5;
+  const warning = timer > 0 && timer <= 10 && timer > 5;
+  const critical = timer > 0 && timer <= 5;
+
+  const color = critical
+    ? "var(--skin-danger)"
+    : warning
+    ? "#f59e0b"
+    : "var(--skin-accent)";
+
+  const secs = Math.max(timer, 0);
+  const label =
+    secs >= 60
+      ? `${Math.floor(secs / 60)}:${(secs % 60).toString().padStart(2, "0")}`
+      : `${secs}`;
 
   return (
-    <div className="flex justify-center mt-6">
-      <Badge
-        variant="default"
-        className={`${badgeColor} border-4 px-4 py-2 rounded-full font-mono text-lg shadow-[3px_3px_0_0_black] flex items-center gap-2 ${
-          urgent ? "animate-pulse" : ""
+    <div className="flex justify-center">
+      <div
+        className={`inline-flex flex-col items-center gap-1 ${
+          critical ? "animate-pulse" : ""
         }`}
       >
-        <Clock className="w-5 h-5" />
-        {timer > 0 ? `${timer}` : ""}
-      </Badge>
+        <span
+          className="font-display tabular-nums leading-none tracking-wider"
+          style={{
+            fontSize: "0.95rem",
+            color,
+            textShadow: `0 0 8px color-mix(in srgb, ${color} 70%, transparent)`,
+          }}
+        >
+          {label}
+        </span>
+        {/* depletion underline — the non-color cue */}
+        <span
+          className="block h-[3px] w-14 overflow-hidden rounded-full"
+          style={{
+            background: "color-mix(in srgb, var(--skin-border) 55%, transparent)",
+          }}
+        >
+          <span
+            className="block h-full rounded-full"
+            style={{
+              width: `${pct}%`,
+              background: color,
+              boxShadow: `0 0 6px color-mix(in srgb, ${color} 80%, transparent)`,
+              transition: "width 1s linear, background 0.3s",
+            }}
+          />
+        </span>
+      </div>
     </div>
   );
 }
