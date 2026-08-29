@@ -59,7 +59,21 @@
     "chemistry": "الكيمياء",
     "world_literature": "الأدب العالمي",
     "technology": "التكنولوجيا",
-    "oceans": "المحيطات"
+    "oceans": "المحيطات",
+    "flags": "الأعلام",
+    "naruto_characters": "شخصيات ناروتو",
+    "one_piece_characters": "شخصيات ون بيس",
+    "dragon_ball_characters": "شخصيات دراغون بول",
+    "bleach_characters": "شخصيات بليتش",
+    "attack_on_titan_characters": "شخصيات هجوم العمالقة",
+    "my_hero_academia_characters": "شخصيات ماي هيرو أكاديميا",
+    "demon_slayer_characters": "شخصيات قاتل الشياطين",
+    "jujutsu_kaisen_characters": "شخصيات جوجوتسو كايسن",
+    "hunter_x_hunter_characters": "شخصيات هنتر × هنتر",
+    "tokyo_ghoul_characters": "شخصيات طوكيو غول",
+    "one_punch_man_characters": "شخصيات ون بانش مان",
+    "death_note_characters": "شخصيات مذكرة الموت",
+    "fullmetal_alchemist_characters": "شخصيات الخيميائي المعدني"
   },
   "playerSection": {
     "title": "اللاعبون ({{count}})",

@@ -49,13 +49,13 @@ export function VoteBreakdownSection({
         “{capitalizeFirst(question)}”
       </p>
       {currentQuestionImageUrl && (
-        <div className="flex justify-center my-4">
+        <div className={theme.voteBreakdownSection.imageFrame}>
           <Image
             src={currentQuestionImageUrl}
             alt="question image"
             width={320}
             height={192}
-            className="max-w-xs max-h-48 w-auto h-auto object-contain rounded-xl border border-white/20"
+            className="max-w-full max-h-44 w-auto h-auto object-contain rounded"
             unoptimized
           />
         </div>
@@ -71,13 +71,15 @@ export function VoteBreakdownSection({
             } ${voters.length > 0 ? "pt-4" : ""} relative`}
           >
             {/* Avatar group top-left */}
-            <div className="absolute -top-4 left-4 flex flex-row gap-2">
+            <div className="absolute -top-4 left-4 flex flex-row gap-1.5">
               {voters.map((voter) => (
                 <div
                   key={voter.id}
-                  className={`w-10 h-10 rounded-full border-2 border-white shadow-md ${
-                    isCorrect ? "bg-green-200" : "bg-red-200"
-                  } flex items-center justify-center`}
+                  className={`w-8 h-8 rounded-full border-2 overflow-hidden bg-[color:var(--skin-card)] flex items-center justify-center ${
+                    isCorrect
+                      ? "border-[color:var(--skin-accent)]"
+                      : "border-[color:var(--skin-danger)]"
+                  }`}
                   title={voter.name}
                 >
                   <Image

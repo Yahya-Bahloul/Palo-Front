@@ -59,7 +59,21 @@
     "chemistry": "Chemistry",
     "world_literature": "World Literature",
     "technology": "Technology",
-    "oceans": "Oceans"
+    "oceans": "Oceans",
+    "flags": "Flags",
+    "naruto_characters": "Naruto Characters",
+    "one_piece_characters": "One Piece Characters",
+    "dragon_ball_characters": "Dragon Ball Characters",
+    "bleach_characters": "Bleach Characters",
+    "attack_on_titan_characters": "Attack on Titan Characters",
+    "my_hero_academia_characters": "My Hero Academia Characters",
+    "demon_slayer_characters": "Demon Slayer Characters",
+    "jujutsu_kaisen_characters": "Jujutsu Kaisen Characters",
+    "hunter_x_hunter_characters": "Hunter x Hunter Characters",
+    "tokyo_ghoul_characters": "Tokyo Ghoul Characters",
+    "one_punch_man_characters": "One Punch Man Characters",
+    "death_note_characters": "Death Note Characters",
+    "fullmetal_alchemist_characters": "Fullmetal Alchemist Characters"
   },
   "playerSection": {
     "title": "Players ({{count}})",

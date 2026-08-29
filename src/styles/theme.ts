@@ -191,28 +191,38 @@ export const theme = {
   },
 
   resultSection: {
-    card: "bg-gradient-to-br from-yellow-50 to-amber-100 p-6 rounded-2xl shadow-xl border border-yellow-200 space-y-6",
-    title: "text-2xl font-bold text-amber-700 text-center",
-    topPlayer: "bg-yellow-400 text-black font-extrabold ring-2 ring-yellow-500",
-    player: "bg-amber-200 text-amber-900",
-    avatar: "w-10 h-10 rounded-full overflow-hidden border border-white shadow",
-    playerName: "flex-1 text-left text-lg",
-    playerScore: "text-md",
+    card: "skin-panel w-full max-w-sm mx-auto p-5 sm:p-6 space-y-5",
+    title: "skin-category-title text-[color:var(--skin-primary)] text-center [font-size:clamp(1.4rem,6vw,2rem)]",
+    topPlayer:
+      "bg-[color:var(--skin-primary)] text-[color:var(--skin-btn-color)] font-bold border-2 border-[color:var(--skin-primary-bright)]",
+    player:
+      "bg-[color:var(--skin-bg-2)] text-[color:var(--skin-text)] border-2 border-[color:var(--skin-border)]",
+    avatar:
+      "w-10 h-10 rounded-full overflow-hidden border-2 border-[color:var(--skin-accent)] shrink-0 bg-[color:var(--skin-card)]",
+    playerName: "flex-1 text-left font-arcade text-base truncate",
+    playerScore:
+      "font-arcade font-bold text-sm tabular-nums shrink-0",
   },
 
   voteBreakdownSection: {
-    container:
-      "p-6 bg-amber-50 rounded-xl border border-amber-200 shadow space-y-6",
-    title: "text-center text-2xl font-bold text-amber-700",
-    question: "text-center text-sm italic text-amber-600",
+    container: "skin-panel w-full max-w-sm mx-auto p-5 sm:p-6 space-y-5",
+    title: "text-center text-base skin-section-title",
+    question:
+      "text-center text-sm text-[color:var(--skin-muted)] font-arcade",
+    // image frame: dark, opaque — white flags stay visible against it
+    imageFrame:
+      "mx-auto p-2 rounded-xl bg-[color:var(--skin-bg)] border-2 border-[color:var(--skin-border)]",
     card: {
-      base: "rounded-xl p-1 relative shadow border",
-      correct: "bg-green-100 border-green-200 text-green-900",
-      bluff: "bg-red-100 border-red-200 text-red-900",
+      base: "rounded-xl p-4 pt-5 relative border-2",
+      correct:
+        "bg-[color:var(--skin-bg-2)] border-[color:var(--skin-accent)] text-[color:var(--skin-text)]",
+      bluff:
+        "bg-[color:var(--skin-bg-2)] border-[color:var(--skin-danger)]/60 text-[color:var(--skin-text)]",
     },
     text: {
-      guess: "text-center font-semibold text-lg",
-      author: "text-center text-sm italic mt-1",
+      guess: "text-center font-arcade font-semibold text-base",
+      author:
+        "text-center text-xs text-[color:var(--skin-muted)] font-arcade mt-1",
     },
   },
 
