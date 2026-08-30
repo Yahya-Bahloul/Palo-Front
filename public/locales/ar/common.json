@@ -94,7 +94,11 @@
     "money": "المال",
     "dinosaurs": "الديناصورات",
     "exploration": "الاستكشاف",
-    "islamic_civilization": "الحضارة الإسلاميّة"
+    "islamic_civilization": "الحضارة الإسلاميّة",
+    "premier_league": "الدوري الإنجليزي",
+    "bundesliga": "الدوري الألماني",
+    "champions_league": "دوري الأبطال",
+    "la_liga": "الدوري الإسباني"
   },
   "playerSection": {
     "title": "اللاعبون ({{count}})",

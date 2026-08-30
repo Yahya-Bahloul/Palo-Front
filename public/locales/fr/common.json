@@ -93,7 +93,11 @@
     "money": "Argent",
     "dinosaurs": "Dinosaures",
     "exploration": "Exploration",
-    "islamic_civilization": "Civilisation islamique"
+    "islamic_civilization": "Civilisation islamique",
+    "premier_league": "Premier League",
+    "bundesliga": "Bundesliga",
+    "champions_league": "Ligue des champions",
+    "la_liga": "Liga"
   },
   "playerSection": {
     "title": "Joueurs ({{count}})",
