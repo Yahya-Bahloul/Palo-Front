@@ -25,20 +25,22 @@ function arraysAreEqual(a: string[], b: string[]) {
   return a.length === b.length && a.every((v) => b.includes(v));
 }
 
-// Best-effort countdown on reconnect: the server doesn't track remaining
-// time per phase, so this restarts the phase's full duration rather than
-// leaving the timer at a stale value.
-function defaultTimerForPhase(phase: QuizzType1Phases): number {
-  switch (phase) {
-    case QuizzType1Phases.CATEGORIES:
-      return 60;
-    case QuizzType1Phases.GUESSING:
-      return 40;
-    case QuizzType1Phases.VOTING:
-      return 30;
-    default:
-      return 0;
-  }
+// The server sends an absolute `phaseDeadline` (epoch ms) plus its own clock
+// as `serverNow`. Comparing the two gives the device's clock offset, so the
+// countdown stays correct even on a phone whose clock is minutes off — and a
+// client that reconnects mid-phase, or whose socket lagged, shows the real
+// remaining time instead of restarting the full duration.
+type PhaseTiming = { deadline: number; offsetMs: number } | null;
+
+function readTiming(data: {
+  phaseDeadline?: number;
+  serverNow?: number;
+}): PhaseTiming {
+  if (!data?.phaseDeadline) return null;
+  return {
+    deadline: data.phaseDeadline,
+    offsetMs: data.serverNow ? data.serverNow - Date.now() : 0,
+  };
 }
 
 export function useRoomPage() {
@@ -56,6 +58,8 @@ export function useRoomPage() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [timer, setTimer] = useState(0);
+  const [phaseTiming, setPhaseTiming] = useState<PhaseTiming>(null);
+  const [guessRejectedNonce, setGuessRejectedNonce] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [phase, setPhase] = useState<QuizzType1Phases>(
     QuizzType1Phases.STARTING
@@ -173,7 +177,17 @@ export function useRoomPage() {
       setCurrentRoomId(null);
       router.replace("/?roomError=1");
     };
+
+    // Rooms live only in the backend's memory, so a restart ends every game.
+    // Without this the client sits on a dead socket retrying into a room that
+    // no longer exists.
+    const handleServerShuttingDown = () => {
+      setCurrentRoomId(null);
+      router.replace("/?roomError=1");
+    };
+
     socketService.on("joinError", handleJoinError);
+    socketService.on("serverShuttingDown", handleServerShuttingDown);
 
     socketService.on("joinedRoom", handleJoinedRoom);
     socketService.on("playerJoined", (data) => setPlayers(data.players));
@@ -188,6 +202,7 @@ export function useRoomPage() {
       socketService.off("youWereKicked", handleYouWereKicked);
       socketService.off("chatMessage", handleChatMessage);
       socketService.off("joinError", handleJoinError);
+      socketService.off("serverShuttingDown", handleServerShuttingDown);
     };
   }, [player]);
 
@@ -223,8 +238,14 @@ export function useRoomPage() {
       setCurrentPlayer(data.currentPlayer);
     };
 
+    // Server-side backstop rejection (a crafted client can bypass the checks in
+    // BluffSection). Bumping the nonce lets BluffSection re-open its input
+    // instead of leaving the player stuck on "waiting for others".
+    const handleGuessRejected = () => setGuessRejectedNonce((n) => n + 1);
+
     socketService.on("playerLeftNotice", handlePlayerLeftNotice);
     socketService.on("currentPlayerChanged", handleCurrentPlayerChanged);
+    socketService.on("guessRejected", handleGuessRejected);
 
     return () => {
       socketService.off("roundStarted", handleRoundStarted);
@@ -239,6 +260,7 @@ export function useRoomPage() {
       socketService.off("playerUpdated");
       socketService.off("playerLeftNotice", handlePlayerLeftNotice);
       socketService.off("currentPlayerChanged", handleCurrentPlayerChanged);
+      socketService.off("guessRejected", handleGuessRejected);
       clearTimeout(noticeTimeoutRef.current);
     };
   }, [player, t]);
@@ -262,7 +284,7 @@ export function useRoomPage() {
     setQuestion("");
     setCurrentQuestionImageUrl(undefined);
     setAnswer("");
-    setTimer(60);
+    setPhaseTiming(readTiming(data));
   }
 
   function handleQuestionReady(data: any) {
@@ -271,17 +293,18 @@ export function useRoomPage() {
     setPhase(data.phase as QuizzType1Phases);
     setCurrentCategory(data.currentCategory || "");
     setCurrentQuestionImageUrl(data.currentQuestionImageUrl || null);
-    setTimer(40);
+    setPhaseTiming(readTiming(data));
   }
 
   function handleVotingStarted(data: any) {
     setGuesses(data.guesses);
     setPhase(QuizzType1Phases.VOTING);
-    setTimer(30);
+    setPhaseTiming(readTiming(data));
   }
 
   function handleResultsReady(data: any) {
     setPhase(data.phase as QuizzType1Phases);
+    setPhaseTiming(null);
     setComputedGuesses(data.computedGuesses);
     setVotes(data.votes);
     setPlayers(data.players);
@@ -294,7 +317,7 @@ export function useRoomPage() {
     setQuestion("");
     setCurrentQuestionImageUrl(undefined);
     setAnswer("");
-    setTimer(0);
+    setPhaseTiming(null);
     setPhase(QuizzType1Phases.STARTING);
     setGuesses({});
     setVotes({});
@@ -305,6 +328,7 @@ export function useRoomPage() {
   function handleFinalResults(data: any) {
     setPhase(QuizzType1Phases.FINAL_RESULTS);
     setPlayers(data.players);
+    setPhaseTiming(null);
   }
 
   function reconnectGameState(room: GameRoom) {
@@ -317,7 +341,10 @@ export function useRoomPage() {
     setVotes(room.votes || {});
     setComputedGuesses(room.computedGuesses || []);
     setIsLastRound(room.isLastRound || false);
-    setTimer(defaultTimerForPhase(room.phase as QuizzType1Phases));
+    // Resumes the real remaining time: previously this restarted the phase's
+    // full duration, so a player reconnecting at 0:38 of a 40s phase saw a
+    // fresh 40s and was then cut off two seconds later.
+    setPhaseTiming(readTiming(room));
   }
 
   function endGame() {
@@ -347,19 +374,24 @@ export function useRoomPage() {
     socketService.forceFinalResults(roomId as string);
   }
 
+  // Ticks against the server deadline rather than decrementing a local counter,
+  // so the displayed time self-corrects after a lag spike or a backgrounded tab
+  // (mobile browsers throttle timers when the app isn't in the foreground).
+  // Polls at 500ms so the visible second doesn't skip.
   useEffect(() => {
-    if (!gameStarted || timer <= 0) return;
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    if (!phaseTiming) {
+      setTimer(0);
+      return;
+    }
+    const tick = () => {
+      const remainingMs =
+        phaseTiming.deadline - (Date.now() + phaseTiming.offsetMs);
+      setTimer(Math.max(0, Math.ceil(remainingMs / 1000)));
+    };
+    tick();
+    const interval = setInterval(tick, 500);
     return () => clearInterval(interval);
-  }, [timer, gameStarted]);
+  }, [phaseTiming]);
 
   const handleStartGame = () => {
     const allCategoriesSelected =
@@ -449,6 +481,7 @@ export function useRoomPage() {
     question,
     answer,
     timer,
+    guessRejectedNonce,
     gameStarted,
     phase,
     guesses,

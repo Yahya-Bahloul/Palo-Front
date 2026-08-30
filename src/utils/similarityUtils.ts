@@ -1,13 +1,18 @@
 // src/utils/similarityUtils.ts
 import { distance } from "fastest-levenshtein";
 
+// Strips punctuation while keeping letters and digits from EVERY script.
+// The previous `[^a-z0-9 ]` erased all non-Latin text, so an Arabic bluff and
+// an Arabic answer both normalized to "" \u2014 they compared equal, and the exact
+// match guard in BluffSection refused every Arabic submission outright.
 export function normalizeText(str: string): string {
   return str
-    .trim()
-    .toLowerCase()
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Remove accents
-    .replace(/[^a-z0-9 ]/g, ""); // Remove punctuation
+    .replace(/[\u0300-\u036f]/g, "") // Latin accents
+    .replace(/[^\p{L}\p{N} ]/gu, "") // punctuation, any script
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
 }
 
 export function getSimilarityScore(a: string, b: string): number {
@@ -29,7 +34,8 @@ export function isBluffTooClose(
   const normBluff = normalizeText(bluff);
   const normAnswer = normalizeText(answer);
 
+  // Two strings that both normalize to empty (emoji-only, say) are not a match.
+  if (!normBluff || !normAnswer) return false;
   if (normBluff === normAnswer) return true; // Exact match
-  console.log(getSimilarityScore(bluff, answer));
   return getSimilarityScore(bluff, answer) > threshold;
 }

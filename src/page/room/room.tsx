@@ -176,6 +176,7 @@ function BluffPhase(props: {
   question: string;
   answer: string;
   currentQuestionImageUrl?: string;
+  guessRejectedNonce: number;
 }) {
   if (props.phase !== QuizzType1Phases.GUESSING) return null;
   return <BluffSection {...props} />;

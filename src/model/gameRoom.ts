@@ -13,6 +13,8 @@ export type GameRoom = {
   currentQuestion?: string;
   currentAnswer?: string;
   phase: QuizzType1Phases;
+  phaseDeadline?: number; // absolute epoch-ms end of the current phase, if it has a countdown
+  serverNow?: number; // server clock when the payload was sent, to correct device clock skew
   guesses: Record<string, string>; // playerId -> guess (bluff or correct answer)
   votes: Record<string, string>; // voterId -> voted playerId
   categories?: string[]; // current categories for the round

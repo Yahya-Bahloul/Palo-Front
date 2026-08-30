@@ -2,7 +2,7 @@
 "use client";
 
 // src/components/game/BluffSection.tsx
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AlertTriangle, Send, Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,8 @@ type Props = {
   question: string;
   answer: string;
   currentQuestionImageUrl?: string;
+  /** Bumped when the server refuses a bluff, so the input can re-open. */
+  guessRejectedNonce?: number;
 };
 
 export function BluffSection({
@@ -22,6 +24,7 @@ export function BluffSection({
   question,
   answer,
   currentQuestionImageUrl,
+  guessRejectedNonce = 0,
 }: Props) {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,11 +42,24 @@ export function BluffSection({
   const [isExactMatch, setIsExactMatch] = useState(false);
   const [similarBluffDetected, setSimilarBluffDetected] = useState(false);
 
+  // The server refused the bluff (it matched the answer). Re-open the input
+  // rather than leaving the player waiting on a guess that was never recorded.
+  useEffect(() => {
+    if (guessRejectedNonce === 0) return;
+    setSubmitted(false);
+    setIsExactMatch(true);
+  }, [guessRejectedNonce]);
+
   const handleSubmit = () => {
     const cleanBluff = normalizeText(bluff);
     const cleanAnswer = normalizeText(answer);
 
-    if (cleanBluff === cleanAnswer) {
+    if (!cleanBluff) return;
+
+    // Guarded on non-empty: when both sides normalized to "" (every non-Latin
+    // script did, before the normalizeText fix) this branch swallowed every
+    // submission.
+    if (cleanAnswer && cleanBluff === cleanAnswer) {
       setIsExactMatch(true);
       setSimilarBluffDetected(false);
       return;
