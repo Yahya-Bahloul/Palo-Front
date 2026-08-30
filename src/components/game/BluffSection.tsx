@@ -30,10 +30,15 @@ export function BluffSection({
   const inputRef = useRef<HTMLInputElement>(null);
   const [bluff, setBluff] = useState("");
 
-  // The keyboard opens on autofocus; wait for its slide-in animation, then
-  // bring the field (and the submit button just below it) into view. Works
-  // whether or not the webview resizes for the keyboard.
+  // True while the field has focus, i.e. while the on-screen keyboard is up.
+  // Drives a compact layout so the image and the question stay visible in the
+  // shrunken viewport instead of being pushed above the fold.
+  const [typing, setTyping] = useState(false);
+
+  // Wait for the keyboard's slide-in before scrolling, so the browser measures
+  // the resized viewport rather than the pre-keyboard one.
   const revealInput = () => {
+    setTyping(true);
     setTimeout(() => {
       inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
     }, 350);
@@ -76,21 +81,30 @@ export function BluffSection({
       setSimilarBluffDetected(false);
       handleSubmitGuess(bluff.trim());
       setSubmitted(true);
+      // The input unmounts on submit, so no blur fires to clear this.
+      setTyping(false);
     }
   };
 
   return (
-    <div className={theme.bluffSection.card}>
+    <div
+      className={`${theme.bluffSection.card} ${
+        typing ? "gap-3 p-4 sm:gap-5 sm:p-6" : ""
+      } transition-[gap,padding] duration-200 motion-reduce:transition-none`}
+    >
       {currentQuestionImageUrl && (
         <div className="flex w-full justify-center">
-          <span className="inline-block overflow-hidden rounded-xl bg-black">
+          <span className="inline-block overflow-hidden rounded-xl">
             <Image
               src={currentQuestionImageUrl}
               alt={t("questionImageAlt")}
               width={320}
               height={192}
-              className="block max-w-full max-h-44 h-auto w-auto object-contain bg-black"
-              style={{ backgroundColor: "#000" }}
+              // Shrinks only while typing, and only on phones — a desktop
+              // browser has no keyboard eating the viewport.
+              className={`block max-w-full h-auto w-auto object-contain transition-[max-height] duration-200 motion-reduce:transition-none ${
+                typing ? "max-h-24 sm:max-h-44" : "max-h-44"
+              }`}
               unoptimized
             />
           </span>
@@ -98,10 +112,20 @@ export function BluffSection({
       )}
 
       <div className="space-y-1.5">
-        <p className="font-arcade text-xs uppercase tracking-[0.2em] text-[color:var(--skin-accent)]">
+        {/* The eyebrow is redundant once the player is answering; dropping it
+            while typing buys back a row on a keyboard-shrunk viewport. */}
+        <p
+          className={`font-arcade text-xs uppercase tracking-[0.2em] text-[color:var(--skin-accent)] ${
+            typing ? "hidden sm:block" : ""
+          }`}
+        >
           {t("bluffSection.questionLabel", "Question")}
         </p>
-        <h2 className={theme.bluffSection.text.heading}>
+        <h2
+          className={`${theme.bluffSection.text.heading} ${
+            typing ? "text-sm sm:text-lg" : ""
+          }`}
+        >
           {capitalizeFirst(question)}
         </h2>
       </div>
@@ -119,10 +143,13 @@ export function BluffSection({
             value={bluff}
             onChange={(e) => setBluff(e.target.value)}
             onFocus={revealInput}
+            onBlur={() => setTyping(false)}
             placeholder={t("bluffInputPlaceholder")}
             className={theme.bluffSection.input}
             disabled={submitted}
-            autoFocus
+            // Deliberately not autofocused: the keyboard used to cover the
+            // image and the question the moment the round started, before the
+            // player had read either.
           />
 
           <button

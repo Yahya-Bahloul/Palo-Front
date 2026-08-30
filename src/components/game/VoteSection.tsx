@@ -37,14 +37,13 @@ export function VoteSection({
 
       {currentQuestionImageUrl && (
         <div className="flex w-full justify-center">
-          <span className="inline-block overflow-hidden rounded-xl bg-black">
+          <span className="inline-block overflow-hidden rounded-xl">
             <Image
               src={currentQuestionImageUrl}
               alt={t("voteSection.imageAlt")}
               width={320}
               height={192}
-              className="block max-w-full max-h-44 w-auto h-auto object-contain bg-black"
-              style={{ backgroundColor: "#000" }}
+              className="block max-w-full max-h-44 w-auto h-auto object-contain"
               unoptimized
             />
           </span>
