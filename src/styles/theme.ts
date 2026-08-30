@@ -173,7 +173,9 @@ export const theme = {
   },
 
   bluffSection: {
-    card: "skin-panel skin-panel--solid w-full max-w-sm mx-auto p-5 sm:p-6 flex flex-col items-center text-center gap-5",
+    // Frameless: the panel's opaque fill and border boxed in the question and
+    // the input for no gain, and cost vertical room on phones.
+    card: "w-full max-w-sm mx-auto p-5 sm:p-6 flex flex-col items-center text-center gap-5",
     text: {
       heading:
         "font-display text-base sm:text-lg text-[color:var(--skin-text)] leading-snug",

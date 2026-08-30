@@ -8,6 +8,7 @@ import { AlertTriangle, Send, Clock } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { theme } from "@/styles/theme";
 import { isBluffTooClose, normalizeText } from "@/utils/similarityUtils";
+import { useKeyboardInset } from "@/hooks/useKeyboardInset";
 import { capitalizeFirst } from "@/lib/utils";
 
 type Props = {
@@ -30,6 +31,13 @@ export function BluffSection({
   const inputRef = useRef<HTMLInputElement>(null);
   const [bluff, setBluff] = useState("");
 
+  const keyboardInset = useKeyboardInset();
+  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+
+  useEffect(() => () => clearTimeout(blurTimeoutRef.current), []);
+
   // True while the field has focus, i.e. while the on-screen keyboard is up.
   // Drives a compact layout so the image and the question stay visible in the
   // shrunken viewport instead of being pushed above the fold.
@@ -38,6 +46,7 @@ export function BluffSection({
   // Wait for the keyboard's slide-in before scrolling, so the browser measures
   // the resized viewport rather than the pre-keyboard one.
   const revealInput = () => {
+    clearTimeout(blurTimeoutRef.current);
     setTyping(true);
     setTimeout(() => {
       inputRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -54,6 +63,10 @@ export function BluffSection({
     setSubmitted(false);
     setIsExactMatch(true);
   }, [guessRejectedNonce]);
+
+  // Only float when a keyboard is actually occluding the view — on desktop,
+  // and on any browser without visualViewport, the button stays in the flow.
+  const floatingSubmit = typing && keyboardInset > 0;
 
   const handleSubmit = () => {
     const cleanBluff = normalizeText(bluff);
@@ -82,6 +95,7 @@ export function BluffSection({
       handleSubmitGuess(bluff.trim());
       setSubmitted(true);
       // The input unmounts on submit, so no blur fires to clear this.
+      clearTimeout(blurTimeoutRef.current);
       setTyping(false);
     }
   };
@@ -143,7 +157,13 @@ export function BluffSection({
             value={bluff}
             onChange={(e) => setBluff(e.target.value)}
             onFocus={revealInput}
-            onBlur={() => setTyping(false)}
+            // Deferred: tapping the floating submit button blurs the input
+            // first. Clearing `typing` synchronously would drop the button back
+            // into the flow before the click landed, so the tap would miss.
+            onBlur={() => {
+              clearTimeout(blurTimeoutRef.current);
+              blurTimeoutRef.current = setTimeout(() => setTyping(false), 150);
+            }}
             placeholder={t("bluffInputPlaceholder")}
             className={theme.bluffSection.input}
             disabled={submitted}
@@ -152,14 +172,29 @@ export function BluffSection({
             // player had read either.
           />
 
-          <button
-            onClick={handleSubmit}
-            disabled={submitted || bluff.trim().length === 0}
-            className={theme.bluffSection.button.base}
+          {/* While the keyboard is up the button lifts out of the flow and
+              parks just above it, so it is reachable without scrolling. The
+              spacer keeps the card from collapsing as it leaves. */}
+          {floatingSubmit && <div aria-hidden="true" className="h-[3.25rem]" />}
+          <div
+            className={
+              floatingSubmit
+                ? "fixed left-0 right-0 z-30 px-5 mx-auto max-w-sm"
+                : ""
+            }
+            style={
+              floatingSubmit ? { bottom: keyboardInset + 8 } : undefined
+            }
           >
-            <Send className="h-4 w-4" />
-            {t("submitBluff")}
-          </button>
+            <button
+              onClick={handleSubmit}
+              disabled={submitted || bluff.trim().length === 0}
+              className={theme.bluffSection.button.base}
+            >
+              <Send className="h-4 w-4" />
+              {t("submitBluff")}
+            </button>
+          </div>
 
           {isExactMatch && (
             <p className={theme.bluffSection.text.error}>
