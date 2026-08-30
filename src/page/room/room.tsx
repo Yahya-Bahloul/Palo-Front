@@ -105,6 +105,11 @@ export default function RoomPage() {
           // clear the floating action button (lobby ~7rem) or the player footer (in-game ~5.25rem)
           !gameStarted && hasRoomAction(props) ? 8 : 5.25
         }
+        // In game on phones there is no player footer to clear, so the toggle
+        // drops to the bottom edge instead of floating above an empty band.
+        bottomOffsetRemMobile={
+          !gameStarted && hasRoomAction(props) ? 8 : 1.25
+        }
       />
 
       {/* Fixed action bar: Start (lobby) / Next / Results — sits above the footer in-game */}

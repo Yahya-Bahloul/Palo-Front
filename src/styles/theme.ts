@@ -65,8 +65,10 @@ export const theme = {
       "w-full max-w-md neon-card rounded-[var(--skin-radius)] p-5 sm:p-6 space-y-5",
     // in-game: no frame; center the phase card in the space between the
     // top bar and the fixed action bar + player footer.
+    // Bottom padding clears the fixed player bar, which only exists from `sm`
+    // up — phones reserve just enough for the chat button and the safe area.
     roomShell:
-      "w-full max-w-lg mx-auto flex flex-col items-center justify-center gap-5 min-h-[calc(100dvh-9rem)] pt-10 [padding-bottom:calc(env(safe-area-inset-bottom,0px)+8rem)]",
+      "w-full max-w-lg mx-auto flex flex-col items-center justify-center gap-5 min-h-[calc(100dvh-9rem)] pt-10 [padding-bottom:calc(env(safe-area-inset-bottom,0px)+4.5rem)] sm:[padding-bottom:calc(env(safe-area-inset-bottom,0px)+8rem)]",
     // lobby content scrolls; Start button floats over it
     lobbyScroll: "w-full max-w-md mx-auto space-y-5 pb-32",
   },
@@ -138,10 +140,14 @@ export const theme = {
 
   avatarSelector: {
     container:
-      "rounded-2xl p-5 text-center space-y-4 bg-[color:var(--skin-bg-2)]/40 border border-[color:var(--skin-border)]",
+      "rounded-2xl p-4 text-center bg-[color:var(--skin-bg-2)]/40 border border-[color:var(--skin-border)]",
     imageWrapper:
       "w-24 h-24 mx-auto rounded-full overflow-hidden bg-[color:var(--skin-card)] border-2 border-[color:var(--skin-accent)] neon-glow-cyan transition-transform active:scale-95",
-    button: "skin-chip px-4 py-2.5 text-sm inline-flex items-center gap-2",
+    // Regenerate is a badge on the avatar rather than a row beneath it, so it
+    // costs no vertical space. Visually 36px, but the tap area is padded out to
+    // the 44px minimum.
+    button:
+      "absolute -bottom-1 -right-1 grid place-items-center w-11 h-11 rounded-full skin-chip !p-0 shadow-md transition-transform active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--skin-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--skin-bg)]",
     icon: "w-4 h-4",
   },
 

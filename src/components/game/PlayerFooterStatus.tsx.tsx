@@ -25,10 +25,12 @@ export function PlayerFooterList({
     .sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
 
   return (
+    // Hidden on phones: the bar ate a band of an already tight viewport, and
+    // roomShell's bottom padding is reduced below `sm` to match.
     <div
-      className={`fixed bottom-0 left-0 right-0 z-40 px-3 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+0.4rem)] ${theme.footer}`}
+      className={`hidden sm:block fixed bottom-0 left-0 right-0 z-40 px-3 pt-2 pb-[calc(env(safe-area-inset-bottom,0px)+0.4rem)] ${theme.footer}`}
     >
-      <div className="flex justify-start sm:justify-center gap-3 overflow-x-auto no-scrollbar">
+      <div className="flex justify-center gap-3 overflow-x-auto no-scrollbar">
         {visible.map((player) => {
           const avatarUrl = `https://api.dicebear.com/8.x/adventurer/svg?seed=${player.avatar}`;
           const hasSubmitted =

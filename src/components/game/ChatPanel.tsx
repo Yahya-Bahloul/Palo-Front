@@ -12,6 +12,11 @@ type Props = {
   onSend: (text: string) => void;
   /** extra bottom offset (rem) so the toggle clears a fixed action bar below it */
   bottomOffsetRem?: number;
+  /**
+   * Offset below `sm`. The player bar is hidden on phones, so the toggle can
+   * sit lower there. Defaults to the desktop value when omitted.
+   */
+  bottomOffsetRemMobile?: number;
 };
 
 export function ChatPanel({
@@ -19,6 +24,7 @@ export function ChatPanel({
   myPlayerId,
   onSend,
   bottomOffsetRem = 5.25,
+  bottomOffsetRemMobile,
 }: Props) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -48,10 +54,13 @@ export function ChatPanel({
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={t("chat.title", "Chat")}
-        className="fixed right-4 z-40 skin-stepper !w-12 !h-12"
-        style={{
-          bottom: `calc(env(safe-area-inset-bottom,0px) + ${bottomOffsetRem}rem)`,
-        }}
+        className="fixed right-4 z-40 skin-stepper !w-12 !h-12 bottom-[calc(env(safe-area-inset-bottom,0px)+var(--fab-bottom-sm))] sm:bottom-[calc(env(safe-area-inset-bottom,0px)+var(--fab-bottom))]"
+        style={
+          {
+            "--fab-bottom": `${bottomOffsetRem}rem`,
+            "--fab-bottom-sm": `${bottomOffsetRemMobile ?? bottomOffsetRem}rem`,
+          } as React.CSSProperties
+        }
       >
         {open ? (
           <X className="w-5 h-5" />
@@ -67,12 +76,15 @@ export function ChatPanel({
 
       {open && (
         <div
-          className="fixed inset-0 z-40 flex items-end justify-center px-3"
-          style={{
-            paddingBottom: `calc(env(safe-area-inset-bottom,0px) + ${
-              bottomOffsetRem + 0.5
-            }rem)`,
-          }}
+          className="fixed inset-0 z-40 flex items-end justify-center px-3 pb-[calc(env(safe-area-inset-bottom,0px)+var(--panel-bottom-sm))] sm:pb-[calc(env(safe-area-inset-bottom,0px)+var(--panel-bottom))]"
+          style={
+            {
+              "--panel-bottom": `${bottomOffsetRem + 0.5}rem`,
+              "--panel-bottom-sm": `${
+                (bottomOffsetRemMobile ?? bottomOffsetRem) + 0.5
+              }rem`,
+            } as React.CSSProperties
+          }
           onMouseDown={(e) => {
             if (e.target === e.currentTarget) setOpen(false);
           }}

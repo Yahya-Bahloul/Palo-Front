@@ -119,18 +119,16 @@ export default function HomePage() {
             seed={player.avatar}
           />
 
-          <div className="space-y-2">
-            <Label htmlFor="name" className={theme.home.label}>
-              {t("playerName")}
-            </Label>
-            <Input
-              id="name"
-              placeholder={t("enterName")}
-              value={player.name}
-              onChange={(e) => updatePlayer({ name: e.target.value })}
-              className={theme.home.input}
-            />
-          </div>
+          {/* No visible label: the placeholder carries the hint, and the field
+              keeps an accessible name through aria-label. */}
+          <Input
+            id="name"
+            aria-label={t("playerName")}
+            placeholder={t("enterName")}
+            value={player.name}
+            onChange={(e) => updatePlayer({ name: e.target.value })}
+            className={theme.home.input}
+          />
         </CardContent>
 
         <CardFooter className={theme.home.cardFooter}>

@@ -30,29 +30,33 @@ export function AvatarSelector({
     }
   }, [seed]);
 
+  // The regenerate control sits on the avatar instead of on its own row, so it
+  // adds no height. Icon-only, so it carries its label through aria-label.
   return (
-    <div
-      className={`${theme.avatarSelector.container} flex flex-col items-center gap-4`}
-    >
-      {avatarUrl && (
-        <div className={theme.avatarSelector.imageWrapper}>
-          <Image
-            src={avatarUrl}
-            alt={t("avatar.previewAlt", "Aperçu de l’avatar")}
-            width={96}
-            height={96}
-            unoptimized
-          />
-        </div>
-      )}
+    <div className={theme.avatarSelector.container}>
+      <div className="relative w-24 h-24 mx-auto">
+        {avatarUrl && (
+          <div className={theme.avatarSelector.imageWrapper}>
+            <Image
+              src={avatarUrl}
+              alt={t("avatar.previewAlt", "Aperçu de l’avatar")}
+              width={96}
+              height={96}
+              unoptimized
+            />
+          </div>
+        )}
 
-      <button
-        onClick={regenerateAvatar}
-        className={theme.avatarSelector.button}
-      >
-        <RefreshCw className={theme.avatarSelector.icon} />
-        {t("avatar.regenerate", "Générer un nouvel avatar")}
-      </button>
+        <button
+          type="button"
+          onClick={regenerateAvatar}
+          aria-label={t("avatar.regenerate", "Générer un nouvel avatar")}
+          title={t("avatar.regenerate", "Générer un nouvel avatar")}
+          className={theme.avatarSelector.button}
+        >
+          <RefreshCw className={theme.avatarSelector.icon} aria-hidden="true" />
+        </button>
+      </div>
     </div>
   );
 }
