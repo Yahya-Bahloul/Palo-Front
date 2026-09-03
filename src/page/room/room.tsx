@@ -23,6 +23,7 @@ import { ComputedGuess } from "@/model/computedGuesses";
 import { CategoryCatalogEntry } from "@/model/category";
 import { useTranslation } from "react-i18next"; // ✅
 import { ChatPanel } from "@/components/game/ChatPanel";
+import { ReportQuestionButton } from "@/components/game/ReportQuestionButton";
 
 export default function RoomPage() {
   const props = useRoomPage();
@@ -68,6 +69,17 @@ export default function RoomPage() {
         </div>
       ) : (
         <div className={theme.layout.roomShell}>
+          {props.question && (
+            <div
+              className="fixed right-4 z-40"
+              style={{ top: "calc(env(safe-area-inset-top, 0px) + 1rem)" }}
+            >
+              <ReportQuestionButton
+                onReport={props.handleReportQuestion}
+                alreadyReported={props.hasReportedQuestion}
+              />
+            </div>
+          )}
           <Timer {...props} />
           {props.currentCategory !== "" && (
             <h1 className={theme.text.gameCategory}>

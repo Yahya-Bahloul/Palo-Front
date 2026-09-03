@@ -80,6 +80,10 @@ export const socketService = {
     socket.emit("checkRoom", { roomId });
   },
 
+  reportQuestion: (roomId: string, playerId: string, message?: string) => {
+    socket.emit("reportQuestion", { roomId, playerId, message });
+  },
+
   sendChatMessage: (
     roomId: string,
     player: { id: string; name: string; avatar?: string },

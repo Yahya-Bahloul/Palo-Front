@@ -57,6 +57,12 @@ export function useRoomPage() {
 
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
+  const [currentQuestionId, setCurrentQuestionId] = useState<
+    string | undefined
+  >(undefined);
+  // Reset whenever the question changes, so the report button re-enables
+  // for the new round instead of staying disabled from the previous one.
+  const [hasReportedQuestion, setHasReportedQuestion] = useState(false);
   const [timer, setTimer] = useState(0);
   const [phaseTiming, setPhaseTiming] = useState<PhaseTiming>(null);
   const [guessRejectedNonce, setGuessRejectedNonce] = useState(0);
@@ -137,6 +143,7 @@ export function useRoomPage() {
       setGameStarted(data.room.phase !== QuizzType1Phases.STARTING);
       setPhase(data.room.phase as QuizzType1Phases);
       setQuestion(data.room.currentQuestion || "");
+      setCurrentQuestionId(data.room.currentQuestionId);
       setCurrentQuestionImageUrl(
         data.room.currentQuestionImageUrl || undefined
       );
@@ -243,9 +250,16 @@ export function useRoomPage() {
     // instead of leaving the player stuck on "waiting for others".
     const handleGuessRejected = () => setGuessRejectedNonce((n) => n + 1);
 
+    const handleQuestionReported = () => {
+      clearTimeout(noticeTimeoutRef.current);
+      setNotice(t("reportQuestionSentNotice"));
+      noticeTimeoutRef.current = setTimeout(() => setNotice(null), 5000);
+    };
+
     socketService.on("playerLeftNotice", handlePlayerLeftNotice);
     socketService.on("currentPlayerChanged", handleCurrentPlayerChanged);
     socketService.on("guessRejected", handleGuessRejected);
+    socketService.on("questionReported", handleQuestionReported);
 
     return () => {
       socketService.off("roundStarted", handleRoundStarted);
@@ -261,6 +275,7 @@ export function useRoomPage() {
       socketService.off("playerLeftNotice", handlePlayerLeftNotice);
       socketService.off("currentPlayerChanged", handleCurrentPlayerChanged);
       socketService.off("guessRejected", handleGuessRejected);
+      socketService.off("questionReported", handleQuestionReported);
       clearTimeout(noticeTimeoutRef.current);
     };
   }, [player, t]);
@@ -282,6 +297,7 @@ export function useRoomPage() {
     setCurrentPlayer(data.currentPlayer);
     setPhase(data.phase as QuizzType1Phases);
     setQuestion("");
+    setCurrentQuestionId(undefined);
     setCurrentQuestionImageUrl(undefined);
     setAnswer("");
     setPhaseTiming(readTiming(data));
@@ -290,6 +306,8 @@ export function useRoomPage() {
   function handleQuestionReady(data: any) {
     setQuestion(data.currentQuestion);
     setAnswer(data.currentAnswer);
+    setCurrentQuestionId(data.currentQuestionId);
+    setHasReportedQuestion(false);
     setPhase(data.phase as QuizzType1Phases);
     setCurrentCategory(data.currentCategory || "");
     setCurrentQuestionImageUrl(data.currentQuestionImageUrl || null);
@@ -315,6 +333,7 @@ export function useRoomPage() {
     setGameStarted(false);
     setCurrentPlayer(null);
     setQuestion("");
+    setCurrentQuestionId(undefined);
     setCurrentQuestionImageUrl(undefined);
     setAnswer("");
     setPhaseTiming(null);
@@ -337,6 +356,7 @@ export function useRoomPage() {
     setPhase(room.phase as QuizzType1Phases);
     setQuestion(room.currentQuestion || "");
     setAnswer(room.currentAnswer || "");
+    setCurrentQuestionId(room.currentQuestionId);
     setGuesses(room.guesses || {});
     setVotes(room.votes || {});
     setComputedGuesses(room.computedGuesses || []);
@@ -368,6 +388,13 @@ export function useRoomPage() {
       name: player.name,
       avatar: player.avatar,
     }, text);
+  }
+
+  // `message` is optional — a bare tap reports the question with no context.
+  function handleReportQuestion(message?: string) {
+    if (!roomId || !currentQuestionId || hasReportedQuestion) return;
+    socketService.reportQuestion(roomId, player.id, message?.trim() || undefined);
+    setHasReportedQuestion(true);
   }
 
   function showFinalResult() {
@@ -518,5 +545,8 @@ export function useRoomPage() {
     dismissNotice,
     chatMessages,
     sendChatMessage,
+    currentQuestionId,
+    hasReportedQuestion,
+    handleReportQuestion,
   };
 }

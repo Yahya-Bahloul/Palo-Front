@@ -12,6 +12,7 @@ export type GameRoom = {
   currentPlayer: Player;
   currentQuestion?: string;
   currentAnswer?: string;
+  currentQuestionId?: string; // AppQuestion id of the current question, for reporting
   phase: QuizzType1Phases;
   phaseDeadline?: number; // absolute epoch-ms end of the current phase, if it has a countdown
   serverNow?: number; // server clock when the payload was sent, to correct device clock skew

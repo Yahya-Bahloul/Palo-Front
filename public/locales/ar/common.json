@@ -19,6 +19,9 @@
   "unselectAll": "إلغاء تحديد الكل",
   "waiting": "{{player}} يختار فئة...",
   "playerLeftNotice": "{{name}} غادر الغرفة",
+  "reportQuestionSentNotice": "شكرًا، تم الإبلاغ عن السؤال.",
+  "close": "إغلاق",
+  "cancel": "إلغاء",
   "purchaseWebUnavailableNotice": "الشراء غير متاح على الويب. حمّل تطبيق Palo من Play Store أو App Store لفتح هذه الفئة أو الاشتراك.",
   "purchaseFailedNotice": "فشلت عملية الشراء. حاول مرة أخرى أو تحقق من وسيلة الدفع على Play Store / App Store.",
   "category": {
@@ -119,7 +122,14 @@
     "nextQuestion": "السؤال التالي",
     "showFinalResults": "عرض النتائج النهائية",
     "backHome": "العودة إلى الشاشة الرئيسية",
-    "defaultPlayerName": "لاعب"
+    "defaultPlayerName": "لاعب",
+    "reportQuestion": {
+      "button": "الإبلاغ عن السؤال",
+      "title": "الإبلاغ عن هذا السؤال",
+      "description": "إجابة خاطئة، خطأ إملائي، محتوى صادم... الرسالة اختيارية.",
+      "placeholder": "صف المشكلة (اختياري)…",
+      "submit": "إبلاغ"
+    }
   },
   "avatar": {
     "previewAlt": "معاينة الصورة الرمزية",

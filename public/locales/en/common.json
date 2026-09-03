@@ -19,6 +19,9 @@
   "unselectAll": "Unselect all",
   "waiting": "{{player}} is choosing a category...",
   "playerLeftNotice": "{{name}} left the room",
+  "reportQuestionSentNotice": "Thanks, the question has been reported.",
+  "close": "Close",
+  "cancel": "Cancel",
   "purchaseWebUnavailableNotice": "Purchases aren't available on the web. Download the Palo app on the Play Store or App Store to unlock this category or the subscription.",
   "purchaseFailedNotice": "The purchase failed. Try again or check your payment method on the Play Store / App Store.",
   "category": {
@@ -119,7 +122,14 @@
     "nextQuestion": "Next question",
     "showFinalResults": "Show the podium",
     "backHome": "Back to home screen",
-    "defaultPlayerName": "Player"
+    "defaultPlayerName": "Player",
+    "reportQuestion": {
+      "button": "Report the question",
+      "title": "Report this question",
+      "description": "Wrong answer, typo, offensive content... A message is optional.",
+      "placeholder": "Describe the issue (optional)…",
+      "submit": "Report"
+    }
   },
   "avatar": {
     "previewAlt": "Avatar preview",

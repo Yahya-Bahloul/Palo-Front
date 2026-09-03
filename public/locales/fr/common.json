@@ -19,6 +19,9 @@
   "unselectAll": "Tout désélectionner",
   "waiting": "{{player}} est en train de choisir une catégorie...",
   "playerLeftNotice": "{{name}} a quitté la salle",
+  "reportQuestionSentNotice": "Merci, la question a été signalée.",
+  "close": "Fermer",
+  "cancel": "Annuler",
   "purchaseWebUnavailableNotice": "L'achat n'est pas disponible sur le web. Téléchargez l'appli Palo sur le Play Store ou l'App Store pour débloquer cette catégorie ou l'abonnement.",
   "purchaseFailedNotice": "L'achat a échoué. Réessaie ou vérifie ton moyen de paiement sur le Play Store / App Store.",
   "category": {
@@ -118,7 +121,14 @@
     "nextQuestion": "Question suivante",
     "showFinalResults": "Voir le podium",
     "backHome": "Retour à l'accueil",
-    "defaultPlayerName": "Joueur"
+    "defaultPlayerName": "Joueur",
+    "reportQuestion": {
+      "button": "Signaler la question",
+      "title": "Signaler cette question",
+      "description": "Réponse fausse, faute, contenu choquant... Un message est facultatif.",
+      "placeholder": "Précise le problème (facultatif)…",
+      "submit": "Signaler"
+    }
   },
   "avatar": {
     "previewAlt": "Aperçu de l’avatar",
