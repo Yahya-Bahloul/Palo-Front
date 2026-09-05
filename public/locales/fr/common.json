@@ -97,7 +97,18 @@
     "premier_league": "Premier League",
     "bundesliga": "Bundesliga",
     "champions_league": "Ligue des champions",
-    "la_liga": "Liga"
+    "la_liga": "Liga",
+    "weird_facts": "Faits insolites"
+  },
+  "categoryGroup": {
+    "sport": "Sport",
+    "anime": "Anime & Manga",
+    "cinemaGaming": "Cinéma & Jeux vidéo",
+    "history": "Histoire",
+    "geography": "Géographie",
+    "sciences": "Sciences",
+    "arts": "Arts & Culture",
+    "general": "Culture générale"
   },
   "playerSection": {
     "title": "Joueurs ({{count}})",
@@ -123,6 +134,34 @@
   "avatar": {
     "previewAlt": "Aperçu de l’avatar",
     "regenerate": "Générer un nouvel avatar"
+  },
+  "off": "Off",
+  "on": "On",
+  "cancel": "Annuler",
+  "bonusMalus": {
+    "enabled": "Bonus/Malus",
+    "frequency": "Fréquence",
+    "everyNRounds": "toutes les {{count}} manches",
+    "pickTarget": "Choisis une cible",
+    "confirmHint": "Activer ce pouvoir ?",
+    "use": "Utiliser",
+    "rejected": "Ce pouvoir n'est plus disponible.",
+    "blocked": "Un bouclier a bloqué ton attaque !",
+    "timeHalved": "Ton temps a été réduit !",
+    "timeHalvedExpired": "Ton temps réduit est écoulé — trop tard pour répondre.",
+    "voteTimeOut": "Ton temps de vote est écoulé — trop tard pour voter.",
+    "shield": "Bouclier",
+    "double_points": "Points doublés",
+    "halve_time": "Temps réduit",
+    "erase_answer": "Effacer une réponse",
+    "fake_answer": "Fausse réponse",
+    "desc": {
+      "shield": "Bloque tous les malus lancés contre toi cette manche (résolu au moment du vote).",
+      "double_points": "Tes points de cette manche sont doublés.",
+      "halve_time": "Divise par deux le temps de vote de ta cible (appliqué au moment du vote).",
+      "erase_answer": "Masque une réponse dans l'écran de vote de ta cible (appliqué au moment du vote).",
+      "fake_answer": "Ajoute une fausse réponse dans l'écran de vote de ta cible (appliqué au moment du vote)."
+    }
   },
   "backHome": "Revenir à l’accueil",
   "endGame": "Terminer la partie",

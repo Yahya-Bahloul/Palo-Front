@@ -1,6 +1,6 @@
 // src/service/socketService.ts
 import { io } from "socket.io-client";
-import { Player } from "@/model/player";
+import { Player, PowerupType } from "@/model/player";
 import { GameConfig } from "@/model/gameConfig";
 
 const SOCKET_URL =
@@ -78,6 +78,22 @@ export const socketService = {
 
   checkRoom: (roomId: string) => {
     socket.emit("checkRoom", { roomId });
+  },
+
+  usePowerup: (
+    roomId: string,
+    playerId: string,
+    powerupId: string,
+    powerupType: PowerupType,
+    targetPlayerId?: string
+  ) => {
+    socket.emit("usePowerup", {
+      roomId,
+      playerId,
+      powerupId,
+      powerupType,
+      targetPlayerId,
+    });
   },
 
   sendChatMessage: (

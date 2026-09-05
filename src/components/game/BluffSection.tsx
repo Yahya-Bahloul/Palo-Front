@@ -18,6 +18,8 @@ type Props = {
   currentQuestionImageUrl?: string;
   /** Bumped when the server refuses a bluff, so the input can re-open. */
   guessRejectedNonce?: number;
+  /** Reason for the most recent rejection — 'too_late' locks the UI instead of reopening it. */
+  guessRejectedReason?: string | null;
 };
 
 export function BluffSection({
@@ -26,6 +28,7 @@ export function BluffSection({
   answer,
   currentQuestionImageUrl,
   guessRejectedNonce = 0,
+  guessRejectedReason = null,
 }: Props) {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -55,49 +58,58 @@ export function BluffSection({
   const [submitted, setSubmitted] = useState(false);
   const [isExactMatch, setIsExactMatch] = useState(false);
   const [similarBluffDetected, setSimilarBluffDetected] = useState(false);
+  // Set once a halve_time malus's real deadline has passed for this player —
+  // unlike a plain rejection, retrying is pointless, so the UI locks instead
+  // of reopening the input.
+  const [timedOut, setTimedOut] = useState(false);
 
-  // The server refused the bluff (it matched the answer). Re-open the input
-  // rather than leaving the player waiting on a guess that was never recorded.
+  // The server refused the bluff. A halve_time malus locks the UI for good;
+  // any other reason (matched the answer, empty) re-opens the input instead
+  // of leaving the player waiting on a guess that was never recorded.
   useEffect(() => {
     if (guessRejectedNonce === 0) return;
+    if (guessRejectedReason === "too_late") {
+      setSubmitted(true);
+      setTimedOut(true);
+      return;
+    }
     setSubmitted(false);
     setIsExactMatch(true);
-  }, [guessRejectedNonce]);
+  }, [guessRejectedNonce, guessRejectedReason]);
 
   // Only float when a keyboard is actually occluding the view — on desktop,
   // and on any browser without visualViewport, the button stays in the flow.
   const floatingSubmit = typing && keyboardInset > 0;
 
   const handleSubmit = () => {
+    // Any non-blank text is a valid bluff, even one that's only punctuation or
+    // symbols. The answer/similarity checks below still run, but only when the
+    // bluff has comparable letters (a symbols-only bluff normalizes to "").
+    const raw = bluff.trim();
+    if (!raw) return;
+
     const cleanBluff = normalizeText(bluff);
     const cleanAnswer = normalizeText(answer);
 
-    if (!cleanBluff) return;
-
-    // Guarded on non-empty: when both sides normalized to "" (every non-Latin
-    // script did, before the normalizeText fix) this branch swallowed every
-    // submission.
-    if (cleanAnswer && cleanBluff === cleanAnswer) {
+    if (cleanAnswer && cleanBluff && cleanBluff === cleanAnswer) {
       setIsExactMatch(true);
       setSimilarBluffDetected(false);
       return;
     }
 
-    if (isBluffTooClose(bluff, answer)) {
+    if (cleanBluff && isBluffTooClose(bluff, answer)) {
       setSimilarBluffDetected(true);
       setIsExactMatch(false);
       return;
     }
 
-    if (cleanBluff.length > 0) {
-      setIsExactMatch(false);
-      setSimilarBluffDetected(false);
-      handleSubmitGuess(bluff.trim());
-      setSubmitted(true);
-      // The input unmounts on submit, so no blur fires to clear this.
-      clearTimeout(blurTimeoutRef.current);
-      setTyping(false);
-    }
+    setIsExactMatch(false);
+    setSimilarBluffDetected(false);
+    handleSubmitGuess(raw);
+    setSubmitted(true);
+    // The input unmounts on submit, so no blur fires to clear this.
+    clearTimeout(blurTimeoutRef.current);
+    setTyping(false);
   };
 
   return (
@@ -147,7 +159,12 @@ export function BluffSection({
       {submitted ? (
         <p className={theme.bluffSection.text.waiting}>
           <Clock className="inline w-4 h-4 mr-1.5 -mt-0.5" />
-          {t("waitingForOthers")}
+          {timedOut
+            ? t(
+                "bonusMalus.timeHalvedExpired",
+                "Ton temps réduit est écoulé — trop tard pour répondre."
+              )
+            : t("waitingForOthers")}
         </p>
       ) : (
         <div className="w-full space-y-4">

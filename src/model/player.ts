@@ -1,3 +1,12 @@
+export type PowerupType =
+  | "shield"
+  | "double_points"
+  | "halve_time"
+  | "erase_answer"
+  | "fake_answer";
+
+export type PowerupItem = { id: string; type: PowerupType };
+
 export type Player = {
   id: string; // généralement le socket.id
   name: string; // le nom du joueur
@@ -5,4 +14,5 @@ export type Player = {
   avatar?: string; // l'avatar du joueur (optionnel)
   joinedLate?: boolean; // indique si le joueur a rejoint la partie après son début
   connected?: boolean; // false s'il s'est déconnecté en cours de partie
+  powerups?: PowerupItem[]; // inventaire bonus/malus cumulable
 };

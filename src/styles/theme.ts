@@ -117,8 +117,10 @@ export const theme = {
     title: "font-display text-base sm:text-lg text-[color:var(--skin-text)] leading-snug",
     eyebrow:
       "font-arcade text-xs uppercase tracking-[0.2em] text-[color:var(--skin-accent)]",
-    option:
-      "neon-btn w-full py-3.5 rounded-xl text-base disabled:opacity-40",
+    // Category choices are a list of peers, not a single CTA, so they get the
+    // subdued "skin-option" look; the disabled attribute (opponent's turn)
+    // dims them further on its own.
+    option: "skin-option",
     optionIdle: "skin-option",
     waiting:
       "text-sm text-[color:var(--skin-muted)] font-arcade",
@@ -138,17 +140,27 @@ export const theme = {
     chipOn: "skin-catchip-on",
   },
 
+  categoryGroup: {
+    section:
+      "rounded-xl border border-[color:var(--skin-border)] bg-[color:var(--skin-bg-2)]/40 overflow-hidden",
+    header:
+      "w-full min-h-11 px-3 py-2.5 flex items-center justify-between gap-3 text-left font-arcade text-sm font-semibold text-[color:var(--skin-text)] transition-colors hover:text-[color:var(--skin-accent)]",
+    headerIcon: "w-4 h-4 text-[color:var(--skin-accent)] shrink-0",
+    count:
+      "text-xs font-arcade text-[color:var(--skin-muted)] tabular-nums",
+    chevron: "w-4 h-4 text-[color:var(--skin-muted)] transition-transform duration-200 shrink-0",
+  },
+
   avatarSelector: {
     container:
-      "rounded-2xl p-4 text-center bg-[color:var(--skin-bg-2)]/40 border border-[color:var(--skin-border)]",
+      "rounded-2xl p-4 text-center bg-[color:var(--skin-bg-2)]/40 border border-[color:var(--skin-border)] flex flex-col items-center gap-2.5",
     imageWrapper:
       "w-24 h-24 mx-auto rounded-full overflow-hidden bg-[color:var(--skin-card)] border-2 border-[color:var(--skin-accent)] neon-glow-cyan transition-transform active:scale-95",
-    // Regenerate is a badge on the avatar rather than a row beneath it, so it
-    // costs no vertical space. Visually 36px, but the tap area is padded out to
-    // the 44px minimum.
+    // Below the avatar as a quiet text+icon link, not a badge on top of the
+    // photo — reads as a secondary action instead of competing with it.
     button:
-      "absolute -bottom-1 -right-1 grid place-items-center w-11 h-11 rounded-full skin-chip !p-0 shadow-md transition-transform active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--skin-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--skin-bg)]",
-    icon: "w-4 h-4",
+      "inline-flex items-center gap-1.5 min-h-11 px-3 rounded-full text-xs font-arcade text-[color:var(--skin-muted)] transition-colors hover:text-[color:var(--skin-accent)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--skin-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--skin-bg)]",
+    icon: "w-3.5 h-3.5",
   },
 
   languageSelect: {
@@ -245,6 +257,34 @@ export const theme = {
 
   avatar: {
     base: "w-11 h-11 rounded-full overflow-hidden border-2 transition-all duration-300",
+  },
+
+  powerUps: {
+    tray: "flex flex-wrap items-center justify-center gap-2 w-full max-w-sm mx-auto",
+    chip:
+      "relative min-h-11 min-w-11 px-3 grid place-items-center rounded-full border-2 transition-transform active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--skin-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--skin-bg)]",
+    chipBonus:
+      "border-[color:var(--skin-accent)] bg-[color:var(--skin-bg-2)] text-[color:var(--skin-accent)]",
+    chipMalus:
+      "border-[color:var(--skin-danger)] bg-[color:var(--skin-bg-2)] text-[color:var(--skin-danger)]",
+    chipArmed:
+      "!bg-[color:var(--skin-danger)] !text-white shadow-[0_0_12px_-1px_var(--skin-danger)]",
+    chipDisabled: "opacity-35 pointer-events-none",
+    icon: "w-4 h-4",
+    count:
+      "absolute -top-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-[color:var(--skin-primary)] text-[color:var(--skin-btn-color)] text-[9px] font-bold flex items-center justify-center leading-none",
+    targetRow: "flex flex-wrap items-center justify-center gap-2.5 w-full max-w-sm mx-auto pt-1",
+    targetHint: "w-full text-center text-xs font-arcade text-[color:var(--skin-muted)]",
+    targetAvatar:
+      "w-10 h-10 rounded-full overflow-hidden border-2 border-[color:var(--skin-danger)] transition-transform active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--skin-danger)]",
+    cancelChip:
+      "min-h-11 px-3 rounded-full text-xs font-arcade text-[color:var(--skin-muted)] border border-[color:var(--skin-border)] hover:text-[color:var(--skin-text)] transition-colors",
+    confirmChip:
+      "min-h-11 px-4 rounded-full text-xs font-arcade font-bold text-[color:var(--skin-btn-color)] bg-[color:var(--skin-primary)] transition-transform active:scale-90",
+    info: "w-full max-w-sm mx-auto flex flex-col items-center gap-0.5 rounded-lg border border-[color:var(--skin-border)] bg-[color:var(--skin-bg-2)] px-3 py-2 text-center",
+    infoTitle:
+      "text-xs font-arcade font-bold text-[color:var(--skin-text)]",
+    infoDesc: "text-[11px] leading-snug text-[color:var(--skin-muted)]",
   },
 
   footer:

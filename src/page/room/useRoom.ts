@@ -5,7 +5,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { socketService } from "@/service/socketService";
-import { Player } from "@/model/player";
+import { Player, PowerupType } from "@/model/player";
 import { QuizzType1Phases } from "@/model/Quizz1Phases";
 import { GameRoom, ChatMessage } from "@/model/gameRoom";
 import { GameConfig } from "@/model/gameConfig";
@@ -60,6 +60,13 @@ export function useRoomPage() {
   const [timer, setTimer] = useState(0);
   const [phaseTiming, setPhaseTiming] = useState<PhaseTiming>(null);
   const [guessRejectedNonce, setGuessRejectedNonce] = useState(0);
+  const [guessRejectedReason, setGuessRejectedReason] = useState<
+    string | null
+  >(null);
+  const [armedPowerup, setArmedPowerup] = useState<{
+    id: string;
+    type: PowerupType;
+  } | null>(null);
   const [gameStarted, setGameStarted] = useState(false);
   const [phase, setPhase] = useState<QuizzType1Phases>(
     QuizzType1Phases.STARTING
@@ -133,6 +140,8 @@ export function useRoomPage() {
         maxRound: data.room.gameConfig?.maxRound ?? 10,
         lang: data.room.gameConfig?.lang || i18n.language || "en",
         categories: data.room.gameConfig?.categories,
+        bonusMalusEnabled: data.room.gameConfig?.bonusMalusEnabled ?? false,
+        bonusMalusFrequency: data.room.gameConfig?.bonusMalusFrequency ?? 1,
       });
       setGameStarted(data.room.phase !== QuizzType1Phases.STARTING);
       setPhase(data.room.phase as QuizzType1Phases);
@@ -240,12 +249,46 @@ export function useRoomPage() {
 
     // Server-side backstop rejection (a crafted client can bypass the checks in
     // BluffSection). Bumping the nonce lets BluffSection re-open its input
-    // instead of leaving the player stuck on "waiting for others".
-    const handleGuessRejected = () => setGuessRejectedNonce((n) => n + 1);
+    // instead of leaving the player stuck on "waiting for others" — except for
+    // 'too_late' (a halve_time malus), where retrying is pointless since the
+    // real deadline has already passed.
+    const handleGuessRejected = (data: { reason?: string }) => {
+      setGuessRejectedReason(data?.reason ?? null);
+      setGuessRejectedNonce((n) => n + 1);
+    };
+
+    const showNotice = (message: string) => {
+      clearTimeout(noticeTimeoutRef.current);
+      setNotice(message);
+      noticeTimeoutRef.current = setTimeout(() => setNotice(null), 5000);
+    };
+
+    const handlePowerupUsed = (data: { players: Player[] }) => {
+      setPlayers(data.players);
+    };
+    const handlePowerupRejected = () => {
+      showNotice(t("bonusMalus.rejected", "Ce pouvoir n'est plus disponible."));
+    };
+    const handlePowerupBlocked = () => {
+      showNotice(
+        t("bonusMalus.blocked", "Un bouclier a bloqué ton attaque !")
+      );
+    };
+    const handleTimeReduced = (data: {
+      phaseDeadline?: number;
+      serverNow?: number;
+    }) => {
+      setPhaseTiming(readTiming(data));
+      showNotice(t("bonusMalus.timeHalved", "Ton temps a été réduit !"));
+    };
 
     socketService.on("playerLeftNotice", handlePlayerLeftNotice);
     socketService.on("currentPlayerChanged", handleCurrentPlayerChanged);
     socketService.on("guessRejected", handleGuessRejected);
+    socketService.on("powerupUsed", handlePowerupUsed);
+    socketService.on("powerupRejected", handlePowerupRejected);
+    socketService.on("powerupBlocked", handlePowerupBlocked);
+    socketService.on("timeReduced", handleTimeReduced);
 
     return () => {
       socketService.off("roundStarted", handleRoundStarted);
@@ -261,9 +304,19 @@ export function useRoomPage() {
       socketService.off("playerLeftNotice", handlePlayerLeftNotice);
       socketService.off("currentPlayerChanged", handleCurrentPlayerChanged);
       socketService.off("guessRejected", handleGuessRejected);
+      socketService.off("powerupUsed", handlePowerupUsed);
+      socketService.off("powerupRejected", handlePowerupRejected);
+      socketService.off("powerupBlocked", handlePowerupBlocked);
+      socketService.off("timeReduced", handleTimeReduced);
       clearTimeout(noticeTimeoutRef.current);
     };
   }, [player, t]);
+
+  // An armed targeted malus only makes sense within the phase it was armed
+  // in — clear it on every phase change so it can't be fired stale.
+  useEffect(() => {
+    setArmedPowerup(null);
+  }, [phase]);
 
   useEffect(() => {
     if (!isAdmin || !roomId) return;
@@ -281,10 +334,17 @@ export function useRoomPage() {
     setWaitingForGameEnd(false);
     setCurrentPlayer(data.currentPlayer);
     setPhase(data.phase as QuizzType1Phases);
+    // The server's config is authoritative once the game starts — this is how
+    // non-admin players learn bonus/malus is on (and its clamped frequency).
+    if (data.gameConfig) {
+      setGameConfig((prev) => ({ ...prev, ...data.gameConfig }));
+    }
     setQuestion("");
     setCurrentQuestionImageUrl(undefined);
     setAnswer("");
     setPhaseTiming(readTiming(data));
+    // Carries this round's freshly-dealt powerups (see GameService.dealPowerups).
+    if (data.players) setPlayers(data.players);
   }
 
   function handleQuestionReady(data: any) {
@@ -400,8 +460,31 @@ export function useRoomPage() {
       ...gameConfig,
       all_categories: allCategoriesSelected,
       categories: allCategoriesSelected ? [] : selectedCategories,
+      bonusMalusEnabled: gameConfig.bonusMalusEnabled ?? false,
+      bonusMalusFrequency: gameConfig.bonusMalusFrequency ?? 1,
     };
     socketService.startGame(roomId as string, config);
+  };
+
+  // Self-buffs fire immediately (no target); targeted malus arm first, then
+  // fire once handleUsePowerup is called again with a targetPlayerId.
+  const handleArmPowerup = (item: { id: string; type: PowerupType } | null) => {
+    setArmedPowerup(item);
+  };
+
+  const handleUsePowerup = (
+    powerupId: string,
+    powerupType: PowerupType,
+    targetPlayerId?: string
+  ) => {
+    socketService.usePowerup(
+      roomId as string,
+      player.id,
+      powerupId,
+      powerupType,
+      targetPlayerId
+    );
+    setArmedPowerup(null);
   };
 
   const handleNextRound = () => {
@@ -486,6 +569,11 @@ export function useRoomPage() {
     phase,
     guesses,
     votes,
+    guessRejectedReason,
+    myPowerups: players.find((p) => p.id === player.id)?.powerups ?? [],
+    armedPowerup,
+    handleArmPowerup,
+    handleUsePowerup,
     waitingForGameEnd,
     setQuestion,
     setAnswer,

@@ -5,6 +5,10 @@ import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { Player } from "@/model/player";
 import { CategoryCatalogEntry } from "@/model/category";
 import {
+  CategoryGroupId,
+  groupCategories,
+} from "@/model/categoryGroups";
+import {
   Users,
   CheckSquare,
   Square,
@@ -13,12 +17,32 @@ import {
   Loader2,
   Crown,
   UserPlus,
+  ChevronDown,
+  Trophy,
+  Sparkles,
+  Clapperboard,
+  Landmark,
+  Globe2,
+  FlaskConical,
+  Palette,
+  BookOpen,
 } from "lucide-react";
 import Image from "next/image";
 import { theme } from "@/styles/theme";
 import { useTranslation } from "react-i18next";
 import { RoomQRCode } from "./RoomQRCode";
 import type React from "react";
+
+const GROUP_ICONS: Record<CategoryGroupId, React.ComponentType<{ className?: string }>> = {
+  sport: Trophy,
+  anime: Sparkles,
+  cinemaGaming: Clapperboard,
+  history: Landmark,
+  geography: Globe2,
+  sciences: FlaskConical,
+  arts: Palette,
+  general: BookOpen,
+};
 
 // distinct per-player accent colors (readable on both light & dark skins)
 const PLAYER_HUES = [
@@ -63,10 +87,34 @@ export function PlayerSection({
   const { i18n, t } = useTranslation();
   const isRTL = i18n.language === "ar";
   const [animateNew, setAnimateNew] = useState<string | null>(null);
+  const [openGroups, setOpenGroups] = useState<Set<CategoryGroupId>>(new Set());
 
   const unlockedCategories = availableCategories
     .filter((cat) => cat.unlocked)
     .map((cat) => cat.key);
+
+  const categoryGroups = groupCategories(availableCategories);
+
+  // Open every group by default the first time categories arrive, so the
+  // picker isn't a wall of collapsed headers on first load.
+  useEffect(() => {
+    if (availableCategories.length > 0) {
+      setOpenGroups(new Set(categoryGroups.map((g) => g.id)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [availableCategories]);
+
+  const toggleGroupOpen = (groupId: CategoryGroupId) => {
+    setOpenGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(groupId)) {
+        next.delete(groupId);
+      } else {
+        next.add(groupId);
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (unlockedCategories.length > 0) {
@@ -216,45 +264,88 @@ export function PlayerSection({
             )}
           </div>
 
-          {/* Boutons de catégorie */}
-          <div className="flex flex-wrap gap-2">
-            {availableCategories.map((cat) => {
-              const selected = selectedCategories.includes(cat.key);
-              const locked = !cat.unlocked;
-              const label = t(`category.${cat.key.toLowerCase()}`);
-
-              if (locked) {
-                const purchasing = purchasingCategoryKey === cat.key;
-                return (
-                  <button
-                    key={cat.key}
-                    onClick={() =>
-                      isAdmin && !purchasing && onRequestUnlockCategory?.(cat)
-                    }
-                    disabled={!isAdmin || purchasing}
-                    className={`${theme.lobby.chip} skin-catchip-locked`}
-                  >
-                    {purchasing ? (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin text-[color:var(--skin-accent-2)]" />
-                    ) : (
-                      <Lock className="w-3.5 h-3.5 text-[color:var(--skin-accent-2)]" />
-                    )}
-                    {label}
-                  </button>
-                );
-              }
+          {/* Groupes de catégories */}
+          <div className="flex flex-col gap-2">
+            {categoryGroups.map(({ id: groupId, categories: groupCats }) => {
+              const GroupIcon = GROUP_ICONS[groupId];
+              const isOpen = openGroups.has(groupId);
+              const selectedInGroup = groupCats.filter((cat) =>
+                selectedCategories.includes(cat.key)
+              ).length;
 
               return (
-                <button
-                  key={cat.key}
-                  onClick={() => toggleCategory(cat.key)}
-                  disabled={!isAdmin}
-                  className={`${theme.lobby.chip} ${
-                    selected ? theme.lobby.chipOn : ""
-                  }`}
-                >
-                  {label}
-                </button>
+                <div key={groupId} className={theme.categoryGroup.section}>
+                  <button
+                    type="button"
+                    onClick={() => toggleGroupOpen(groupId)}
+                    aria-expanded={isOpen}
+                    className={theme.categoryGroup.header}
+                  >
+                    <span className="flex items-center gap-2 min-w-0">
+                      <GroupIcon className={theme.categoryGroup.headerIcon} aria-hidden="true" />
+                      <span className="truncate">
+                        {t(`categoryGroup.${groupId}`)}
+                      </span>
+                    </span>
+                    <span className="flex items-center gap-2 shrink-0">
+                      <span className={theme.categoryGroup.count}>
+                        {selectedInGroup}/{groupCats.length}
+                      </span>
+                      <ChevronDown
+                        className={`${theme.categoryGroup.chevron} ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="flex flex-wrap gap-2 px-3 pb-3">
+                      {groupCats.map((cat) => {
+                        const selected = selectedCategories.includes(cat.key);
+                        const locked = !cat.unlocked;
+                        const label = t(`category.${cat.key.toLowerCase()}`);
+
+                        if (locked) {
+                          const purchasing = purchasingCategoryKey === cat.key;
+                          return (
+                            <button
+                              key={cat.key}
+                              onClick={() =>
+                                isAdmin &&
+                                !purchasing &&
+                                onRequestUnlockCategory?.(cat)
+                              }
+                              disabled={!isAdmin || purchasing}
+                              className={`${theme.lobby.chip} skin-catchip-locked`}
+                            >
+                              {purchasing ? (
+                                <Loader2 className="w-3.5 h-3.5 animate-spin text-[color:var(--skin-accent-2)]" />
+                              ) : (
+                                <Lock className="w-3.5 h-3.5 text-[color:var(--skin-accent-2)]" />
+                              )}
+                              {label}
+                            </button>
+                          );
+                        }
+
+                        return (
+                          <button
+                            key={cat.key}
+                            onClick={() => toggleCategory(cat.key)}
+                            disabled={!isAdmin}
+                            className={`${theme.lobby.chip} ${
+                              selected ? theme.lobby.chipOn : ""
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>

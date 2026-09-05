@@ -98,7 +98,18 @@
     "premier_league": "Premier League",
     "bundesliga": "Bundesliga",
     "champions_league": "Champions League",
-    "la_liga": "La Liga"
+    "la_liga": "La Liga",
+    "weird_facts": "Weird Facts"
+  },
+  "categoryGroup": {
+    "sport": "Sport",
+    "anime": "Anime & Manga",
+    "cinemaGaming": "Movies & Video Games",
+    "history": "History",
+    "geography": "Geography",
+    "sciences": "Sciences",
+    "arts": "Arts & Culture",
+    "general": "General Knowledge"
   },
   "playerSection": {
     "title": "Players ({{count}})",
@@ -124,6 +135,34 @@
   "avatar": {
     "previewAlt": "Avatar preview",
     "regenerate": "Generate a new avatar"
+  },
+  "off": "Off",
+  "on": "On",
+  "cancel": "Cancel",
+  "bonusMalus": {
+    "enabled": "Bonus/Malus",
+    "frequency": "Frequency",
+    "everyNRounds": "every {{count}} rounds",
+    "pickTarget": "Pick a target",
+    "confirmHint": "Activate this power?",
+    "use": "Use",
+    "rejected": "That power is no longer available.",
+    "blocked": "A shield blocked your attack!",
+    "timeHalved": "Your time was halved!",
+    "timeHalvedExpired": "Your reduced time is up — too late to answer.",
+    "voteTimeOut": "Your voting time is up — too late to vote.",
+    "shield": "Shield",
+    "double_points": "Double points",
+    "halve_time": "Halve time",
+    "erase_answer": "Erase an answer",
+    "fake_answer": "Fake answer",
+    "desc": {
+      "shield": "Blocks every malus aimed at you this round (resolved when voting starts).",
+      "double_points": "Doubles the points you score this round.",
+      "halve_time": "Halves your target's time to vote (applied when voting starts).",
+      "erase_answer": "Hides one answer on your target's voting screen (applied when voting starts).",
+      "fake_answer": "Adds a fake answer to your target's voting screen (applied when voting starts)."
+    }
   },
   "backHome": "Back to home",
   "endGame": "End the game",

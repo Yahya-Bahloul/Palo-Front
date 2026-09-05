@@ -14,6 +14,8 @@ type Props = {
 
 const MIN_ROUNDS = 5;
 const MAX_ROUNDS = 30;
+const MIN_FREQUENCY = 1;
+const MAX_FREQUENCY = 5;
 
 const LANG_OPTIONS = [
   { value: "fr", label: "FR", full: "Français" },
@@ -27,6 +29,11 @@ export function GameSettingsPanel({ gameConfig, setGameConfig, isAdmin }: Props)
   const setRounds = (next: number) => {
     const clamped = Math.min(MAX_ROUNDS, Math.max(MIN_ROUNDS, next));
     setGameConfig({ ...gameConfig, maxRound: clamped });
+  };
+
+  const setFrequency = (next: number) => {
+    const clamped = Math.min(MAX_FREQUENCY, Math.max(MIN_FREQUENCY, next));
+    setGameConfig({ ...gameConfig, bonusMalusFrequency: clamped });
   };
 
   if (!isAdmin) return null;
@@ -91,6 +98,74 @@ export function GameSettingsPanel({ gameConfig, setGameConfig, isAdmin }: Props)
           })}
         </div>
       </div>
+
+      <div className={theme.lobby.settingRow}>
+        <span className={theme.lobby.settingLabel}>
+          {t("bonusMalus.enabled", "Bonus/Malus")}
+        </span>
+        <div className="skin-panel flex p-1 gap-1">
+          {[
+            { value: false, label: t("off", "Off") },
+            { value: true, label: t("on", "On") },
+          ].map((opt) => {
+            const active = !!gameConfig.bonusMalusEnabled === opt.value;
+            return (
+              <button
+                key={String(opt.value)}
+                type="button"
+                onClick={() =>
+                  setGameConfig({ ...gameConfig, bonusMalusEnabled: opt.value })
+                }
+                aria-pressed={active}
+                className={`min-w-[52px] h-9 px-2 font-arcade text-sm font-bold rounded-lg transition ${
+                  active
+                    ? "bg-[color:var(--skin-primary)] text-[color:var(--skin-btn-color)]"
+                    : "text-[color:var(--skin-muted)] hover:text-[color:var(--skin-text)]"
+                }`}
+              >
+                {opt.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {gameConfig.bonusMalusEnabled && (
+        <div className={theme.lobby.settingRow}>
+          <span className={theme.lobby.settingLabel}>
+            {t("bonusMalus.frequency", "Fréquence")}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() =>
+                setFrequency((gameConfig.bonusMalusFrequency ?? 1) - 1)
+              }
+              disabled={(gameConfig.bonusMalusFrequency ?? 1) <= MIN_FREQUENCY}
+              className="skin-stepper"
+              aria-label={t("bonusMalus.frequency", "Fréquence") + " -"}
+            >
+              <Minus className="h-4 w-4" />
+            </button>
+            <span className={theme.lobby.readout}>
+              {t("bonusMalus.everyNRounds", "toutes les {{count}} manches", {
+                count: gameConfig.bonusMalusFrequency ?? 1,
+              })}
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                setFrequency((gameConfig.bonusMalusFrequency ?? 1) + 1)
+              }
+              disabled={(gameConfig.bonusMalusFrequency ?? 1) >= MAX_FREQUENCY}
+              className="skin-stepper"
+              aria-label={t("bonusMalus.frequency", "Fréquence") + " +"}
+            >
+              <Plus className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

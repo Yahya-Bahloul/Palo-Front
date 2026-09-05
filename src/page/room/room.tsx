@@ -23,6 +23,7 @@ import { ComputedGuess } from "@/model/computedGuesses";
 import { CategoryCatalogEntry } from "@/model/category";
 import { useTranslation } from "react-i18next"; // ✅
 import { ChatPanel } from "@/components/game/ChatPanel";
+import { PowerupTray } from "@/components/game/PowerupTray";
 
 export default function RoomPage() {
   const props = useRoomPage();
@@ -69,6 +70,10 @@ export default function RoomPage() {
       ) : (
         <div className={theme.layout.roomShell}>
           <Timer {...props} />
+          {props.gameConfig.bonusMalusEnabled &&
+            props.phase === QuizzType1Phases.GUESSING && (
+              <PowerupTray {...props} />
+            )}
           {props.currentCategory !== "" && (
             <h1 className={theme.text.gameCategory}>
               {t(`category.${props.currentCategory}`)}
@@ -182,6 +187,7 @@ function BluffPhase(props: {
   answer: string;
   currentQuestionImageUrl?: string;
   guessRejectedNonce: number;
+  guessRejectedReason: string | null;
 }) {
   if (props.phase !== QuizzType1Phases.GUESSING) return null;
   return <BluffSection {...props} />;
@@ -193,6 +199,7 @@ function VotePhase(props: {
   handleSubmitVote: (vote: string) => void;
   question: string;
   currentQuestionImageUrl?: string;
+  timer: number;
 }) {
   if (props.phase !== QuizzType1Phases.VOTING) return null;
   return <VoteSection {...props} />;
