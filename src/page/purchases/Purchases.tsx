@@ -15,6 +15,7 @@ export function PurchasesPage() {
     checkoutPending,
     error,
     checkoutStatus,
+    confirmingCheckout,
     handleSubscribe,
     handleSubscribeMonthlyWeb,
     handleSubscribeYearlyWeb,
@@ -61,7 +62,12 @@ export function PurchasesPage() {
             ))}
           </ul>
 
-          {checkoutStatus === "success" && (
+          {checkoutStatus === "success" && confirmingCheckout && (
+            <p className="text-gray-500 text-sm text-center font-medium animate-pulse">
+              {t("purchases.checkoutFinalizing")}
+            </p>
+          )}
+          {checkoutStatus === "success" && !confirmingCheckout && (
             <p className="text-emerald-600 text-sm text-center font-medium">
               {t("purchases.checkoutSuccess")}
             </p>

@@ -235,6 +235,7 @@
     "lockedCategoriesTitle": "Débloquer une catégorie",
     "buyCategory": "Acheter",
     "checkoutSuccess": "Achat confirmé — profites-en !",
+    "checkoutFinalizing": "Finalisation de ton achat…",
     "checkoutCanceled": "Paiement annulé.",
     "features": [
       "Nombre de joueurs illimité",

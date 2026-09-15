@@ -17,6 +17,7 @@ export function usePurchases() {
   const [subscribing, setSubscribing] = useState(false);
   const [checkoutPending, setCheckoutPending] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [confirmingCheckout, setConfirmingCheckout] = useState(false);
 
   const refreshCatalog = async (token: string) => {
     const refreshed = await authService.getCategoryCatalog(token);
@@ -32,11 +33,37 @@ export function usePurchases() {
     refreshCatalog(accessToken).finally(() => setLoading(false));
   }, [accessToken, router]);
 
+  // Stripe redirects back here with a `status` query param. Only the exact
+  // literal strings "success" and "cancel" are recognized below — any other
+  // value (including no param at all) shows neither banner. These strings
+  // must match the STRIPE_CHECKOUT_SUCCESS_URL / STRIPE_CHECKOUT_CANCEL_URL
+  // env vars configured in the sibling Palo-back repo's .env/CLAUDE.md.
   const checkoutStatus = searchParams.get("status");
   useEffect(() => {
-    if (checkoutStatus === "success" && accessToken) {
-      refreshCatalog(accessToken);
-    }
+    if (checkoutStatus !== "success" || !accessToken) return;
+
+    // Entitlement-granting happens via an async Stripe webhook that races
+    // the browser redirect back to this page — it frequently arrives after
+    // we land here. Poll briefly instead of trusting a single immediate
+    // fetch, so we don't show "confirmed" next to a still-locked catalog.
+    let cancelled = false;
+    setConfirmingCheckout(true);
+    (async () => {
+      for (let attempt = 0; attempt < 5; attempt++) {
+        if (attempt > 0) {
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+        }
+        if (cancelled) return;
+        const refreshed = await refreshCatalog(accessToken);
+        const fullyUnlocked = refreshed.every((cat) => !cat.isPremium || cat.unlocked);
+        if (fullyUnlocked) break;
+      }
+      if (!cancelled) setConfirmingCheckout(false);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [checkoutStatus, accessToken]);
 
   const isSubscribed =
@@ -101,6 +128,7 @@ export function usePurchases() {
     checkoutPending,
     error,
     checkoutStatus,
+    confirmingCheckout,
     handleSubscribe,
     handleSubscribeMonthlyWeb,
     handleSubscribeYearlyWeb,

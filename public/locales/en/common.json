@@ -236,6 +236,7 @@
     "lockedCategoriesTitle": "Unlock a single category",
     "buyCategory": "Buy",
     "checkoutSuccess": "Purchase confirmed — enjoy!",
+    "checkoutFinalizing": "Finalizing your purchase…",
     "checkoutCanceled": "Checkout canceled.",
     "features": [
       "Unlimited players",

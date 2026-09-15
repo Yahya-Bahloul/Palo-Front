@@ -236,6 +236,7 @@
     "lockedCategoriesTitle": "افتح فئة واحدة",
     "buyCategory": "شراء",
     "checkoutSuccess": "تم تأكيد الشراء — استمتع!",
+    "checkoutFinalizing": "جارٍ إنهاء عملية الشراء…",
     "checkoutCanceled": "تم إلغاء الدفع.",
     "features": [
       "عدد لا محدود من اللاعبين",
