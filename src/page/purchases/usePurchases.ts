@@ -55,8 +55,7 @@ export function usePurchases() {
         }
         if (cancelled) return;
         const refreshed = await refreshCatalog(accessToken);
-        const fullyUnlocked = refreshed.every((cat) => !cat.isPremium || cat.unlocked);
-        if (fullyUnlocked) break;
+        if (refreshed.some((cat) => cat.isSubscribed)) break;
       }
       if (!cancelled) setConfirmingCheckout(false);
     })();
@@ -66,8 +65,7 @@ export function usePurchases() {
     };
   }, [checkoutStatus, accessToken]);
 
-  const isSubscribed =
-    catalog.length > 0 && catalog.every((cat) => !cat.isPremium || cat.unlocked);
+  const isSubscribed = catalog.some((cat) => cat.isSubscribed);
   const lockedCategories = catalog.filter((cat) => cat.isPremium && !cat.unlocked);
 
   const close = () => router.back();

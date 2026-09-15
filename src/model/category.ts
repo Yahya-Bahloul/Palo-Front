@@ -4,4 +4,5 @@ export type CategoryCatalogEntry = {
   isPremium: boolean;
   priceCents: number | null;
   unlocked: boolean;
+  isSubscribed: boolean;
 };
