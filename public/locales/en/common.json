@@ -230,6 +230,13 @@
     "subscribing": "Purchasing…",
     "subscriptionUnavailable": "Only available in the app",
     "purchaseFailed": "The purchase failed. Please try again later.",
+    "subscribeMonthly": "Subscribe monthly",
+    "subscribeYearly": "Subscribe yearly",
+    "manageSubscription": "Manage subscription",
+    "lockedCategoriesTitle": "Unlock a single category",
+    "buyCategory": "Buy",
+    "checkoutSuccess": "Purchase confirmed — enjoy!",
+    "checkoutCanceled": "Checkout canceled.",
     "features": [
       "Unlimited players",
       "Every category unlocked",

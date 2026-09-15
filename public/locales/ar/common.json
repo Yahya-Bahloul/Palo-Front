@@ -230,6 +230,13 @@
     "subscribing": "جارٍ الشراء…",
     "subscriptionUnavailable": "متوفر فقط داخل التطبيق",
     "purchaseFailed": "فشلت عملية الشراء. حاول مرة أخرى لاحقاً.",
+    "subscribeMonthly": "اشترك شهرياً",
+    "subscribeYearly": "اشترك سنوياً",
+    "manageSubscription": "إدارة الاشتراك",
+    "lockedCategoriesTitle": "افتح فئة واحدة",
+    "buyCategory": "شراء",
+    "checkoutSuccess": "تم تأكيد الشراء — استمتع!",
+    "checkoutCanceled": "تم إلغاء الدفع.",
     "features": [
       "عدد لا محدود من اللاعبين",
       "فتح جميع الفئات",

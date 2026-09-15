@@ -229,6 +229,13 @@
     "subscribing": "Achat en cours…",
     "subscriptionUnavailable": "Disponible uniquement dans l'app",
     "purchaseFailed": "L'achat a échoué. Réessaie plus tard.",
+    "subscribeMonthly": "S'abonner au mois",
+    "subscribeYearly": "S'abonner à l'année",
+    "manageSubscription": "Gérer l'abonnement",
+    "lockedCategoriesTitle": "Débloquer une catégorie",
+    "buyCategory": "Acheter",
+    "checkoutSuccess": "Achat confirmé — profites-en !",
+    "checkoutCanceled": "Paiement annulé.",
     "features": [
       "Nombre de joueurs illimité",
       "Toutes les catégories débloquées",
