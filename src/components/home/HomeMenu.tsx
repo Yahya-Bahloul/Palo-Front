@@ -64,7 +64,7 @@ export function HomeMenu() {
           >
             <Crown className="h-4 w-4 shrink-0 text-[color:var(--skin-primary)]" />
             {isSubscribed
-              ? t("purchases.subscriptionActive", "Abonnement actif")
+              ? t("purchases.manageSubscription", "Gérer l'abonnement")
               : t("getPremium", "Passer Premium")}
           </DropdownMenuItem>
 
