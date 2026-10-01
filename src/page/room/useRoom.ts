@@ -91,6 +91,7 @@ export function useRoomPage() {
     string | undefined
   >(undefined);
   const [currentCategory, setCurrentCategory] = useState<string>("");
+  const [currentQuestionId, setCurrentQuestionId] = useState<string | undefined>(undefined);
   const [notice, setNotice] = useState<string | null>(null);
   const [purchasingCategoryKey, setPurchasingCategoryKey] = useState<
     string | null
@@ -146,6 +147,7 @@ export function useRoomPage() {
       setGameStarted(data.room.phase !== QuizzType1Phases.STARTING);
       setPhase(data.room.phase as QuizzType1Phases);
       setQuestion(data.room.currentQuestion || "");
+      setCurrentQuestionId(data.room.currentQuestionId || undefined);
       setCurrentQuestionImageUrl(
         data.room.currentQuestionImageUrl || undefined
       );
@@ -349,6 +351,7 @@ export function useRoomPage() {
 
   function handleQuestionReady(data: any) {
     setQuestion(data.currentQuestion);
+    setCurrentQuestionId(data.currentQuestionId || undefined);
     setAnswer(data.currentAnswer);
     setPhase(data.phase as QuizzType1Phases);
     setCurrentCategory(data.currentCategory || "");
@@ -396,6 +399,7 @@ export function useRoomPage() {
     setCurrentPlayer(room.currentPlayer);
     setPhase(room.phase as QuizzType1Phases);
     setQuestion(room.currentQuestion || "");
+    setCurrentQuestionId(room.currentQuestionId || undefined);
     setAnswer(room.currentAnswer || "");
     setGuesses(room.guesses || {});
     setVotes(room.votes || {});
@@ -601,6 +605,7 @@ export function useRoomPage() {
     purchasingCategoryKey,
     computedGuesses,
     currentQuestionImageUrl,
+    currentQuestionId,
     currentCategory,
     notice,
     dismissNotice,

@@ -5,6 +5,7 @@ import { PlayerSection } from "@/components/game/PlayerSelection";
 import { NoticeToast } from "@/components/game/NoticeToast";
 import { BluffSection } from "@/components/game/BluffSection";
 import { VoteSection } from "@/components/game/VoteSection";
+import { ReportQuestionButton } from "@/components/game/ReportQuestionButton";
 import { Timer } from "@/components/game/Timer";
 import { useRoomPage } from "./useRoom";
 import type { Player } from "@/model/player";
@@ -92,6 +93,18 @@ export default function RoomPage() {
             {...props}
             currentPlayerId={props.currentPlayer?.id || ""}
           />
+          {props.currentQuestionId &&
+            props.question &&
+            (props.phase === QuizzType1Phases.GUESSING ||
+              props.phase === QuizzType1Phases.VOTING ||
+              props.phase === QuizzType1Phases.RESULTS) && (
+              <ReportQuestionButton
+                questionId={props.currentQuestionId}
+                questionText={props.question}
+                category={props.currentCategory}
+                lang={props.gameConfig.lang}
+              />
+            )}
         </div>
       )}
 

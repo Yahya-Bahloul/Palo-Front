@@ -31,6 +31,32 @@ async function request<T>(
   return res.json();
 }
 
+export type ReportStatus = "open" | "resolved";
+
+export type AdminReport = {
+  id: string;
+  questionId: string | null;
+  questionText: string;
+  category: string | null;
+  lang: string | null;
+  comment: string | null;
+  status: ReportStatus;
+  createdAt: string;
+  reporterEmail: string | null;
+  questionDisabled: boolean | null; // null = question not found
+  openReportsForQuestion: number;
+};
+
+export type AdminFeedback = {
+  id: string;
+  type: "contact" | "feature" | "question";
+  message: string;
+  email: string | null;
+  lang: string | null;
+  status: ReportStatus;
+  createdAt: string;
+};
+
 export type PeriodKey = "day" | "week" | "month" | "year";
 
 export type AdminStats = {
@@ -108,6 +134,17 @@ export type QuestionFilters = {
 export const adminService = {
   me: (token: string) =>
     request<{ isAdmin: true; email: string }>("GET", "/me", token),
+
+  inbox: (token: string) =>
+    request<{ reports: number; feedback: number }>("GET", "/inbox", token),
+  reports: (token: string, status: ReportStatus | "") =>
+    request<AdminReport[]>("GET", `/reports?status=${status}`, token),
+  setReportStatus: (token: string, id: string, status: ReportStatus) =>
+    request("PATCH", `/reports/${id}`, token, { status }),
+  feedback: (token: string, status: ReportStatus | "") =>
+    request<AdminFeedback[]>("GET", `/feedback?status=${status}`, token),
+  setFeedbackStatus: (token: string, id: string, status: ReportStatus) =>
+    request("PATCH", `/feedback/${id}`, token, { status }),
 
   stats: (token: string) => request<AdminStats>("GET", "/stats", token),
 

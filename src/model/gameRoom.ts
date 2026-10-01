@@ -11,6 +11,7 @@ export type GameRoom = {
   currentRound: number;
   currentPlayer: Player;
   currentQuestion?: string;
+  currentQuestionId?: string; // AppQuestion.id, used to report the question
   currentAnswer?: string;
   phase: QuizzType1Phases;
   phaseDeadline?: number; // absolute epoch-ms end of the current phase, if it has a countdown

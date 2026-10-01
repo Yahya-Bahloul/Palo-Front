@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, LogIn, LogOut, Crown } from "lucide-react";
+import { Menu, LogIn, LogOut, Crown, MessageCircle } from "lucide-react";
 import { useAuthStore } from "@/utils/useAuthStore";
 import { authService } from "@/service/authService";
 
@@ -66,6 +66,14 @@ export function HomeMenu() {
             {isSubscribed
               ? t("purchases.manageSubscription", "Gérer l'abonnement")
               : t("getPremium", "Passer Premium")}
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            className={item}
+            onClick={() => router.push("/contact")}
+          >
+            <MessageCircle className="h-4 w-4 shrink-0 text-[color:var(--skin-primary)]" />
+            {t("contact.menu", "Nous contacter")}
           </DropdownMenuItem>
 
           {user ? (

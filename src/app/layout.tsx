@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           name="viewport"
           content="width=device-width, initial-scale=1, interactive-widget=resizes-content"
         />
-        <title>Tnjya</title>
+        <title>Blaafy</title>
       </head>
       <body
         className={theme.background}

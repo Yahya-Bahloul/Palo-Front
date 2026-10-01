@@ -19,7 +19,7 @@
   "unselectAll": "إلغاء تحديد الكل",
   "waiting": "{{player}} يختار فئة...",
   "playerLeftNotice": "{{name}} غادر الغرفة",
-  "purchaseWebUnavailableNotice": "الشراء غير متاح على الويب. حمّل تطبيق Palo من Play Store أو App Store لفتح هذه الفئة أو الاشتراك.",
+  "purchaseWebUnavailableNotice": "الشراء غير متاح على الويب. حمّل تطبيق Blaafy من Play Store أو App Store لفتح هذه الفئة أو الاشتراك.",
   "purchaseFailedNotice": "فشلت عملية الشراء. حاول مرة أخرى أو تحقق من وسيلة الدفع على Play Store / App Store.",
   "category": {
     "sport": "رياضة",
@@ -223,7 +223,7 @@
     "unlocked": "مفتوح",
     "logout": "تسجيل الخروج",
     "close": "إغلاق",
-    "subscriptionTitle": "Palo بريميوم",
+    "subscriptionTitle": "Blaafy بريميوم",
     "subscriptionDescription": "افتح جميع الفئات والعب بلا حدود",
     "subscriptionActive": "الاشتراك نشط",
     "subscribe": "اشترك",
@@ -252,6 +252,45 @@
       "فتح جميع الفئات",
       "جميع إعدادات اللعبة"
     ]
+  },
+  "report": {
+    "button": "الإبلاغ عن السؤال",
+    "title": "الإبلاغ عن هذا السؤال",
+    "description": "هل هناك مشكلة في هذا السؤال؟ أخبرنا بها.",
+    "commentLabel": "تعليق (اختياري)",
+    "placeholder": "إجابة خاطئة، خطأ إملائي، سؤال غامض…",
+    "send": "إرسال",
+    "sending": "جارٍ الإرسال…",
+    "cancel": "إلغاء",
+    "thanks": "شكرًا، تم إرسال البلاغ!",
+    "error": "تعذّر الإرسال. حاول مجددًا لاحقًا."
+  },
+  "contact": {
+    "menu": "تواصل معنا",
+    "title": "تواصل معنا",
+    "subtitle": "سؤال أو فكرة أو سؤال تريد اقتراحه؟ نحن نقرأ كل شيء.",
+    "typeLabel": "نوع الرسالة",
+    "types": {
+      "contact": "تواصل معنا",
+      "feature": "اقتراح ميزة",
+      "question": "اقتراح سؤال"
+    },
+    "messageLabel": "رسالتك",
+    "placeholders": {
+      "contact": "اكتب لنا رسالة…",
+      "feature": "صف الميزة التي تود رؤيتها…",
+      "question": "اكتب سؤالك والإجابة الصحيحة وثلاث إجابات خاطئة…"
+    },
+    "emailLabel": "بريدك الإلكتروني (اختياري)",
+    "emailHint": "حتى نتمكن من الرد عليك.",
+    "send": "إرسال",
+    "sending": "جارٍ الإرسال…",
+    "thanksTitle": "شكرًا لك!",
+    "thanksText": "تم إرسال رسالتك.",
+    "another": "إرسال رسالة أخرى",
+    "backHome": "العودة إلى الرئيسية",
+    "error": "تعذّر الإرسال. حاول مجددًا لاحقًا.",
+    "tooMany": "تم إرسال رسائل كثيرة، حاول مجددًا بعد بضع دقائق."
   },
   "reconnecting": "جارٍ إعادة الاتصال باللعبة…",
   "roomNotFoundTitle": "الغرفة غير موجودة",

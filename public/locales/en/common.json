@@ -19,7 +19,7 @@
   "unselectAll": "Unselect all",
   "waiting": "{{player}} is choosing a category...",
   "playerLeftNotice": "{{name}} left the room",
-  "purchaseWebUnavailableNotice": "Purchases aren't available on the web. Download the Palo app on the Play Store or App Store to unlock this category or the subscription.",
+  "purchaseWebUnavailableNotice": "Purchases aren't available on the web. Download the Blaafy app on the Play Store or App Store to unlock this category or the subscription.",
   "purchaseFailedNotice": "The purchase failed. Try again or check your payment method on the Play Store / App Store.",
   "category": {
     "sport": "Sport",
@@ -223,7 +223,7 @@
     "unlocked": "Unlocked",
     "logout": "Sign out",
     "close": "Close",
-    "subscriptionTitle": "Palo Premium",
+    "subscriptionTitle": "Blaafy Premium",
     "subscriptionDescription": "Unlock every category and play without limits",
     "subscriptionActive": "Subscription active",
     "subscribe": "Subscribe",
@@ -252,6 +252,45 @@
       "Every category unlocked",
       "All game settings"
     ]
+  },
+  "report": {
+    "button": "Report question",
+    "title": "Report this question",
+    "description": "Something wrong with this question? Tell us what.",
+    "commentLabel": "Comment (optional)",
+    "placeholder": "Wrong answer, typo, ambiguous question…",
+    "send": "Send",
+    "sending": "Sending…",
+    "cancel": "Cancel",
+    "thanks": "Thanks, report sent!",
+    "error": "Could not send. Please try again later."
+  },
+  "contact": {
+    "menu": "Contact us",
+    "title": "Contact us",
+    "subtitle": "A question, an idea, or a question to suggest? We read everything.",
+    "typeLabel": "Message type",
+    "types": {
+      "contact": "Contact us",
+      "feature": "Suggest a feature",
+      "question": "Suggest a question"
+    },
+    "messageLabel": "Your message",
+    "placeholders": {
+      "contact": "Write us a message…",
+      "feature": "Describe the feature you would like to see…",
+      "question": "Write your question, the right answer and three wrong answers…"
+    },
+    "emailLabel": "Your email (optional)",
+    "emailHint": "So we can reply to you.",
+    "send": "Send",
+    "sending": "Sending…",
+    "thanksTitle": "Thank you!",
+    "thanksText": "Your message has been sent.",
+    "another": "Send another message",
+    "backHome": "Back to home",
+    "error": "Could not send. Please try again later.",
+    "tooMany": "Too many messages sent, please try again in a few minutes."
   },
   "reconnecting": "Reconnecting to the game…",
   "roomNotFoundTitle": "Room not found",

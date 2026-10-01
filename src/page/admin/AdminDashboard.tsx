@@ -2,20 +2,22 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Layers, ListChecks, LogIn, ShieldAlert, Swords, Users } from "lucide-react";
+import { ArrowLeft, Inbox, Layers, ListChecks, LogIn, ShieldAlert, Swords, Users } from "lucide-react";
 import { useAuthStore } from "@/utils/useAuthStore";
 import { adminService, AdminApiError } from "@/service/adminService";
-import { adminFont, buttonClass, Spinner } from "./adminUi";
+import { adminFont, buttonClass, Spinner, useAdminQuery } from "./adminUi";
 import { RoomsTab } from "./RoomsTab";
 import { UsersTab } from "./UsersTab";
 import { CategoriesTab } from "./CategoriesTab";
 import { QuestionsTab } from "./QuestionsTab";
+import { InboxTab } from "./InboxTab";
 
 const TABS = [
   { id: "rooms", label: "Parties", icon: Swords },
   { id: "users", label: "Utilisateurs", icon: Users },
   { id: "categories", label: "Catégories", icon: Layers },
   { id: "questions", label: "Questions", icon: ListChecks },
+  { id: "inbox", label: "Retours", icon: Inbox },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -57,6 +59,12 @@ export function AdminDashboard() {
   const [gate, setGate] = useState<Gate>("checking");
   const [tab, setTab] = useState<TabId>("rooms");
   const [questionCategory, setQuestionCategory] = useState("");
+  const inbox = useAdminQuery(
+    () => (accessToken && gate === "ok" ? adminService.inbox(accessToken) : Promise.resolve(null)),
+    [accessToken, gate],
+    60000
+  );
+  const openCount = (inbox.data?.reports ?? 0) + (inbox.data?.feedback ?? 0);
 
   // The auth store reads localStorage on first render; wait one tick so we
   // don't flash "login required" for an already signed-in admin.
@@ -133,7 +141,7 @@ export function AdminDashboard() {
             >
               <ArrowLeft className="h-5 w-5 rtl:rotate-180" />
             </Link>
-            <h1 className="truncate text-lg font-bold">Palo · Admin</h1>
+            <h1 className="truncate text-lg font-bold">Blaafy · Admin</h1>
           </div>
           <span className="hidden max-w-[14rem] truncate text-xs text-slate-500 sm:block">{user?.email}</span>
         </div>
@@ -156,6 +164,11 @@ export function AdminDashboard() {
               >
                 <Icon className="h-4 w-4" aria-hidden="true" />
                 {label}
+                {id === "inbox" && openCount > 0 && (
+                  <span className="rounded-full bg-amber-500 px-1.5 text-xs font-bold tabular-nums text-white">
+                    {openCount}
+                  </span>
+                )}
               </button>
             ))}
           </div>
@@ -171,6 +184,13 @@ export function AdminDashboard() {
         {tab === "rooms" && <RoomsTab token={accessToken} />}
         {tab === "users" && <UsersTab token={accessToken} />}
         {tab === "categories" && <CategoriesTab token={accessToken} onOpenQuestions={openQuestions} />}
+        {tab === "inbox" && (
+          <InboxTab
+            token={accessToken}
+            counts={inbox.data ?? { reports: 0, feedback: 0 }}
+            onChanged={inbox.reload}
+          />
+        )}
         {tab === "questions" && (
           <QuestionsTab key={questionCategory} token={accessToken} initialCategory={questionCategory} />
         )}

@@ -36,7 +36,7 @@ export default function HomePage() {
     return (
       <div className="min-h-dvh flex flex-col items-center justify-center gap-4">
         <div className="skin-category-title text-[color:var(--skin-primary)] neon-text-glow [font-size:clamp(2rem,10vw,3rem)]">
-          PALO
+          BLAAFY
         </div>
         <p className="font-arcade text-sm text-[color:var(--skin-muted)] animate-pulse">
           {t("reconnecting", "Reconnexion à la partie…")}
@@ -78,7 +78,7 @@ export default function HomePage() {
         <CardContent className={theme.home.cardContent}>
           <div className="text-center pt-2 pb-1">
             <h1 className="skin-category-title text-[color:var(--skin-primary)] neon-text-glow leading-tight [font-size:clamp(2.75rem,14vw,4rem)]">
-              PALO
+              BLAAFY
             </h1>
           </div>
 

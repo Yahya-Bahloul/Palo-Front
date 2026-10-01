@@ -19,7 +19,7 @@
   "unselectAll": "Tout désélectionner",
   "waiting": "{{player}} est en train de choisir une catégorie...",
   "playerLeftNotice": "{{name}} a quitté la salle",
-  "purchaseWebUnavailableNotice": "L'achat n'est pas disponible sur le web. Téléchargez l'appli Palo sur le Play Store ou l'App Store pour débloquer cette catégorie ou l'abonnement.",
+  "purchaseWebUnavailableNotice": "L'achat n'est pas disponible sur le web. Téléchargez l'appli Blaafy sur le Play Store ou l'App Store pour débloquer cette catégorie ou l'abonnement.",
   "purchaseFailedNotice": "L'achat a échoué. Réessaie ou vérifie ton moyen de paiement sur le Play Store / App Store.",
   "category": {
     "sport": "Sport",
@@ -222,7 +222,7 @@
     "unlocked": "Débloqué",
     "logout": "Se déconnecter",
     "close": "Fermer",
-    "subscriptionTitle": "Palo Premium",
+    "subscriptionTitle": "Blaafy Premium",
     "subscriptionDescription": "Débloque toutes les catégories et joue sans limite",
     "subscriptionActive": "Abonnement actif",
     "subscribe": "S'abonner",
@@ -251,6 +251,45 @@
       "Toutes les catégories débloquées",
       "Tous les paramètres de partie"
     ]
+  },
+  "report": {
+    "button": "Signaler la question",
+    "title": "Signaler cette question",
+    "description": "Un souci avec cette question ? Dis-nous ce qui ne va pas.",
+    "commentLabel": "Commentaire (facultatif)",
+    "placeholder": "Réponse fausse, faute, question ambiguë…",
+    "send": "Envoyer",
+    "sending": "Envoi…",
+    "cancel": "Annuler",
+    "thanks": "Merci, signalement envoyé !",
+    "error": "Envoi impossible. Réessaie plus tard."
+  },
+  "contact": {
+    "menu": "Nous contacter",
+    "title": "Nous contacter",
+    "subtitle": "Une question, une idée ou une question à proposer ? On te lit.",
+    "typeLabel": "Type de message",
+    "types": {
+      "contact": "Nous contacter",
+      "feature": "Proposer une fonctionnalité",
+      "question": "Proposer une question"
+    },
+    "messageLabel": "Ton message",
+    "placeholders": {
+      "contact": "Écris-nous ton message…",
+      "feature": "Décris la fonctionnalité que tu aimerais voir…",
+      "question": "Écris ta question, la bonne réponse et trois fausses réponses…"
+    },
+    "emailLabel": "Ton e-mail (facultatif)",
+    "emailHint": "Pour qu’on puisse te répondre.",
+    "send": "Envoyer",
+    "sending": "Envoi…",
+    "thanksTitle": "Merci !",
+    "thanksText": "Ton message a bien été envoyé.",
+    "another": "Envoyer un autre message",
+    "backHome": "Retour à l’accueil",
+    "error": "Envoi impossible. Réessaie plus tard.",
+    "tooMany": "Trop de messages envoyés, réessaie dans quelques minutes."
   },
   "reconnecting": "Reconnexion à la partie…",
   "roomNotFoundTitle": "Salle introuvable",
