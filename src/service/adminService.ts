@@ -31,6 +31,14 @@ async function request<T>(
   return res.json();
 }
 
+export type PeriodKey = "day" | "week" | "month" | "year";
+
+export type AdminStats = {
+  trackedSince: string | null;
+  rooms: Record<PeriodKey, number>;
+  players: Record<PeriodKey, number>;
+};
+
 export type AdminRoom = {
   id: string;
   phase: string;
@@ -100,6 +108,8 @@ export type QuestionFilters = {
 export const adminService = {
   me: (token: string) =>
     request<{ isAdmin: true; email: string }>("GET", "/me", token),
+
+  stats: (token: string) => request<AdminStats>("GET", "/stats", token),
 
   rooms: (token: string) => request<AdminRoom[]>("GET", "/rooms", token),
 

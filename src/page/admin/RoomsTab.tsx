@@ -1,8 +1,77 @@
 "use client";
 
 import { Crown, Users } from "lucide-react";
-import { adminService } from "@/service/adminService";
-import { Empty, ErrorBox, Pill, Spinner, useAdminQuery } from "./adminUi";
+import { adminService, PeriodKey } from "@/service/adminService";
+import { Empty, ErrorBox, formatDate, Pill, Spinner, useAdminQuery } from "./adminUi";
+
+const PERIODS: { key: PeriodKey; label: string }[] = [
+  { key: "day", label: "24 h" },
+  { key: "week", label: "7 jours" },
+  { key: "month", label: "30 jours" },
+  { key: "year", label: "1 an" },
+];
+
+function StatsPanel({ token, livePlayers, liveRooms }: { token: string; livePlayers: number; liveRooms: number }) {
+  const { data, error } = useAdminQuery(() => adminService.stats(token), [token], 60000);
+  const fmt = new Intl.NumberFormat("fr-FR");
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+            <span aria-hidden="true" className="h-2 w-2 animate-pulse rounded-full bg-emerald-500 motion-reduce:animate-none" />
+            Joueurs connectés
+          </p>
+          <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-900">{fmt.format(livePlayers)}</p>
+        </div>
+        <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Parties en cours</p>
+          <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-900">{fmt.format(liveRooms)}</p>
+        </div>
+      </div>
+
+      {error && !data ? (
+        <ErrorBox message={error} />
+      ) : (
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+          <table className="w-full min-w-[26rem] text-sm">
+            <caption className="sr-only">Activité par période</caption>
+            <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+              <tr>
+                <th scope="col" className="px-4 py-2.5 text-start font-semibold">Activité</th>
+                {PERIODS.map((p) => (
+                  <th key={p.key} scope="col" className="px-4 py-2.5 text-end font-semibold">{p.label}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {([
+                ["Parties créées", data?.rooms],
+                ["Joueurs uniques", data?.players],
+              ] as const).map(([label, values]) => (
+                <tr key={label}>
+                  <th scope="row" className="px-4 py-3 text-start font-medium text-slate-700">{label}</th>
+                  {PERIODS.map((p) => (
+                    <td key={p.key} className="px-4 py-3 text-end text-lg font-bold tabular-nums text-slate-900">
+                      {values ? fmt.format(values[p.key]) : "…"}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="border-t border-slate-100 px-4 py-2 text-xs text-slate-400">
+            {data?.trackedSince
+              ? `Suivi depuis le ${formatDate(data.trackedSince)} — les périodes plus longues se remplissent au fil du temps.`
+              : "Le suivi démarre à la prochaine partie créée."}{" "}
+            « Joueurs uniques » = appareils distincts ayant rejoint une partie.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 const PHASES: Record<string, { label: string; tone: "slate" | "blue" | "amber" | "green" }> = {
   starting: { label: "Lobby", tone: "slate" },
@@ -22,16 +91,10 @@ export function RoomsTab({ token }: { token: string }) {
   const players = rooms.reduce((n, r) => n + r.players.filter((p) => p.connected).length, 0);
 
   return (
-    <section className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm text-slate-600">
-          <strong className="text-slate-900">{rooms.length}</strong> partie
-          {rooms.length > 1 ? "s" : ""} en cours ·{" "}
-          <strong className="text-slate-900">{players}</strong> joueur{players > 1 ? "s" : ""}{" "}
-          connecté{players > 1 ? "s" : ""}
-        </p>
-        <span className="text-xs text-slate-400">Actualisation automatique toutes les 5 s</span>
-      </div>
+    <section className="space-y-5">
+      <StatsPanel token={token} livePlayers={players} liveRooms={rooms.length} />
+
+      <p className="text-end text-xs text-slate-400">Actualisation automatique des parties toutes les 5 s</p>
 
       {rooms.length === 0 ? (
         <Empty>Aucune partie en cours pour le moment.</Empty>
