@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { theme } from "@/styles/theme";
 import Image from "next/image";
+import { useAuthStore } from "@/utils/useAuthStore";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -43,6 +44,7 @@ export default function UploadQuestionPage() {
   const [jsonInput, setJsonInput] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   const fillFromJson = () => {
     try {
@@ -146,6 +148,7 @@ export default function UploadQuestionPage() {
     setLoading(true);
     const res = await fetch(`${API_BASE_URL}/api/upload-question`, {
       method: "POST",
+      headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
       body: formData,
     });
 
@@ -163,7 +166,11 @@ export default function UploadQuestionPage() {
       setJsonInput("");
       router.refresh();
     } else {
-      alert("Erreur lors de l'ajout.");
+      alert(
+        res.status === 401 || res.status === 403
+          ? "Accès refusé : connecte-toi avec un compte administrateur."
+          : "Erreur lors de l'ajout."
+      );
     }
   };
 
