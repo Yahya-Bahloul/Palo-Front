@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,12 +11,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu, LogIn, LogOut, Crown } from "lucide-react";
 import { useAuthStore } from "@/utils/useAuthStore";
+import { authService } from "@/service/authService";
 
 export function HomeMenu() {
   const router = useRouter();
   const { t } = useTranslation("common");
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
+  const accessToken = useAuthStore((s) => s.accessToken);
+  const [isSubscribed, setIsSubscribed] = useState(false);
+
+  useEffect(() => {
+    if (!accessToken) {
+      setIsSubscribed(false);
+      return;
+    }
+    let cancelled = false;
+    authService
+      .getCategoryCatalog(accessToken)
+      .then((catalog) => {
+        if (!cancelled) setIsSubscribed(catalog.some((cat) => cat.isSubscribed));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [accessToken]);
 
   const item =
     "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg font-arcade text-sm text-[color:var(--skin-text)] hover:bg-[color:var(--skin-primary)]/15 transition cursor-pointer";
@@ -42,7 +63,9 @@ export function HomeMenu() {
             onClick={() => router.push("/purchases")}
           >
             <Crown className="h-4 w-4 shrink-0 text-[color:var(--skin-primary)]" />
-            {t("getPremium", "Passer Premium")}
+            {isSubscribed
+              ? t("purchases.subscriptionActive", "Abonnement actif")
+              : t("getPremium", "Passer Premium")}
           </DropdownMenuItem>
 
           {user ? (

@@ -68,7 +68,9 @@ export function usePurchases() {
   const isSubscribed = catalog.some((cat) => cat.isSubscribed);
   const lockedCategories = catalog.filter((cat) => cat.isPremium && !cat.unlocked);
 
-  const close = () => router.back();
+  // Not router.back(): after a Stripe checkout/portal redirect, the previous
+  // history entry is the Stripe page itself.
+  const close = () => router.replace("/");
 
   const handleSubscribe = async () => {
     if (!accessToken || !purchasesAvailable()) return;
