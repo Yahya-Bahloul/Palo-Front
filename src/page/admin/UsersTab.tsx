@@ -220,8 +220,9 @@ function UserDialog({
 
               {sub?.effective && sub.provider !== "manual" && (
                 <p className="text-xs text-slate-500">
-                  Abonnement payant géré par {PROVIDERS[sub.provider] ?? sub.provider} : pour le
-                  résilier ou le rembourser, passe par son tableau de bord.
+                  Abonnement payant géré par {PROVIDERS[sub.provider] ?? sub.provider}. Pour arrêter la
+                  facturation ou rembourser, passe par son tableau de bord. « Forcer l’expiration »
+                  retire seulement l’accès Premium dans Blaafy (utile pour un abonnement de test).
                 </p>
               )}
 
@@ -253,17 +254,19 @@ function UserDialog({
                 </div>
               )}
 
-              {sub?.effective && sub.provider === "manual" && (
+              {sub?.effective && (
                 confirmRevoke ? (
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-sm text-slate-600">Retirer le Premium offert ?</span>
+                    <span className="text-sm text-slate-600">
+                      {sub.provider === "manual" ? "Retirer le Premium offert ?" : "Retirer le Premium maintenant ?"}
+                    </span>
                     <button
                       type="button"
                       disabled={busy}
                       onClick={() => run(() => adminService.revokeSubscription(token, user.id))}
                       className={buttonClass.danger}
                     >
-                      Oui, retirer
+                      {sub.provider === "manual" ? "Oui, retirer" : "Oui, forcer l’expiration"}
                     </button>
                     <button type="button" onClick={() => setConfirmRevoke(false)} className={buttonClass.secondary}>
                       Annuler
@@ -271,7 +274,7 @@ function UserDialog({
                   </div>
                 ) : (
                   <button type="button" onClick={() => setConfirmRevoke(true)} className={buttonClass.danger}>
-                    Retirer l’abonnement offert
+                    {sub.provider === "manual" ? "Retirer l’abonnement offert" : "Forcer l’expiration"}
                   </button>
                 )
               )}
