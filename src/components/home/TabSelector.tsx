@@ -5,12 +5,14 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslation } from "react-i18next";
 import { theme } from "@/styles/theme";
 
+export type HomeTab = "create" | "join" | "online";
+
 export default function TabSelector({
   activeTab,
   setActiveTab,
 }: {
-  activeTab: "create" | "join";
-  setActiveTab: (tab: "create" | "join") => void;
+  activeTab: HomeTab;
+  setActiveTab: (tab: HomeTab) => void;
 }) {
   const { t } = useTranslation("common");
 
@@ -18,7 +20,7 @@ export default function TabSelector({
     <div>
       <Tabs
         value={activeTab}
-        onValueChange={(value) => setActiveTab(value as "create" | "join")}
+        onValueChange={(value) => setActiveTab(value as HomeTab)}
         className="w-full"
       >
         <TabsList className={theme.tabSelector.list}>
@@ -27,6 +29,9 @@ export default function TabSelector({
           </TabsTrigger>
           <TabsTrigger value="join" className={theme.tabSelector.trigger}>
             {t("joinGame")}
+          </TabsTrigger>
+          <TabsTrigger value="online" className={theme.tabSelector.trigger}>
+            {t("online.tab", "En ligne")}
           </TabsTrigger>
         </TabsList>
       </Tabs>

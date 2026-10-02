@@ -6,12 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import TabSelector from "@/components/home/TabSelector";
+import TabSelector, { type HomeTab } from "@/components/home/TabSelector";
 import { useHomePage } from "./useHome";
 import { AvatarSelector } from "@/components/avatar/AvatarSelectorHome";
 import { theme } from "@/styles/theme";
 import LanguageSelect from "@/components/utils/LanguageSelect";
 import { HomeMenu } from "@/components/home/HomeMenu";
+import { PublicRoomsList } from "@/components/home/PublicRoomsList";
 
 export default function HomePage() {
   const { t } = useTranslation("common");
@@ -30,6 +31,12 @@ export default function HomePage() {
     clearJoinError,
     roomErrorPopup,
     dismissRoomErrorPopup,
+    publicRooms,
+    publicRoomsError,
+    publicRoomGone,
+    refreshPublicRooms,
+    joinPublicRoom,
+    handleQuickPlay,
   } = useHomePage();
 
   if (checkingRoom) {
@@ -114,6 +121,17 @@ export default function HomePage() {
             </div>
           )}
 
+          {activeTab === "online" && (
+            <PublicRoomsList
+              rooms={publicRooms}
+              error={publicRoomsError}
+              gone={publicRoomGone}
+              canJoin={!!player.name}
+              onJoin={joinPublicRoom}
+              onRetry={refreshPublicRooms}
+            />
+          )}
+
           <AvatarSelector
             regenerateAvatar={regenerateAvatar}
             seed={player.avatar}
@@ -138,6 +156,8 @@ export default function HomePage() {
             roomCode={roomCode}
             onCreate={handleCreateRoom}
             onJoin={handleJoinRoom}
+            onQuickPlay={handleQuickPlay}
+            hasPublicRooms={!!publicRooms?.length}
           />
         </CardFooter>
       </Card>
@@ -151,23 +171,42 @@ function RoomActionButton({
   roomCode,
   onCreate,
   onJoin,
+  onQuickPlay,
+  hasPublicRooms,
 }: {
-  activeTab: "create" | "join";
+  activeTab: HomeTab;
   name: string;
   roomCode: string;
   onCreate: () => void;
   onJoin: () => void;
+  onQuickPlay: () => void;
+  hasPublicRooms: boolean;
 }) {
   const { t } = useTranslation("common");
-  const disabled = activeTab === "join" ? !name || !roomCode : !name;
+  const disabled =
+    activeTab === "join"
+      ? !name || !roomCode
+      : activeTab === "online"
+        ? !name || !hasPublicRooms
+        : !name;
 
   return (
     <Button
-      onClick={activeTab === "join" ? onJoin : onCreate}
+      onClick={
+        activeTab === "join"
+          ? onJoin
+          : activeTab === "online"
+            ? onQuickPlay
+            : onCreate
+      }
       disabled={disabled}
       className={theme.home.actionButton}
     >
-      {activeTab === "join" ? t("joinNow") : t("createRoom")}
+      {activeTab === "join"
+        ? t("joinNow")
+        : activeTab === "online"
+          ? t("online.playNow", "Jouer maintenant")
+          : t("createRoom")}
     </Button>
   );
 }

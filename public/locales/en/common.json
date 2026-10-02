@@ -292,6 +292,25 @@
     "error": "Could not send. Please try again later.",
     "tooMany": "Too many messages sent, please try again in a few minutes."
   },
+  "online": {
+    "tab": "Online",
+    "title": "Public games",
+    "subtitle": "Join an open game and play with other players.",
+    "loading": "Loading…",
+    "error": "Could not load the games.",
+    "retry": "Retry",
+    "empty": "No open game right now.",
+    "hostedBy": "Host: {{name}}",
+    "waiting": "Waiting for players",
+    "players": "players",
+    "join": "Join",
+    "playNow": "Play now",
+    "nameRequired": "Enter your name to join.",
+    "gone": "That game just started. Pick another one."
+  },
+  "weekly": {
+    "badge": "Free this week"
+  },
   "reconnecting": "Reconnecting to the game…",
   "roomNotFoundTitle": "Room not found",
   "joinRoomError": "This room doesn't exist or has been closed.",

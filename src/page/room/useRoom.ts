@@ -201,8 +201,16 @@ export function useRoomPage() {
     socketService.on("serverShuttingDown", handleServerShuttingDown);
 
     socketService.on("joinedRoom", handleJoinedRoom);
-    socketService.on("playerJoined", (data) => setPlayers(data.players));
-    socketService.on("playerLeft", (data) => setPlayers(data.players));
+    // The host can change while the room is open (public rooms hand the role to
+    // another player when the host leaves), so keep `admin` in step with adminId.
+    const syncRoster = (data: { players: Player[]; adminId?: string }) => {
+      setPlayers(data.players);
+      if (data.adminId !== undefined) {
+        setAdmin(data.players.find((p) => p.id === data.adminId) || null);
+      }
+    };
+    socketService.on("playerJoined", syncRoster);
+    socketService.on("playerLeft", syncRoster);
     socketService.on("youWereKicked", handleYouWereKicked);
     socketService.on("chatMessage", handleChatMessage);
 

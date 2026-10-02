@@ -67,6 +67,7 @@ export type AdminStats = {
 
 export type AdminRoom = {
   id: string;
+  isPublic: boolean;
   phase: string;
   currentRound: number;
   maxRound: number;
@@ -106,6 +107,7 @@ export type AdminCategory = {
   label: string;
   isPremium: boolean;
   disabled: boolean;
+  freeUntil: string | null; // set = free for everyone until then ("free of the week")
   questionCount: number;
   disabledQuestionCount: number;
 };
@@ -167,6 +169,10 @@ export const adminService = {
 
   categories: (token: string) =>
     request<AdminCategory[]>("GET", "/categories", token),
+  setWeeklyFree: (token: string, key: string, enabled: boolean) =>
+    request("PATCH", `/categories/${encodeURIComponent(key)}/weekly-free`, token, { enabled }),
+  randomWeeklyFree: (token: string, count: number) =>
+    request<{ picked: string[]; freeUntil: string }>("POST", "/weekly-free/random", token, { count }),
   setCategoryDisabled: (token: string, key: string, disabled: boolean) =>
     request("PATCH", `/categories/${encodeURIComponent(key)}`, token, { disabled }),
 

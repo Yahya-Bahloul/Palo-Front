@@ -11,13 +11,23 @@ const PERIODS: { key: PeriodKey; label: string }[] = [
   { key: "year", label: "1 an" },
 ];
 
-function StatsPanel({ token, livePlayers, liveRooms }: { token: string; livePlayers: number; liveRooms: number }) {
+function StatsPanel({
+  token,
+  livePlayers,
+  liveRooms,
+  openPublic,
+}: {
+  token: string;
+  livePlayers: number;
+  liveRooms: number;
+  openPublic: number;
+}) {
   const { data, error } = useAdminQuery(() => adminService.stats(token), [token], 60000);
   const fmt = new Intl.NumberFormat("fr-FR");
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
           <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-emerald-700">
             <span aria-hidden="true" className="h-2 w-2 animate-pulse rounded-full bg-emerald-500 motion-reduce:animate-none" />
@@ -28,6 +38,10 @@ function StatsPanel({ token, livePlayers, liveRooms }: { token: string; livePlay
         <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-emerald-700">Parties en cours</p>
           <p className="mt-1 text-3xl font-extrabold tabular-nums text-emerald-900">{fmt.format(liveRooms)}</p>
+        </div>
+        <div className="col-span-2 rounded-2xl border border-sky-200 bg-sky-50 p-4 sm:col-span-1">
+          <p className="text-xs font-semibold uppercase tracking-wide text-sky-700">Salons publics ouverts</p>
+          <p className="mt-1 text-3xl font-extrabold tabular-nums text-sky-900">{fmt.format(openPublic)}</p>
         </div>
       </div>
 
@@ -87,12 +101,15 @@ export function RoomsTab({ token }: { token: string }) {
 
   if (loading && !data) return <Spinner />;
   if (error && !data) return <ErrorBox message={error} />;
-  const rooms = data ?? [];
-  const players = rooms.reduce((n, r) => n + r.players.filter((p) => p.connected).length, 0);
+  const allRooms = data ?? [];
+  // An open public lobby nobody has joined yet is not a game in progress.
+  const rooms = allRooms.filter((r) => !(r.isPublic && r.players.length === 0));
+  const openPublic = allRooms.filter((r) => r.isPublic).length;
+  const players = allRooms.reduce((n, r) => n + r.players.filter((p) => p.connected).length, 0);
 
   return (
     <section className="space-y-5">
-      <StatsPanel token={token} livePlayers={players} liveRooms={rooms.length} />
+      <StatsPanel token={token} livePlayers={players} liveRooms={rooms.length} openPublic={openPublic} />
 
       <p className="text-end text-xs text-slate-400">Actualisation automatique des parties toutes les 5 s</p>
 
@@ -110,10 +127,13 @@ export function RoomsTab({ token }: { token: string }) {
                       {room.id}
                     </p>
                     <p className="text-xs text-slate-500">
-                      {room.hostEmail ?? "Hôte invité (sans compte)"}
+                      {room.isPublic ? "Salon public" : (room.hostEmail ?? "Hôte invité (sans compte)")}
                     </p>
                   </div>
-                  <Pill tone={phase.tone}>{phase.label}</Pill>
+                  <span className="flex flex-wrap justify-end gap-1.5">
+                    {room.isPublic && <Pill tone="blue">Publique</Pill>}
+                    <Pill tone={phase.tone}>{phase.label}</Pill>
+                  </span>
                 </div>
 
                 <dl className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-slate-600">

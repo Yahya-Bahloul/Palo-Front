@@ -247,7 +247,7 @@ export const theme = {
   },
 
   tabSelector: {
-    list: "w-full grid grid-cols-2 items-stretch gap-2 h-auto min-h-[56px] p-1.5 rounded-xl bg-[color:var(--skin-bg-2)]/60 border border-[color:var(--skin-border)]",
+    list: "w-full grid grid-cols-3 items-stretch gap-1.5 h-auto min-h-[56px] p-1.5 rounded-xl bg-[color:var(--skin-bg-2)]/60 border border-[color:var(--skin-border)]",
     trigger: "skin-tab h-full",
   },
   border: {

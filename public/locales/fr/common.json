@@ -291,6 +291,25 @@
     "error": "Envoi impossible. Réessaie plus tard.",
     "tooMany": "Trop de messages envoyés, réessaie dans quelques minutes."
   },
+  "online": {
+    "tab": "En ligne",
+    "title": "Parties publiques",
+    "subtitle": "Rejoins une partie ouverte et joue avec d’autres joueurs.",
+    "loading": "Chargement…",
+    "error": "Impossible de charger les parties.",
+    "retry": "Réessayer",
+    "empty": "Aucune partie ouverte pour le moment.",
+    "hostedBy": "Hôte : {{name}}",
+    "waiting": "En attente de joueurs",
+    "players": "joueurs",
+    "join": "Rejoindre",
+    "playNow": "Jouer maintenant",
+    "nameRequired": "Entre ton nom pour rejoindre.",
+    "gone": "Cette partie vient de commencer. Choisis-en une autre."
+  },
+  "weekly": {
+    "badge": "Gratuite cette semaine"
+  },
   "reconnecting": "Reconnexion à la partie…",
   "roomNotFoundTitle": "Salle introuvable",
   "joinRoomError": "Cette salle n’existe pas ou a été fermée.",

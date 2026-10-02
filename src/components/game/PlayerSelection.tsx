@@ -13,6 +13,7 @@ import {
   CheckSquare,
   Square,
   Lock,
+  Gift,
   X,
   Loader2,
   Crown,
@@ -339,6 +340,12 @@ export function PlayerSection({
                               selected ? theme.lobby.chipOn : ""
                             }`}
                           >
+                            {cat.freeThisWeek && (
+                              <Gift
+                                className="w-3.5 h-3.5 text-[color:var(--skin-accent-2)]"
+                                aria-label={t("weekly.badge", "Gratuite cette semaine")}
+                              />
+                            )}
                             {label}
                           </button>
                         );

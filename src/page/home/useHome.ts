@@ -1,10 +1,12 @@
 // src/hooks/useHomePage.ts
 import { GameRoom } from "@/model";
 import { socketService } from "@/service/socketService";
+import { PublicRoom, pickQuickRoom, publicRoomsService } from "@/service/publicRoomsService";
+import type { HomeTab } from "@/components/home/TabSelector";
 import { usePlayerStore } from "@/utils/usePlayerStore";
 import { useAuthStore } from "@/utils/useAuthStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export function useHomePage() {
@@ -17,7 +19,10 @@ export function useHomePage() {
   const accessToken = useAuthStore((s) => s.accessToken);
 
   const [roomCode, setRoomCode] = useState("");
-  const [activeTab, setActiveTab] = useState<"create" | "join">("create");
+  const [activeTab, setActiveTab] = useState<HomeTab>("create");
+  const [publicRooms, setPublicRooms] = useState<PublicRoom[] | null>(null);
+  const [publicRoomsError, setPublicRoomsError] = useState(false);
+  const [publicRoomGone, setPublicRoomGone] = useState(false);
   const [checkingRoom, setCheckingRoom] = useState(!!currentRoomId);
   const [joinError, setJoinError] = useState<string | null>(null);
   const [roomErrorPopup, setRoomErrorPopup] = useState(
@@ -110,6 +115,27 @@ export function useHomePage() {
     };
   }, [currentRoomId, router, setCurrentRoomId]);
 
+  const refreshPublicRooms = useCallback(() => {
+    return publicRoomsService
+      .list()
+      .then((rooms) => {
+        setPublicRooms(rooms);
+        setPublicRoomsError(false);
+      })
+      .catch(() => setPublicRoomsError(true));
+  }, []);
+
+  // Keep the list of open public rooms fresh while the "online" tab is showing.
+  useEffect(() => {
+    if (activeTab !== "online") return;
+    setPublicRoomGone(false);
+    refreshPublicRooms();
+    const id = setInterval(() => {
+      if (!document.hidden) refreshPublicRooms();
+    }, 5000);
+    return () => clearInterval(id);
+  }, [activeTab, refreshPublicRooms]);
+
   const handleCreateRoom = () => {
     socketService.createRoom(
       player,
@@ -123,7 +149,33 @@ export function useHomePage() {
     socketService.joinRoom(roomCode.trim().toUpperCase(), player);
   };
 
+  const joinPublicRoom = (roomId: string) => {
+    setJoinError(null);
+    setPublicRoomGone(false);
+    socketService.joinRoom(roomId, player);
+  };
+
+  const handleQuickPlay = () => {
+    const room = pickQuickRoom(publicRooms ?? [], i18n.language);
+    if (room) joinPublicRoom(room.id);
+    else refreshPublicRooms();
+  };
+
+  // The room we tried to join started (or closed) in the meantime.
+  useEffect(() => {
+    if (joinError && activeTab === "online") {
+      setPublicRoomGone(true);
+      refreshPublicRooms();
+    }
+  }, [joinError, activeTab, refreshPublicRooms]);
+
   return {
+    publicRooms,
+    publicRoomsError,
+    publicRoomGone,
+    refreshPublicRooms,
+    joinPublicRoom,
+    handleQuickPlay,
     activeTab,
     setActiveTab,
     roomCode,
