@@ -19,8 +19,6 @@
   "unselectAll": "Unselect all",
   "waiting": "{{player}} is choosing a category...",
   "playerLeftNotice": "{{name}} left the room",
-  "purchaseWebUnavailableNotice": "Purchases aren't available on the web. Download the Blaafy app on the Play Store or App Store to unlock this category or the subscription.",
-  "purchaseFailedNotice": "The purchase failed. Try again or check your payment method on the Play Store / App Store.",
   "category": {
     "sport": "Sport",
     "anime": "Anime",
@@ -242,8 +240,6 @@
     "continue": "Continue",
     "redirecting": "Redirecting to payment…",
     "secureNote": "Secure payment by Stripe · Cancel anytime",
-    "lockedCategoriesTitle": "Unlock a single category",
-    "buyCategory": "Buy",
     "checkoutSuccess": "Purchase confirmed — enjoy!",
     "checkoutFinalizing": "Finalizing your purchase…",
     "checkoutCanceled": "Checkout canceled.",
@@ -310,6 +306,14 @@
   },
   "weekly": {
     "badge": "Free this week"
+  },
+  "loading": {
+    "creatingRoom": "Creating the room…",
+    "joiningRoom": "Joining the room…",
+    "redirectingPayment": "Redirecting to secure payment…",
+    "openingPortal": "Opening subscription management…",
+    "processingPurchase": "Purchase in progress…",
+    "actionError": "Could not connect. Please try again in a moment."
   },
   "reconnecting": "Reconnecting to the game…",
   "roomNotFoundTitle": "Room not found",

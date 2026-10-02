@@ -18,6 +18,20 @@ export function usePurchases() {
   const [checkoutPending, setCheckoutPending] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [confirmingCheckout, setConfirmingCheckout] = useState(false);
+  const [openingPortal, setOpeningPortal] = useState(false);
+
+  // Coming back with the browser's Back button restores this page from the
+  // bfcache with its old state: don't leave the loading layer stuck on screen.
+  useEffect(() => {
+    const onShow = (e: PageTransitionEvent) => {
+      if (!e.persisted) return;
+      setCheckoutPending(null);
+      setOpeningPortal(false);
+      setSubscribing(false);
+    };
+    window.addEventListener("pageshow", onShow);
+    return () => window.removeEventListener("pageshow", onShow);
+  }, []);
 
   const refreshCatalog = async (token: string) => {
     const refreshed = await authService.getCategoryCatalog(token);
@@ -66,7 +80,6 @@ export function usePurchases() {
   }, [checkoutStatus, accessToken]);
 
   const isSubscribed = catalog.some((cat) => cat.isSubscribed);
-  const lockedCategories = catalog.filter((cat) => cat.isPremium && !cat.unlocked);
 
   // Not router.back(): after a Stripe checkout/portal redirect, the previous
   // history entry is the Stripe page itself.
@@ -90,8 +103,7 @@ export function usePurchases() {
 
   const redirectToCheckout = async (plan: CheckoutPlan) => {
     if (!accessToken) return;
-    const pendingKey = plan.plan === "category" ? plan.categoryKey : plan.plan;
-    setCheckoutPending(pendingKey);
+    setCheckoutPending(plan.plan);
     setError(null);
     try {
       const { url } = await billingService.createCheckoutSession(accessToken, plan);
@@ -104,17 +116,17 @@ export function usePurchases() {
 
   const handleSubscribeMonthlyWeb = () => redirectToCheckout({ plan: "monthly" });
   const handleSubscribeYearlyWeb = () => redirectToCheckout({ plan: "yearly" });
-  const handleBuyCategoryWeb = (categoryKey: string) =>
-    redirectToCheckout({ plan: "category", categoryKey });
 
   const handleManageSubscription = async () => {
-    if (!accessToken) return;
+    if (!accessToken || openingPortal) return;
     setError(null);
+    setOpeningPortal(true);
     try {
       const { url } = await billingService.createPortalSession(accessToken);
       window.location.href = url;
     } catch {
       setError("purchaseFailed");
+      setOpeningPortal(false);
     }
   };
 
@@ -123,8 +135,8 @@ export function usePurchases() {
     loading,
     logout,
     isSubscribed,
-    lockedCategories,
     subscribing,
+    openingPortal,
     checkoutPending,
     error,
     checkoutStatus,
@@ -132,7 +144,6 @@ export function usePurchases() {
     handleSubscribe,
     handleSubscribeMonthlyWeb,
     handleSubscribeYearlyWeb,
-    handleBuyCategoryWeb,
     handleManageSubscription,
     close,
     purchasesAvailable: purchasesAvailable(),

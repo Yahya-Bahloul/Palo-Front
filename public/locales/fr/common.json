@@ -19,8 +19,6 @@
   "unselectAll": "Tout désélectionner",
   "waiting": "{{player}} est en train de choisir une catégorie...",
   "playerLeftNotice": "{{name}} a quitté la salle",
-  "purchaseWebUnavailableNotice": "L'achat n'est pas disponible sur le web. Téléchargez l'appli Blaafy sur le Play Store ou l'App Store pour débloquer cette catégorie ou l'abonnement.",
-  "purchaseFailedNotice": "L'achat a échoué. Réessaie ou vérifie ton moyen de paiement sur le Play Store / App Store.",
   "category": {
     "sport": "Sport",
     "anime": "Animé",
@@ -241,8 +239,6 @@
     "continue": "Continuer",
     "redirecting": "Redirection vers le paiement…",
     "secureNote": "Paiement sécurisé par Stripe · Résiliable à tout moment",
-    "lockedCategoriesTitle": "Débloquer une catégorie",
-    "buyCategory": "Acheter",
     "checkoutSuccess": "Achat confirmé — profites-en !",
     "checkoutFinalizing": "Finalisation de ton achat…",
     "checkoutCanceled": "Paiement annulé.",
@@ -309,6 +305,14 @@
   },
   "weekly": {
     "badge": "Gratuite cette semaine"
+  },
+  "loading": {
+    "creatingRoom": "Création de la salle…",
+    "joiningRoom": "Connexion à la salle…",
+    "redirectingPayment": "Redirection vers le paiement sécurisé…",
+    "openingPortal": "Ouverture de la gestion de l’abonnement…",
+    "processingPurchase": "Achat en cours…",
+    "actionError": "Connexion impossible. Réessaie dans un instant."
   },
   "reconnecting": "Reconnexion à la partie…",
   "roomNotFoundTitle": "Salle introuvable",

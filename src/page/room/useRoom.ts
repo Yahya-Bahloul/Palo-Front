@@ -13,13 +13,10 @@ import { ComputedGuess } from "@/model/computedGuesses";
 import { CategoryCatalogEntry } from "@/model/category";
 import { usePlayerStore } from "@/utils/usePlayerStore";
 import { useAuthStore } from "@/utils/useAuthStore";
-import { authService } from "@/service/authService";
-import { purchasesService, purchasesAvailable } from "@/service/purchasesService";
 import { useTranslation } from "react-i18next";
 
 // Per-category purchases aren't offered yet (no RevenueCat offerings
 // configured) — route to the subscription page instead until that's set up.
-const CATEGORY_PURCHASES_ENABLED = false;
 
 function arraysAreEqual(a: string[], b: string[]) {
   return a.length === b.length && a.every((v) => b.includes(v));
@@ -93,9 +90,6 @@ export function useRoomPage() {
   const [currentCategory, setCurrentCategory] = useState<string>("");
   const [currentQuestionId, setCurrentQuestionId] = useState<string | undefined>(undefined);
   const [notice, setNotice] = useState<string | null>(null);
-  const [purchasingCategoryKey, setPurchasingCategoryKey] = useState<
-    string | null
-  >(null);
   const noticeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
     undefined
   );
@@ -511,53 +505,10 @@ export function useRoomPage() {
     socketService.kickPlayer(roomId as string, targetPlayerId);
   };
 
-  const handleRequestUnlockCategory = async (cat: CategoryCatalogEntry) => {
-    if (!accessToken) {
-      router.push("/login");
-      return;
-    }
 
-    if (!CATEGORY_PURCHASES_ENABLED) {
-      router.push("/purchases");
-      return;
-    }
-
-    setPurchasingCategoryKey(cat.key);
-    try {
-      if (purchasesAvailable()) {
-        // Real purchase: StoreKit/Play Billing → RevenueCat → our webhook grants
-        // the entitlement server-side. Refresh shortly after to pick it up.
-        try {
-          await purchasesService.purchaseCategory(cat.key);
-        } catch {
-          clearTimeout(noticeTimeoutRef.current);
-          setNotice(t("purchaseFailedNotice"));
-          noticeTimeoutRef.current = setTimeout(() => setNotice(null), 5000);
-          return;
-        }
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        const refreshed = await authService.getCategoryCatalog(accessToken);
-        setAvailableCategories(refreshed);
-        return;
-      }
-
-      // Plain web build: no native purchase flow available. Falls back to the
-      // dev/test-only unlock endpoint, which the backend only allows when
-      // ALLOW_TEST_UNLOCK is explicitly set — fails otherwise, since buying
-      // is only possible from the mobile app (Play Store/App Store).
-      try {
-        await authService.unlockCategory(accessToken, cat.key);
-      } catch {
-        clearTimeout(noticeTimeoutRef.current);
-        setNotice(t("purchaseWebUnavailableNotice"));
-        noticeTimeoutRef.current = setTimeout(() => setNotice(null), 5000);
-        return;
-      }
-      const refreshed = await authService.getCategoryCatalog(accessToken);
-      setAvailableCategories(refreshed);
-    } finally {
-      setPurchasingCategoryKey(null);
-    }
+  // Locked categories are only unlocked through the Premium subscription.
+  const handleRequestUnlockCategory = () => {
+    router.push(accessToken ? "/purchases" : "/login");
   };
 
   const handleSubmitGuess = (bluff: string) => {
@@ -610,7 +561,6 @@ export function useRoomPage() {
     selectedCategories,
     setSelectedCategories,
     handleRequestUnlockCategory,
-    purchasingCategoryKey,
     computedGuesses,
     currentQuestionImageUrl,
     currentQuestionId,

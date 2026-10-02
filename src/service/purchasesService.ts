@@ -43,17 +43,6 @@ export const purchasesService = {
     return offerings.current;
   },
 
-  async purchaseCategory(categoryKey: string) {
-    const offering = await this.getOfferings();
-    const pkg = offering?.availablePackages.find(
-      (p) => p.identifier === categoryKey
-    );
-    if (!pkg) {
-      throw new Error(`No RevenueCat package found for category "${categoryKey}"`);
-    }
-    return Purchases.purchasePackage({ aPackage: pkg });
-  },
-
   async purchasePremiumSubscription() {
     const offering = await this.getOfferings();
     const pkg = offering?.monthly;

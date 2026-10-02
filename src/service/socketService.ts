@@ -14,6 +14,12 @@ socket.on("connect", () => {
 });
 
 export const socketService = {
+  /** Drops emits queued while the socket was offline, so a request the user was
+   * told had failed is not delivered later (which would create a second room). */
+  discardQueuedEmits: () => {
+    (socket as unknown as { sendBuffer: unknown[] }).sendBuffer.length = 0;
+  },
+
   createRoom: (player: Player, authToken?: string, lang?: string) => {
     socket.emit("createRoom", { ...player, authToken, lang });
   },

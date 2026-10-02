@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { X, Check, Crown, Lock, Loader2, ShieldCheck, Settings } from "lucide-react";
+import { X, Check, Crown, Loader2, ShieldCheck, Settings } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { theme } from "@/styles/theme";
+import { LoadingOverlay } from "@/components/ui/LoadingOverlay";
 import { usePurchases } from "./usePurchases";
 
 // Display-only prices — the amounts actually charged live in Stripe
@@ -20,8 +21,8 @@ export function PurchasesPage() {
   const {
     loading,
     isSubscribed,
-    lockedCategories,
     subscribing,
+    openingPortal,
     checkoutPending,
     error,
     checkoutStatus,
@@ -29,7 +30,6 @@ export function PurchasesPage() {
     handleSubscribe,
     handleSubscribeMonthlyWeb,
     handleSubscribeYearlyWeb,
-    handleBuyCategoryWeb,
     handleManageSubscription,
     close,
     purchasesAvailable,
@@ -43,6 +43,13 @@ export function PurchasesPage() {
 
   const features = t("purchases.features", { returnObjects: true }) as string[];
   const checkoutBusy = checkoutPending === "monthly" || checkoutPending === "yearly";
+  const busyMessage = subscribing
+    ? t("loading.processingPurchase", "Achat en cours…")
+    : checkoutBusy
+      ? t("loading.redirectingPayment", "Redirection vers le paiement sécurisé…")
+      : openingPortal
+        ? t("loading.openingPortal", "Ouverture de la gestion de l’abonnement…")
+        : null;
   const handleWebSubscribe =
     selectedPlan === "yearly" ? handleSubscribeYearlyWeb : handleSubscribeMonthlyWeb;
 
@@ -97,6 +104,7 @@ export function PurchasesPage() {
 
   return (
     <div className={`${theme.home.wrapper} relative`}>
+      {busyMessage && <LoadingOverlay message={busyMessage} />}
       <div className={`${theme.home.card} border-[3px] border-yellow-400 relative`}>
         {closeButton}
 
@@ -160,35 +168,6 @@ export function PurchasesPage() {
             </p>
           )}
 
-          {!purchasesAvailable && !isSubscribed && lockedCategories.length > 0 && (
-            <section className="space-y-2 pt-4 border-t border-amber-100">
-              <h2 className="text-gray-700 text-sm font-semibold text-center">
-                {t("purchases.lockedCategoriesTitle")}
-              </h2>
-              {lockedCategories.map((cat) => (
-                <button
-                  key={cat.key}
-                  onClick={() => handleBuyCategoryWeb(cat.key)}
-                  disabled={checkoutPending === cat.key}
-                  className="w-full min-h-11 flex justify-between items-center gap-3 px-4 py-2 rounded-xl bg-white border border-amber-200 text-gray-900 font-medium shadow-sm hover:bg-amber-50 active:scale-[0.99] transition disabled:opacity-60 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
-                >
-                  <span className="flex items-center gap-2 min-w-0">
-                    <Lock className="w-4 h-4 shrink-0 text-amber-600" aria-hidden="true" />
-                    <span className="truncate">{cat.label}</span>
-                  </span>
-                  <span className="shrink-0 flex items-center gap-1.5 text-xs font-bold uppercase text-amber-700">
-                    {checkoutPending === cat.key && (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin motion-reduce:animate-none" aria-hidden="true" />
-                    )}
-                    {cat.priceCents != null && (
-                      <span className="tabular-nums">{money(cat.priceCents / 100)}</span>
-                    )}
-                    {t("purchases.buyCategory")}
-                  </span>
-                </button>
-              ))}
-            </section>
-          )}
         </div>
 
         <div className={`${theme.home.cardFooter} pt-5`}>

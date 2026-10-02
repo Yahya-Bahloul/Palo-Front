@@ -1,8 +1,6 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
-export type CheckoutPlan =
-  | { plan: "monthly" | "yearly" }
-  | { plan: "category"; categoryKey: string };
+export type CheckoutPlan = { plan: "monthly" | "yearly" };
 
 async function post<T>(path: string, accessToken: string, body?: unknown): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {

@@ -159,7 +159,6 @@ function GameStartingPhase(props: {
   selectedCategories: string[];
   setSelectedCategories: Dispatch<SetStateAction<string[]>>;
   onRequestUnlockCategory?: (category: CategoryCatalogEntry) => void;
-  purchasingCategoryKey?: string | null;
   onKickPlayer?: (playerId: string) => void;
   roomId: string;
   isAdmin: boolean;

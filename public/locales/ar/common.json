@@ -19,8 +19,6 @@
   "unselectAll": "إلغاء تحديد الكل",
   "waiting": "{{player}} يختار فئة...",
   "playerLeftNotice": "{{name}} غادر الغرفة",
-  "purchaseWebUnavailableNotice": "الشراء غير متاح على الويب. حمّل تطبيق Blaafy من Play Store أو App Store لفتح هذه الفئة أو الاشتراك.",
-  "purchaseFailedNotice": "فشلت عملية الشراء. حاول مرة أخرى أو تحقق من وسيلة الدفع على Play Store / App Store.",
   "category": {
     "sport": "رياضة",
     "anime": "أنمي",
@@ -242,8 +240,6 @@
     "continue": "متابعة",
     "redirecting": "جارٍ التحويل إلى الدفع…",
     "secureNote": "دفع آمن عبر Stripe · يمكنك الإلغاء في أي وقت",
-    "lockedCategoriesTitle": "افتح فئة واحدة",
-    "buyCategory": "شراء",
     "checkoutSuccess": "تم تأكيد الشراء — استمتع!",
     "checkoutFinalizing": "جارٍ إنهاء عملية الشراء…",
     "checkoutCanceled": "تم إلغاء الدفع.",
@@ -310,6 +306,14 @@
   },
   "weekly": {
     "badge": "مجانية هذا الأسبوع"
+  },
+  "loading": {
+    "creatingRoom": "جارٍ إنشاء الغرفة…",
+    "joiningRoom": "جارٍ الانضمام إلى الغرفة…",
+    "redirectingPayment": "جارٍ التحويل إلى الدفع الآمن…",
+    "openingPortal": "جارٍ فتح إدارة الاشتراك…",
+    "processingPurchase": "جارٍ إتمام عملية الشراء…",
+    "actionError": "تعذّر الاتصال. حاول مجددًا بعد قليل."
   },
   "reconnecting": "جارٍ إعادة الاتصال باللعبة…",
   "roomNotFoundTitle": "الغرفة غير موجودة",

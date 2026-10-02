@@ -13,6 +13,7 @@ import { theme } from "@/styles/theme";
 import LanguageSelect from "@/components/utils/LanguageSelect";
 import { HomeMenu } from "@/components/home/HomeMenu";
 import { PublicRoomsList } from "@/components/home/PublicRoomsList";
+import { LoadingOverlay } from "@/components/ui/LoadingOverlay";
 
 export default function HomePage() {
   const { t } = useTranslation("common");
@@ -31,6 +32,8 @@ export default function HomePage() {
     clearJoinError,
     roomErrorPopup,
     dismissRoomErrorPopup,
+    pendingAction,
+    actionError,
     publicRooms,
     publicRoomsError,
     publicRoomGone,
@@ -54,6 +57,15 @@ export default function HomePage() {
 
   return (
     <div className={`${theme.home.wrapper} relative`}>
+      {pendingAction && (
+        <LoadingOverlay
+          message={
+            pendingAction === "create"
+              ? t("loading.creatingRoom", "Création de la salle…")
+              : t("loading.joiningRoom", "Connexion à la salle…")
+          }
+        />
+      )}
       <HomeMenu />
       <LanguageSelect />
 
@@ -126,7 +138,7 @@ export default function HomePage() {
               rooms={publicRooms}
               error={publicRoomsError}
               gone={publicRoomGone}
-              canJoin={!!player.name}
+              canJoin={!!player.name && !pendingAction}
               onJoin={joinPublicRoom}
               onRetry={refreshPublicRooms}
             />
@@ -149,8 +161,17 @@ export default function HomePage() {
           />
         </CardContent>
 
-        <CardFooter className={theme.home.cardFooter}>
+        <CardFooter className={`${theme.home.cardFooter} flex-col items-stretch`}>
+          {actionError && (
+            <p
+              role="alert"
+              className="mb-3 w-full text-center text-xs font-arcade text-[color:var(--skin-danger)]"
+            >
+              {t("loading.actionError", "Connexion impossible. Réessaie dans un instant.")}
+            </p>
+          )}
           <RoomActionButton
+            pending={!!pendingAction}
             activeTab={activeTab}
             name={player.name}
             roomCode={roomCode}
@@ -173,6 +194,7 @@ function RoomActionButton({
   onJoin,
   onQuickPlay,
   hasPublicRooms,
+  pending,
 }: {
   activeTab: HomeTab;
   name: string;
@@ -181,14 +203,16 @@ function RoomActionButton({
   onJoin: () => void;
   onQuickPlay: () => void;
   hasPublicRooms: boolean;
+  pending: boolean;
 }) {
   const { t } = useTranslation("common");
   const disabled =
-    activeTab === "join"
+    pending ||
+    (activeTab === "join"
       ? !name || !roomCode
       : activeTab === "online"
         ? !name || !hasPublicRooms
-        : !name;
+        : !name);
 
   return (
     <Button

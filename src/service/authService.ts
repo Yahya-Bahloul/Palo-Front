@@ -44,10 +44,4 @@ export const authService = {
       accessToken
     ),
 
-  unlockCategory: (accessToken: string, categoryKey: string) =>
-    request(
-      "/api/entitlements/unlock-category",
-      { method: "POST", body: JSON.stringify({ categoryKey }) },
-      accessToken
-    ),
 };

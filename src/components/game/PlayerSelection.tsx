@@ -15,7 +15,6 @@ import {
   Lock,
   Gift,
   X,
-  Loader2,
   Crown,
   UserPlus,
   ChevronDown,
@@ -66,7 +65,6 @@ type Props = {
   selectedCategories: string[];
   setSelectedCategories: Dispatch<SetStateAction<string[]>>;
   onRequestUnlockCategory?: (category: CategoryCatalogEntry) => void;
-  purchasingCategoryKey?: string | null;
   onKickPlayer?: (playerId: string) => void;
   roomId: string;
   isAdmin: boolean;
@@ -79,7 +77,6 @@ export function PlayerSection({
   selectedCategories,
   setSelectedCategories,
   onRequestUnlockCategory,
-  purchasingCategoryKey,
   onKickPlayer,
   roomId,
   isAdmin,
@@ -309,23 +306,16 @@ export function PlayerSection({
                         const label = t(`category.${cat.key.toLowerCase()}`);
 
                         if (locked) {
-                          const purchasing = purchasingCategoryKey === cat.key;
                           return (
                             <button
                               key={cat.key}
                               onClick={() =>
-                                isAdmin &&
-                                !purchasing &&
-                                onRequestUnlockCategory?.(cat)
+                                isAdmin && onRequestUnlockCategory?.(cat)
                               }
-                              disabled={!isAdmin || purchasing}
+                              disabled={!isAdmin}
                               className={`${theme.lobby.chip} skin-catchip-locked`}
                             >
-                              {purchasing ? (
-                                <Loader2 className="w-3.5 h-3.5 animate-spin text-[color:var(--skin-accent-2)]" />
-                              ) : (
-                                <Lock className="w-3.5 h-3.5 text-[color:var(--skin-accent-2)]" />
-                              )}
+                              <Lock className="w-3.5 h-3.5 text-[color:var(--skin-accent-2)]" />
                               {label}
                             </button>
                           );
