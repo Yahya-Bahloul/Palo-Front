@@ -260,6 +260,10 @@
     "thanks": "Merci, signalement envoyé !",
     "error": "Envoi impossible. Réessaie plus tard."
   },
+  "legal": {
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
   "contact": {
     "menu": "Nous contacter",
     "title": "Nous contacter",

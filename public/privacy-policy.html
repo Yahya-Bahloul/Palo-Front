@@ -1,0 +1,503 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Politique de confidentialité de Blaafy / Blaafy privacy policy.">
+<link rel="canonical" href="https://blaafy.com/privacy-policy.html">
+<title>Blaafy Privacy Policy</title>
+<style>
+  :root {
+    --bg: #f7f7f4;
+    --surface: #ffffff;
+    --text: #1b1d22;
+    --text-muted: #565b66;
+    --accent: #2b5c6b;
+    --accent-soft: #e4edee;
+    --border: #e2e4e0;
+    --code-bg: #eef0ee;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161a;
+      --surface: #1b1e24;
+      --text: #e8e9ea;
+      --text-muted: #9aa0aa;
+      --accent: #7fc3d3;
+      --accent-soft: #1f2f33;
+      --border: #2a2d33;
+      --code-bg: #21242a;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #14161a;
+    --surface: #1b1e24;
+    --text: #e8e9ea;
+    --text-muted: #9aa0aa;
+    --accent: #7fc3d3;
+    --accent-soft: #1f2f33;
+    --border: #2a2d33;
+    --code-bg: #21242a;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2 {
+    font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+    text-wrap: balance;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 4vw, 2rem);
+  }
+
+  @media (min-width: 960px) {
+    .shell {
+      grid-template-columns: 230px minmax(0, 680px);
+      gap: 3.5rem;
+      align-items: start;
+    }
+  }
+
+  header.masthead {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+    margin-bottom: clamp(1.75rem, 4vw, 2.75rem);
+    flex-wrap: wrap;
+  }
+
+  .mark {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .mark .name {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .mark .tag {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .stamp {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    white-space: nowrap;
+  }
+
+  nav.toc {
+    display: none;
+  }
+
+  @media (min-width: 960px) {
+    nav.toc {
+      display: block;
+      position: sticky;
+      top: clamp(1.5rem, 4vw, 3.5rem);
+    }
+  }
+
+  nav.toc .eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.85rem;
+  }
+
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: toc;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  nav.toc li {
+    counter-increment: toc;
+  }
+
+  nav.toc a {
+    display: flex;
+    gap: 0.6rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.88rem;
+    line-height: 1.35;
+    transition: color 0.15s ease;
+  }
+
+  nav.toc a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  nav.toc a:hover,
+  nav.toc a:focus-visible {
+    color: var(--text);
+  }
+
+  main {
+    min-width: 0;
+  }
+
+  .lede {
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    max-width: 62ch;
+    margin: 0 0 clamp(2rem, 5vw, 3rem);
+  }
+
+  section {
+    padding-top: clamp(1.75rem, 4vw, 2.5rem);
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    border-top: 1px solid var(--border);
+    scroll-margin-top: 1.5rem;
+  }
+
+  section:first-of-type {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+    margin: 0 0 0.9rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+  }
+
+  h2 .num {
+    font-family: "Public Sans", sans-serif;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  p {
+    max-width: 65ch;
+    margin: 0 0 1rem;
+  }
+
+  ul {
+    max-width: 65ch;
+    padding-left: 1.2rem;
+    margin: 0 0 1rem;
+  }
+
+  li {
+    margin-bottom: 0.5rem;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+
+  a {
+    color: var(--accent);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    margin: 1.2rem 0;
+    max-width: 65ch;
+  }
+
+  .card .label {
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+    display: block;
+  }
+
+  table {
+    width: 100%;
+    max-width: 65ch;
+    border-collapse: collapse;
+    margin: 0 0 1rem;
+    font-size: 0.92rem;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    max-width: 65ch;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 0.55rem 0.8rem 0.55rem 0;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  code {
+    background: var(--code-bg);
+    border-radius: 4px;
+    padding: 0.1rem 0.4rem;
+    font-size: 0.88em;
+  }
+
+  footer {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    max-width: 65ch;
+  }
+
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+
+<div class="shell">
+  <header class="masthead">
+    <div class="mark">
+      <span class="name">Blaafy</span>
+      <span class="tag">Privacy Policy</span>
+    </div>
+    <span class="stamp">Last updated: October 3, 2026</span>
+  </header>
+
+  <nav class="toc" aria-label="Sections">
+    <p class="eyebrow">On this page</p>
+    <ol>
+      <li><a href="#collect">Information we collect</a></li>
+      <li><a href="#accounts">Accounts &amp; sign-in</a></li>
+      <li><a href="#purchases">Purchases &amp; subscriptions</a></li>
+      <li><a href="#thirdparty">Third-party services</a></li>
+      <li><a href="#ads">Advertising</a></li>
+      <li><a href="#retention">Data retention</a></li>
+      <li><a href="#rights">Your rights &amp; choices</a></li>
+      <li><a href="#children">Children's privacy</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#changes">Changes to this policy</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <p class="lede">
+      Blaafy is a real-time multiplayer party game where players invent fake answers and
+      try to guess the real one. This page explains, plainly, what information Blaafy
+      collects, why, and what you can do about it.
+    </p>
+
+    <section id="collect">
+      <h2><span class="num">01</span>Information we collect</h2>
+      <p>
+        You can play Blaafy entirely as a <strong>guest</strong>, without ever creating an
+        account. In that case, the only information involved is a display name and an
+        avatar you choose, stored locally on your device, plus whatever you type during
+        a game (your bluffed answers and votes) — sent to our server only for the
+        duration of that game session.
+      </p>
+      <p>
+        We do not collect location data, contacts, photos, or device identifiers of any
+        kind for guest play.
+      </p>
+    </section>
+
+    <section id="accounts">
+      <h2><span class="num">02</span>Accounts &amp; sign-in</h2>
+      <p>
+        An account is only needed if you want to unlock premium categories or subscribe.
+        Blaafy supports signing in with your <strong>Google</strong> or <strong>Apple</strong>
+        account. When you do, we receive and store:
+      </p>
+      <ul>
+        <li>Your email address</li>
+        <li>A unique identifier from Google or Apple, used to recognize your account on
+          future sign-ins</li>
+      </ul>
+      <p>
+        We never see or store your Google or Apple password — authentication happens
+        entirely through their sign-in systems.
+      </p>
+    </section>
+
+    <section id="purchases">
+      <h2><span class="num">03</span>Purchases &amp; subscriptions</h2>
+      <p>
+        In the mobile app, category unlocks and subscriptions are purchased through the
+        Apple App Store or Google Play, and processed by <strong>RevenueCat</strong>, our
+        subscription management provider. On the website (blaafy.com), subscriptions are
+        paid through <strong>Stripe</strong> Checkout. We store which categories and subscription status are
+        associated with your account so we can unlock the right content. We do not
+        receive or store your payment card details — those are handled entirely by
+        Apple, Google, Stripe, and RevenueCat.
+      </p>
+    </section>
+
+    <section id="thirdparty">
+      <h2><span class="num">04</span>Third-party services</h2>
+      <p>Blaafy relies on a small number of external services to function:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Purpose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Google Sign-In / Apple Sign-In</td>
+              <td>Account authentication</td>
+            </tr>
+            <tr>
+              <td>RevenueCat</td>
+              <td>Purchase and subscription management</td>
+            </tr>
+            <tr>
+              <td>Stripe</td>
+              <td>Web payments and subscription billing (blaafy.com)</td>
+            </tr>
+            <tr>
+              <td>Cloudinary</td>
+              <td>Hosting images used in trivia questions (not user data)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Each of these providers has its own privacy policy governing how they handle data.</p>
+    </section>
+
+    <section id="ads">
+      <h2><span class="num">05</span>Advertising</h2>
+      <p>
+        Blaafy does not display ads and does not use advertising identifiers (such as the
+        Android Advertising ID) or any third-party advertising or tracking SDKs.
+      </p>
+    </section>
+
+    <section id="retention">
+      <h2><span class="num">06</span>Data retention</h2>
+      <p>
+        Game room data (players, questions, guesses, votes) lives only in server memory
+        for the duration of a game and is discarded shortly after the room empties —
+        it is never stored permanently. Account data (email, entitlements) is kept for
+        as long as your account exists.
+      </p>
+    </section>
+
+    <section id="rights">
+      <h2><span class="num">07</span>Your rights &amp; choices</h2>
+      <p>You can, at any time:</p>
+      <ul>
+        <li>Play as a guest without ever providing an email or creating an account</li>
+        <li>Request a copy of the account data we hold about you</li>
+        <li>Request deletion of your account and associated data</li>
+      </ul>
+      <p>To exercise any of these, contact us using the details below.</p>
+    </section>
+
+    <section id="children">
+      <h2><span class="num">08</span>Children's privacy</h2>
+      <p>
+        Blaafy is not directed at children under 13, and we do not knowingly collect
+        personal information from children under that age. If you believe a child has
+        provided us with personal information, contact us and we will remove it.
+      </p>
+    </section>
+
+    <section id="security">
+      <h2><span class="num">09</span>Security</h2>
+      <p>
+        We take reasonable measures to protect the information we hold, including
+        encrypted connections between the app and our servers. No method of transmission
+        or storage is completely secure, and we cannot guarantee absolute security.
+      </p>
+    </section>
+
+    <section id="changes">
+      <h2><span class="num">10</span>Changes to this policy</h2>
+      <p>
+        We may update this policy from time to time. The "last updated" date at the top
+        of this page reflects the most recent revision. Continued use of Blaafy after a
+        change means you accept the updated policy.
+      </p>
+    </section>
+
+    <section id="contact">
+      <h2><span class="num">11</span>Contact</h2>
+      <div class="card">
+        <span class="label">Reach us at</span>
+        <p style="margin:0">
+          <a href="https://blaafy.com/contact">blaafy.com/contact</a>
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      This policy applies to the Blaafy mobile app and its web version at blaafy.com. See also our <a href="/terms.html">Terms of Service</a>.
+    </footer>
+  </main>
+</div>

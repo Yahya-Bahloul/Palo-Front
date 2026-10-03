@@ -261,6 +261,10 @@
     "thanks": "Thanks, report sent!",
     "error": "Could not send. Please try again later."
   },
+  "legal": {
+    "privacy": "Privacy policy",
+    "terms": "Terms of service"
+  },
   "contact": {
     "menu": "Contact us",
     "title": "Contact us",
