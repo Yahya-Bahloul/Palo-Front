@@ -100,7 +100,7 @@ export default function HomePage() {
               <img
                 src="/blaafy-text.png"
                 alt="Blaafy"
-                className="h-auto w-[min(70vw,300px)] drop-shadow-[0_0_18px_rgba(124,58,237,0.45)]"
+                className="h-auto w-[min(70vw,300px)]"
               />
             </h1>
           </div>
