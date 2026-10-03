@@ -45,9 +45,8 @@ export default function HomePage() {
   if (checkingRoom) {
     return (
       <div className="min-h-dvh flex flex-col items-center justify-center gap-4">
-        <div className="skin-category-title text-[color:var(--skin-primary)] neon-text-glow [font-size:clamp(2rem,10vw,3rem)]">
-          BLAAFY
-        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/blaafy-text.png" alt="Blaafy" className="w-[min(60vw,260px)] h-auto" />
         <p className="font-arcade text-sm text-[color:var(--skin-muted)] animate-pulse">
           {t("reconnecting", "Reconnexion à la partie…")}
         </p>
@@ -96,8 +95,13 @@ export default function HomePage() {
       <Card className={theme.home.card}>
         <CardContent className={theme.home.cardContent}>
           <div className="text-center pt-2 pb-1">
-            <h1 className="skin-category-title text-[color:var(--skin-primary)] neon-text-glow leading-tight [font-size:clamp(2.75rem,14vw,4rem)]">
-              BLAAFY
+            <h1 className="flex justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/blaafy-text.png"
+                alt="Blaafy"
+                className="h-auto w-[min(70vw,300px)] drop-shadow-[0_0_18px_rgba(124,58,237,0.45)]"
+              />
             </h1>
           </div>
 
