@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Menu, LogIn, LogOut, Crown, MessageCircle, FileText } from "lucide-react";
+import { Menu, LogIn, LogOut, Crown, MessageCircle } from "lucide-react";
 import { useAuthStore } from "@/utils/useAuthStore";
 import { authService } from "@/service/authService";
 
@@ -74,22 +74,6 @@ export function HomeMenu() {
           >
             <MessageCircle className="h-4 w-4 shrink-0 text-[color:var(--skin-primary)]" />
             {t("contact.menu", "Nous contacter")}
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            className={item}
-            onClick={() => window.location.assign("/privacy-policy.html")}
-          >
-            <FileText className="h-4 w-4 shrink-0 text-[color:var(--skin-primary)]" />
-            {t("legal.privacy", "Politique de confidentialité")}
-          </DropdownMenuItem>
-
-          <DropdownMenuItem
-            className={item}
-            onClick={() => window.location.assign("/terms.html")}
-          >
-            <FileText className="h-4 w-4 shrink-0 text-[color:var(--skin-primary)]" />
-            {t("legal.terms", "Conditions d'utilisation")}
           </DropdownMenuItem>
 
           {user ? (

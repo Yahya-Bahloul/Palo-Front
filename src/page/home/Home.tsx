@@ -100,7 +100,7 @@ export default function HomePage() {
               <img
                 src="/blaafy-text.png"
                 alt="Blaafy"
-                className="h-auto w-[min(70vw,300px)]"
+                className="h-auto w-[min(58vw,240px)]"
               />
             </h1>
           </div>
@@ -186,6 +186,16 @@ export default function HomePage() {
           />
         </CardFooter>
       </Card>
+
+      <footer className="mt-auto pt-8 flex items-center gap-3 text-[11px] text-[color:var(--skin-muted)]">
+        <a href="/privacy-policy.html" className="underline-offset-2 hover:underline">
+          {t("legal.privacy", "Politique de confidentialité")}
+        </a>
+        <span aria-hidden>·</span>
+        <a href="/terms.html" className="underline-offset-2 hover:underline">
+          {t("legal.terms", "Conditions d'utilisation")}
+        </a>
+      </footer>
     </div>
   );
 }
