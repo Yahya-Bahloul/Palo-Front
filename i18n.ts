@@ -12,8 +12,8 @@ i18n.use(initReactI18next).init({
     en: { common: en }, // Placeholder for English translations
     ar: { common: ar }, // Placeholder for Arabic translations
   },
-  lng: "fr", // default language
-  fallbackLng: "fr",
+  lng: "en", // default for new users; saved choice is applied by I18nInitializerWrapper
+  fallbackLng: "en",
   debug: false,
   interpolation: {
     escapeValue: false,

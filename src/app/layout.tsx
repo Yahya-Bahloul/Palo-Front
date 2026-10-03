@@ -6,9 +6,9 @@ import { theme } from "@/styles/theme";
 import { Providers } from "./providers";
 
 const SITE_URL = "https://blaafy.com";
-const TITLE = "Blaafy – Jeu de bluff et de quiz entre amis";
+const TITLE = "Blaafy – The bluffing party game to play with friends";
 const DESCRIPTION =
-  "Blaafy, le jeu de bluff multijoueur en temps réel : invente de fausses réponses, devine la vraie et piège tes amis. Gratuit, sans inscription, jouable sur mobile et navigateur.";
+  "Blaafy is the real-time multiplayer bluffing game: invent fake answers, guess the real one and fool your friends. Free to play, no sign-up required, on mobile and in your browser.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -17,12 +17,12 @@ export const metadata: Metadata = {
   applicationName: "Blaafy",
   keywords: [
     "Blaafy",
-    "jeu de bluff",
-    "quiz entre amis",
-    "jeu multijoueur en ligne",
+    "bluffing game",
     "party game",
     "trivia",
-    "bluffing game",
+    "online multiplayer game",
+    "quiz with friends",
+    "jeu de bluff",
   ],
   alternates: { canonical: "/" },
   openGraph: {
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
     siteName: "Blaafy",
     title: TITLE,
     description: DESCRIPTION,
-    locale: "fr_FR",
-    alternateLocale: ["en_US", "ar"],
+    locale: "en_US",
+    alternateLocale: ["fr_FR", "ar"],
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Blaafy" }],
   },
   twitter: {

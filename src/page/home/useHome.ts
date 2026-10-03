@@ -181,7 +181,7 @@ export function useHomePage() {
     socketService.createRoom(
       player,
       accessToken ?? undefined,
-      i18n.language || "fr"
+      i18n.language || "en"
     );
   };
 

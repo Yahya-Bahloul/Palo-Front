@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import i18n from "@/../i18n"; // chemin d’accès selon ton alias
 
 export function useHtmlLangDir() {
-  const [lang, setLang] = useState(i18n.language || "fr");
+  const [lang, setLang] = useState(i18n.language || "en");
   const [dir, setDir] = useState<"ltr" | "rtl">(
     i18n.language === "ar" ? "rtl" : "ltr"
   );

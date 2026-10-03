@@ -6,6 +6,9 @@ import { X } from "lucide-react";
 import { theme } from "@/styles/theme";
 import { useLogin } from "./useLogin";
 
+// Apple Sign-In is hidden for now (not configured); flip to true to bring it back.
+const SHOW_APPLE_SIGN_IN = false;
+
 export function LoginPage() {
   const { t } = useTranslation();
   const {
@@ -26,10 +29,12 @@ export function LoginPage() {
             src="https://accounts.google.com/gsi/client"
             strategy="afterInteractive"
           />
-          <Script
-            src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
-            strategy="afterInteractive"
-          />
+          {SHOW_APPLE_SIGN_IN && (
+            <Script
+              src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+              strategy="afterInteractive"
+            />
+          )}
         </>
       )}
       <div className={`${theme.home.wrapper} relative`}>
@@ -69,18 +74,19 @@ export function LoginPage() {
                 </p>
               )}
 
-              {appleConfigured ? (
-                <button
-                  onClick={signInWithApple}
-                  className={theme.home.actionButton}
-                >
-                  {t("auth.continueWithApple")}
-                </button>
-              ) : (
-                <p className="text-sm text-[color:var(--skin-muted)] italic font-arcade">
-                  {t("auth.appleNotConfigured")}
-                </p>
-              )}
+              {SHOW_APPLE_SIGN_IN &&
+                (appleConfigured ? (
+                  <button
+                    onClick={signInWithApple}
+                    className={theme.home.actionButton}
+                  >
+                    {t("auth.continueWithApple")}
+                  </button>
+                ) : (
+                  <p className="text-sm text-[color:var(--skin-muted)] italic font-arcade">
+                    {t("auth.appleNotConfigured")}
+                  </p>
+                ))}
             </div>
           </div>
         </div>
